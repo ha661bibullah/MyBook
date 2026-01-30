@@ -1,0 +1,170 @@
+{
+  "orders": [
+    {
+      "customerName": "arif",
+      "phone": "01347585899",
+      "email": "bkksd@gmail.com",
+      "address": "দতসুতকৃ",
+      "district": "barishal",
+      "quantity": 2,
+      "total": 910,
+      "orderId": "ORD1769794722325296",
+      "status": "delivered",
+      "createdAt": "2026-01-30T17:38:42.325Z",
+      "updatedAt": "2026-01-30T17:43:38.080Z"
+    },
+    {
+      "customerName": "arif",
+      "phone": "01347585899",
+      "email": "bkksd@gmail.com",
+      "address": "asda",
+      "district": "rangpur",
+      "quantity": 1,
+      "total": 460,
+      "orderId": "ORD1769794940855387",
+      "status": "delivered",
+      "createdAt": "2026-01-30T17:42:20.855Z",
+      "updatedAt": "2026-01-30T17:43:46.040Z"
+    },
+    {
+      "customerName": "arif",
+      "phone": "01347585899",
+      "email": "bkksd@gmail.com",
+      "address": "asda",
+      "district": "rangpur",
+      "quantity": 3,
+      "total": 1360,
+      "orderId": "ORD1769795186923437",
+      "status": "delivered",
+      "createdAt": "2026-01-30T17:46:26.923Z",
+      "updatedAt": "2026-01-30T18:24:55.994Z"
+    },
+    {
+      "customerName": "arif",
+      "phone": "01347585899",
+      "email": "bkksd@gmail.com",
+      "address": ",মৃুদতমৃুতিৃ",
+      "district": "chittagong",
+      "quantity": 7,
+      "total": 1620,
+      "orderId": "ORD1769796383272667",
+      "status": "delivered",
+      "createdAt": "2026-01-30T18:06:23.272Z",
+      "updatedAt": "2026-01-30T18:24:52.702Z"
+    },
+    {
+      "customerName": "arif",
+      "phone": "01347585899",
+      "email": "bkksd@gmail.com",
+      "address": "npm start",
+      "district": "barishal",
+      "quantity": 2,
+      "total": 510,
+      "orderId": "ORD1769797327452491",
+      "status": "delivered",
+      "createdAt": "2026-01-30T18:22:07.452Z",
+      "updatedAt": "2026-01-30T18:24:48.847Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01707489975",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 5,
+      "total": 460,
+      "orderId": "ORD1769797423419323",
+      "status": "delivered",
+      "createdAt": "2026-01-30T18:23:43.419Z",
+      "updatedAt": "2026-01-30T18:24:44.165Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01702308754",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 2,
+      "total": 460,
+      "orderId": "ORD1769797587777809",
+      "status": "pending",
+      "createdAt": "2026-01-30T18:26:27.777Z",
+      "updatedAt": "2026-01-30T18:26:27.777Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01700506647",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 3,
+      "total": 460,
+      "orderId": "ORD17697975971320",
+      "status": "pending",
+      "createdAt": "2026-01-30T18:26:37.132Z",
+      "updatedAt": "2026-01-30T18:26:37.132Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01705200765",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 5,
+      "total": 460,
+      "orderId": "ORD1769797601015556",
+      "status": "pending",
+      "createdAt": "2026-01-30T18:26:41.015Z",
+      "updatedAt": "2026-01-30T18:26:41.015Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01706292360",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 1,
+      "total": 460,
+      "orderId": "ORD1769797604108598",
+      "status": "pending",
+      "createdAt": "2026-01-30T18:26:44.108Z",
+      "updatedAt": "2026-01-30T18:26:44.108Z"
+    },
+    {
+      "customerName": "টেস্ট গ্রাহক",
+      "phone": "01705018960",
+      "email": "test@example.com",
+      "address": "টেস্ট ঠিকানা, ঢাকা",
+      "district": "dhaka",
+      "quantity": 4,
+      "total": 460,
+      "orderId": "ORD1769797606894496",
+      "status": "pending",
+      "createdAt": "2026-01-30T18:26:46.894Z",
+      "updatedAt": "2026-01-30T18:26:46.894Z"
+    }
+  ],
+  "reviews": [],
+  "users": [
+    {
+      "id": "admin001",
+      "username": "admin",
+      "password": "$2a$10$9QIoMyDBNxNYC8sOOpStHeGZN.96tqBb3Jix31HC04r7vtgsCO7Pm",
+      "email": "admin@MyBook.com",
+      "role": "admin",
+      "createdAt": "2026-01-30T16:29:00.896Z"
+    }
+  ],
+  "settings": {
+    "bookPrice": 450,
+    "deliveryCharge": 60,
+    "discount": 50,
+    "bulkDiscountThreshold": 5,
+    "bulkDiscountAmount": 20,
+    "currency": "৳",
+    "siteTitle": "মৃত্যু ও তার পরে",
+    "siteDescription": "আধ্যাত্মিক জিজ্ঞাসার উত্তর",
+    "hotlineNumber": "০১৭১২-৩৪৫৬৭৮",
+    "contactHours": "সকাল ১০টা - রাত ১০টা"
+  }
+}

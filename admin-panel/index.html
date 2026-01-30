@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিন প্যানেল - মৃত্যু ও তার পরে</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Hind Siliguri', sans-serif; }
+        .sidebar { background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%); }
+        .modal-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-confirmed { background: #dbeafe; color: #1e40af; }
+        .badge-shipped { background: #e9d5ff; color: #6b21a8; }
+        .badge-delivered { background: #d1fae5; color: #065f46; }
+        .badge-cancelled { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- লগইন মডাল -->
+    <div id="loginModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-white text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">এডমিন লগইন</h2>
+                <p class="text-gray-600 mt-2">এডমিন প্যানেলে অ্যাক্সেস করতে লগইন করুন</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ইউজারনেম</label>
+                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="admin" value="admin" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">পাসওয়ার্ড</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="admin123" value="admin123" required>
+                </div>
+                
+                <div id="loginError" class="hidden p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
+                        <span id="errorMessage" class="text-red-700 text-sm"></span>
+                    </div>
+                </div>
+                
+                <button type="submit" id="loginBtn" class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition">
+                    লগইন করুন
+                </button>
+                
+                <div class="text-center pt-4 border-t border-gray-200">
+                    <p class="text-sm text-gray-600">
+                        <strong>ডেমো অ্যাকাউন্ট:</strong><br>
+                        ইউজারনেম: <span class="font-bold">admin</span><br>
+                        পাসওয়ার্ড: <span class="font-bold">admin123</span>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- মেইন লেআউট -->
+    <div class="flex h-screen overflow-hidden hidden" id="adminLayout">
+        <!-- সাইডবার -->
+        <div id="sidebar" class="sidebar w-64 text-white flex flex-col">
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-crown text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">মৃত্যু ও তার পরে</h2>
+                        <p class="text-xs text-gray-300">এডমিন প্যানেল</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" onclick="showPage('dashboard')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-tachometer-alt w-6 mr-3"></i>
+                    <span>ড্যাশবোর্ড</span>
+                </a>
+                
+                <a href="#" onclick="showPage('orders')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-shopping-cart w-6 mr-3"></i>
+                    <span>অর্ডারসমূহ</span>
+                    <span id="pendingBadge" class="badge badge-pending ml-auto hidden">0</span>
+                </a>
+                
+                <a href="#" onclick="showPage('reviews')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-star w-6 mr-3"></i>
+                    <span>রিভিউ</span>
+                    <span id="reviewBadge" class="badge badge-pending ml-auto hidden">0</span>
+                </a>
+                
+                <div class="pt-4">
+                    <a href="#" onclick="showPage('debug')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-bug w-6 mr-3"></i>
+                        <span>ডিবাগ</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="p-4 border-t border-white/10">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-semibold" id="currentUser">লোড হচ্ছে...</div>
+                        <div class="text-xs text-gray-300" id="userRole">এডমিন</div>
+                    </div>
+                    <button onclick="logout()" class="ml-auto text-gray-300 hover:text-white">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- মূল কন্টেন্ট -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 id="pageTitle" class="text-xl font-bold text-gray-800">ড্যাশবোর্ড</h1>
+                        <p id="pageSubtitle" class="text-sm text-gray-600">সিস্টেম ওভারভিউ</p>
+                    </div>
+                    
+                    <div class="text-right">
+                        <div class="text-sm font-medium text-gray-800" id="currentDateTime"></div>
+                        <div class="text-xs text-gray-600">
+                            <i class="fas fa-circle text-green-500 mr-1" id="serverStatusIcon"></i>
+                            <span id="serverStatusText">সার্ভার চালু</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- ড্যাশবোর্ড -->
+                <div id="dashboardPage">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-shopping-cart text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">মোট অর্ডার</p>
+                                    <h3 id="statTotalOrders" class="text-2xl font-bold text-gray-800">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-money-bill-wave text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">মোট আয়</p>
+                                    <h3 id="statTotalRevenue" class="text-2xl font-bold text-gray-800">৳ 0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-star text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">মোট রিভিউ</p>
+                                    <h3 id="statTotalReviews" class="text-2xl font-bold text-gray-800">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-users text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">পেন্ডিং অর্ডার</p>
+                                    <h3 id="statPendingOrders" class="text-2xl font-bold text-gray-800">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-6">অর্ডার ট্রেন্ড</h3>
+                            <div style="height: 300px;">
+                                <canvas id="ordersChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-6">অর্ডার স্ট্যাটাস</h3>
+                            <div style="height: 300px;">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-bold text-gray-800">সাম্প্রতিক অর্ডার</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">বইয়ের সংখ্যা</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTable">
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                            লোড হচ্ছে...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- অর্ডার ম্যানেজমেন্ট -->
+                <div id="ordersPage" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">অর্ডার ম্যানেজমেন্ট</h2>
+                        <p class="text-gray-600">সমস্ত অর্ডার দেখুন এবং ম্যানেজ করুন</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button onclick="filterOrders('all')" class="filter-btn active px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                            সব অর্ডার
+                        </button>
+                        <button onclick="filterOrders('pending')" class="filter-btn px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                            পেন্ডিং
+                        </button>
+                        <button onclick="filterOrders('confirmed')" class="filter-btn px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                            কনফার্মড
+                        </button>
+                        <button onclick="filterOrders('delivered')" class="filter-btn px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium">
+                            ডেলিভারড
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">বইয়ের সংখ্যা</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                            লোড হচ্ছে...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- রিভিউ ম্যানেজমেন্ট -->
+                <div id="reviewsPage" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">রিভিউ ম্যানেজমেন্ট</h2>
+                        <p class="text-gray-600">গ্রাহক রিভিউ ম্যানেজ করুন</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button onclick="filterReviews('all')" class="review-filter-btn active px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                            সব রিভিউ
+                        </button>
+                        <button onclick="filterReviews('pending')" class="review-filter-btn px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                            পেন্ডিং
+                        </button>
+                        <button onclick="filterReviews('approved')" class="review-filter-btn px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium">
+                            অনুমোদিত
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">নাম</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">রেটিং</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">রিভিউ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reviewsTableBody">
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                            লোড হচ্ছে...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ডিবাগ প্যানেল -->
+                <div id="debugPage" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">ডিবাগ প্যানেল</h2>
+                        <p class="text-gray-600">সিস্টেম ডিবাগ এবং ট্রাবলশুটিং</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">সার্ভার স্ট্যাটাস</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">API কানেকশন:</span>
+                                    <span id="apiStatus" class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">চেক করা হচ্ছে...</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">টোকেন:</span>
+                                    <span id="tokenStatus" class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">চেক করা হচ্ছে...</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">অর্ডার সংখ্যা:</span>
+                                    <span id="debugOrderCount" class="font-bold">0</span>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button onclick="checkServerHealth()" class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
+                                    স্বাস্থ্য পরীক্ষা করুন
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">ডিবাগ টুলস</h3>
+                            <div class="space-y-3">
+                                <button onclick="testOrderAPI()" class="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">
+                                    টেস্ট অর্ডার করুন
+                                </button>
+                                <button onclick="clearLocalStorage()" class="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium">
+                                    লোকাল স্টোরেজ ক্লিয়ার
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">ডিবাগ লগ</h3>
+                        <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm max-h-48 overflow-y-auto" id="debugConsole">
+                            [SYSTEM] ডিবাগ কনসোল প্রস্তুত...
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- অর্ডার ডিটেইলস মডাল -->
+    <div id="orderDetailsModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-gray-800">অর্ডার বিস্তারিত</h3>
+                <button onclick="closeOrderDetails()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6" id="orderDetailsContent">
+                লোড হচ্ছে...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = '/api';
+        const TOKEN_KEY = 'admin_token';
+        const USER_KEY = 'admin_user';
+        
+        // Global variables
+        let authToken = null;
+        let currentUser = null;
+        let ordersChart = null;
+        let statusChart = null;
+        let allOrders = [];
+        let allReviews = [];
+        let currentFilter = 'all';
+        let currentReviewFilter = 'all';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        async function initializeApp() {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            
+            await checkServerHealth();
+            
+            const savedToken = localStorage.getItem(TOKEN_KEY);
+            const savedUser = localStorage.getItem(USER_KEY);
+            
+            if (savedToken && savedUser) {
+                try {
+                    authToken = savedToken;
+                    currentUser = JSON.parse(savedUser);
+                    
+                    const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    
+                    if (response.ok) {
+                        showAdminPanel();
+                        loadDashboardData();
+                    } else {
+                        showLogin();
+                    }
+                } catch (error) {
+                    showLogin();
+                }
+            } else {
+                showLogin();
+            }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('bn-BD', options);
+        }
+
+        async function checkServerHealth() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('serverStatusIcon').className = 'fas fa-circle text-green-500 mr-1';
+                    document.getElementById('serverStatusText').textContent = 'সার্ভার চালু';
+                    return true;
+                }
+            } catch (error) {
+                document.getElementById('serverStatusIcon').className = 'fas fa-circle text-red-500 mr-1';
+                document.getElementById('serverStatusText').textContent = 'সার্ভার ডাউন';
+                return false;
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('adminLayout').classList.add('hidden');
+        }
+
+        function showAdminPanel() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('adminLayout').classList.remove('hidden');
+            document.getElementById('currentUser').textContent = currentUser.username;
+        }
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            loginBtn.disabled = true;
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.token;
+                    currentUser = data.user;
+                    
+                    localStorage.setItem(TOKEN_KEY, authToken);
+                    localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+                    
+                    showAdminPanel();
+                    loadDashboardData();
+                    showToast('লগইন সফল!', 'success');
+                } else {
+                    errorDiv.classList.remove('hidden');
+                    document.getElementById('errorMessage').textContent = data.message;
+                }
+            } catch (error) {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('errorMessage').textContent = 'নেটওয়ার্ক ত্রুটি';
+            } finally {
+                loginBtn.disabled = false;
+            }
+        });
+
+        function logout() {
+            if (confirm('আপনি কি লগআউট করতে চান?')) {
+                localStorage.removeItem(TOKEN_KEY);
+                localStorage.removeItem(USER_KEY);
+                authToken = null;
+                currentUser = null;
+                showLogin();
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            // Simple toast implementation
+            console.log(`${type}: ${message}`);
+        }
+
+        // Dashboard functions
+        async function loadDashboardData() {
+            try {
+                // Load statistics
+                const statsResponse = await fetch(`${API_BASE_URL}/admin/statistics`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    if (statsData.success) {
+                        updateStatistics(statsData.statistics);
+                    }
+                }
+                
+                // Load recent orders
+                const ordersResponse = await fetch(`${API_BASE_URL}/admin/orders?limit=5`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (ordersResponse.ok) {
+                    const ordersData = await ordersResponse.json();
+                    if (ordersData.success) {
+                        renderRecentOrders(ordersData.orders);
+                    }
+                }
+                
+                // Load charts
+                loadChartData();
+                updateNotificationBadges();
+                
+            } catch (error) {
+                console.error('Dashboard error:', error);
+            }
+        }
+
+        function updateStatistics(stats) {
+            document.getElementById('statTotalOrders').textContent = stats.orders.total;
+            document.getElementById('statTotalRevenue').textContent = `৳ ${stats.revenue.total}`;
+            document.getElementById('statTotalReviews').textContent = stats.reviews.total;
+            document.getElementById('statPendingOrders').textContent = stats.orders.pending;
+            document.getElementById('debugOrderCount').textContent = stats.orders.total;
+        }
+
+        function renderRecentOrders(orders) {
+            const container = document.getElementById('recentOrdersTable');
+            
+            if (!orders || orders.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                            কোনো অর্ডার পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            orders.forEach(order => {
+                const statusClass = getStatusClass(order.status);
+                const statusText = getStatusText(order.status);
+                const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
+                
+                html += `
+                    <tr>
+                        <td class="px-6 py-4">${order.orderId}</td>
+                        <td class="px-6 py-4">${order.customerName}</td>
+                        <td class="px-6 py-4">${order.quantity}</td>
+                        <td class="px-6 py-4">৳ ${order.total}</td>
+                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
+                        <td class="px-6 py-4">${date}</td>
+                        <td class="px-6 py-4">
+                            <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        async function loadChartData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/chart-data`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        renderCharts(data);
+                    }
+                }
+            } catch (error) {
+                renderDefaultCharts();
+            }
+        }
+
+        function renderCharts(data) {
+            const ctx1 = document.getElementById('ordersChart').getContext('2d');
+            const ctx2 = document.getElementById('statusChart').getContext('2d');
+            
+            if (ordersChart) ordersChart.destroy();
+            if (statusChart) statusChart.destroy();
+            
+            ordersChart = new Chart(ctx1, {
+                type: 'line',
+                data: data.chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+            
+            statusChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: data.statusData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function renderDefaultCharts() {
+            const ctx1 = document.getElementById('ordersChart').getContext('2d');
+            const ctx2 = document.getElementById('statusChart').getContext('2d');
+            
+            ordersChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['১', '২', '৩', '৪', '৫', '৬', '৭'],
+                    datasets: [{
+                        label: 'অর্ডার',
+                        data: [2, 3, 1, 4, 2, 3, 2],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+            
+            statusChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['পেন্ডিং', 'কনফার্মড', 'ডেলিভারড'],
+                    datasets: [{
+                        data: [5, 3, 8],
+                        backgroundColor: ['#fbbf24', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Page navigation
+        function showPage(page) {
+            // Hide all pages
+            document.getElementById('dashboardPage').classList.add('hidden');
+            document.getElementById('ordersPage').classList.add('hidden');
+            document.getElementById('reviewsPage').classList.add('hidden');
+            document.getElementById('debugPage').classList.add('hidden');
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-white/20');
+            });
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.remove('hidden');
+            
+            // Update page title
+            const titles = {
+                dashboard: 'ড্যাশবোর্ড',
+                orders: 'অর্ডারসমূহ',
+                reviews: 'রিভিউ',
+                debug: 'ডিবাগ প্যানেল'
+            };
+            
+            document.getElementById('pageTitle').textContent = titles[page];
+            
+            // Add active class to nav item
+            event.currentTarget.classList.add('bg-white/20');
+            
+            // Load page data
+            if (page === 'orders') {
+                loadOrders();
+            } else if (page === 'reviews') {
+                loadReviews();
+            }
+        }
+
+        // Order management
+        async function loadOrders() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/orders?status=${currentFilter}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        allOrders = data.orders;
+                        renderOrdersTable(data.orders);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        function renderOrdersTable(orders) {
+            const container = document.getElementById('ordersTableBody');
+            
+            if (!orders || orders.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                            কোনো অর্ডার পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            orders.forEach(order => {
+                const statusClass = getStatusClass(order.status);
+                const statusText = getStatusText(order.status);
+                const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
+                
+                html += `
+                    <tr>
+                        <td class="px-6 py-4">${order.orderId}</td>
+                        <td class="px-6 py-4">${order.customerName}</td>
+                        <td class="px-6 py-4">${order.quantity}</td>
+                        <td class="px-6 py-4">৳ ${order.total}</td>
+                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
+                        <td class="px-6 py-4">${date}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex space-x-2">
+                                <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="text-green-600 hover:text-green-800">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="text-purple-600 hover:text-purple-800">
+                                    <i class="fas fa-truck"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function filterOrders(status) {
+            currentFilter = status === 'all' ? '' : status;
+            loadOrders();
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-blue-100', 'text-blue-800');
+            });
+            event.currentTarget.classList.add('active');
+            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+        }
+
+        // Review management
+        async function loadReviews() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reviews?${currentReviewFilter !== 'all' ? `approved=${currentReviewFilter === 'approved'}` : ''}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        allReviews = data.reviews;
+                        renderReviewsTable(data.reviews);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        }
+
+        function renderReviewsTable(reviews) {
+            const container = document.getElementById('reviewsTableBody');
+            
+            if (!reviews || reviews.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            কোনো রিভিউ পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            reviews.forEach(review => {
+                const status = review.approved ? 'অনুমোদিত' : 'পেন্ডিং';
+                const statusClass = review.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+                const date = new Date(review.createdAt).toLocaleDateString('bn-BD');
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                
+                html += `
+                    <tr>
+                        <td class="px-6 py-4">${review.reviewerName}</td>
+                        <td class="px-6 py-4">
+                            <div class="text-yellow-500">${stars}</div>
+                            <div class="text-sm text-gray-500">${review.rating}/5</div>
+                        </td>
+                        <td class="px-6 py-4">${review.reviewText.substring(0, 100)}...</td>
+                        <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-sm ${statusClass}">${status}</span></td>
+                        <td class="px-6 py-4">${date}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex space-x-2">
+                                ${!review.approved ? `
+                                    <button onclick="approveReview('${review.id}')" class="text-green-600 hover:text-green-800">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                                <button onclick="deleteReview('${review.id}')" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function filterReviews(status) {
+            currentReviewFilter = status;
+            loadReviews();
+            
+            // Update active button
+            document.querySelectorAll('.review-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-blue-100', 'text-blue-800');
+            });
+            event.currentTarget.classList.add('active');
+            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+        }
+
+        async function approveReview(reviewId) {
+            if (!confirm('এই রিভিউটি অনুমোদন করতে চান?')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('রিভিউ অনুমোদন করা হয়েছে', 'success');
+                        loadReviews();
+                        updateNotificationBadges();
+                    }
+                }
+            } catch (error) {
+                showToast('রিভিউ অনুমোদন করতে সমস্যা', 'error');
+            }
+        }
+
+        async function deleteReview(reviewId) {
+            if (!confirm('এই রিভিউটি ডিলিট করতে চান?')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('রিভিউ ডিলিট করা হয়েছে', 'success');
+                        loadReviews();
+                    }
+                }
+            } catch (error) {
+                showToast('রিভিউ ডিলিট করতে সমস্যা', 'error');
+            }
+        }
+
+        async function viewOrderDetails(orderId) {
+            try {
+                const order = allOrders.find(o => o.orderId === orderId);
+                if (!order) {
+                    // Try to fetch from API
+                    const response = await fetch(`${API_BASE_URL}/admin/orders`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        order = data.orders.find(o => o.orderId === orderId);
+                    }
+                }
+                
+                if (order) {
+                    displayOrderDetails(order);
+                }
+            } catch (error) {
+                console.error('Error viewing order:', error);
+            }
+        }
+
+        function displayOrderDetails(order) {
+            const statusText = getStatusText(order.status);
+            const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
+            
+            const content = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">অর্ডার আইডি</h4>
+                            <p class="font-bold">${order.orderId}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">তারিখ</h4>
+                            <p>${date}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">গ্রাহক নাম</h4>
+                            <p>${order.customerName}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">মোবাইল</h4>
+                            <p>${order.phone}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">বইয়ের সংখ্যা</h4>
+                            <p>${order.quantity} কপি</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">মোট মূল্য</h4>
+                            <p class="font-bold text-blue-600">৳ ${order.total}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">ঠিকানা</h4>
+                        <p>${order.address}, ${order.district}</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500 mb-2">স্ট্যাটাস পরিবর্তন</h4>
+                        <div class="flex space-x-2">
+                            <button onclick="updateOrderStatus('${order.orderId}', 'pending')" class="px-4 py-2 bg-yellow-500 text-white rounded-lg">পেন্ডিং</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="px-4 py-2 bg-blue-500 text-white rounded-lg">কনফার্মড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'shipped')" class="px-4 py-2 bg-purple-500 text-white rounded-lg">শিপড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="px-4 py-2 bg-green-500 text-white rounded-lg">ডেলিভারড</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('orderDetailsContent').innerHTML = content;
+            document.getElementById('orderDetailsModal').classList.remove('hidden');
+        }
+
+        function closeOrderDetails() {
+            document.getElementById('orderDetailsModal').classList.add('hidden');
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            const statusText = getStatusText(status);
+            if (!confirm(`আপনি কি এই অর্ডারের স্ট্যাটাস "${statusText}" করতে চান?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/orders/${orderId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast(`অর্ডার স্ট্যাটাস "${statusText}" করা হয়েছে`, 'success');
+                        closeOrderDetails();
+                        loadOrders();
+                        loadDashboardData();
+                    }
+                }
+            } catch (error) {
+                showToast('অর্ডার স্ট্যাটাস আপডেট করতে সমস্যা', 'error');
+            }
+        }
+
+        async function updateNotificationBadges() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/orders?status=pending`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const pendingCount = data.orders.length;
+                        const badge = document.getElementById('pendingBadge');
+                        
+                        if (pendingCount > 0) {
+                            badge.textContent = pendingCount;
+                            badge.classList.remove('hidden');
+                        } else {
+                            badge.classList.add('hidden');
+                        }
+                    }
+                }
+                
+                const reviewsResponse = await fetch(`${API_BASE_URL}/admin/reviews?approved=false`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (reviewsResponse.ok) {
+                    const reviewsData = await reviewsResponse.json();
+                    if (reviewsData.success) {
+                        const pendingReviews = reviewsData.reviews.length;
+                        const reviewBadge = document.getElementById('reviewBadge');
+                        
+                        if (pendingReviews > 0) {
+                            reviewBadge.textContent = pendingReviews;
+                            reviewBadge.classList.remove('hidden');
+                        } else {
+                            reviewBadge.classList.add('hidden');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating badges:', error);
+            }
+        }
+
+        // Debug functions
+        function logDebug(message) {
+            const console = document.getElementById('debugConsole');
+            const timestamp = new Date().toLocaleTimeString();
+            console.innerHTML += `[${timestamp}] ${message}<br>`;
+            console.scrollTop = console.scrollHeight;
+        }
+
+        async function testOrderAPI() {
+            try {
+                logDebug('টেস্ট অর্ডার তৈরি করা হচ্ছে...');
+                
+                const testOrder = {
+                    customerName: 'টেস্ট গ্রাহক',
+                    phone: '017' + Math.floor(Math.random() * 10000000).toString().padStart(8, '0'),
+                    email: 'test@example.com',
+                    address: 'টেস্ট ঠিকানা, ঢাকা',
+                    district: 'dhaka',
+                    quantity: Math.floor(Math.random() * 5) + 1,
+                    total: 460
+                };
+                
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testOrder)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('টেস্ট অর্ডার সফল!', 'success');
+                        logDebug('টেস্ট অর্ডার সফলভাবে তৈরি হয়েছে');
+                        loadDashboardData();
+                    }
+                }
+            } catch (error) {
+                logDebug(`টেস্ট অর্ডার ব্যর্থ: ${error.message}`);
+                showToast('টেস্ট অর্ডার ব্যর্থ', 'error');
+            }
+        }
+
+        function clearLocalStorage() {
+            if (confirm('লোকাল স্টোরেজ ক্লিয়ার করবেন? লগইন তথ্য মুছে যাবে।')) {
+                localStorage.clear();
+                showToast('লোকাল স্টোরেজ ক্লিয়ার করা হয়েছে', 'info');
+                location.reload();
+            }
+        }
+
+        // Utility functions
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'badge-pending',
+                'confirmed': 'badge-confirmed',
+                'shipped': 'badge-shipped',
+                'delivered': 'badge-delivered',
+                'cancelled': 'badge-cancelled'
+            };
+            return classes[status] || 'badge-pending';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'pending': 'পেন্ডিং',
+                'confirmed': 'কনফার্মড',
+                'shipped': 'শিপড',
+                'delivered': 'ডেলিভারড',
+                'cancelled': 'ক্যান্সেলড'
+            };
+            return texts[status] || status;
+        }
+    </script>
+</body>
+</html>

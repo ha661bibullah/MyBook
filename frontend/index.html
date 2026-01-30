@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মৃত্যু ও তার পরে - আধ্যাত্মিক জিজ্ঞাসার উত্তর</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bangla': ['Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1e3a8a',
+                        'secondary': '#0f766e',
+                        'accent': '#7c3aed',
+                        'dark': '#0f172a',
+                        'light': '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        .section-padding {
+            padding: 5rem 0;
+        }
+        .book-cover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+        }
+        .book-cover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+        }
+        .chapter-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .chapter-item:hover {
+            border-left-color: #7c3aed;
+            background-color: rgba(124, 58, 237, 0.05);
+            transform: translateX(5px);
+        }
+        .author-signature {
+            font-family: 'Dancing Script', cursive;
+        }
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .quantity-btn:hover {
+            background-color: #7c3aed;
+            color: white;
+        }
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-bangla bg-light text-gray-800">
+    <!-- হেডার -->
+    <header class="sticky top-0 z-50 bg-dark text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- লোগো -->
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-book-open text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">মৃত্যু ও তার পরে</h1>
+                        <p class="text-xs text-gray-300">আধ্যাত্মিক জিজ্ঞাসার উত্তর</p>
+                    </div>
+                </div>
+                
+                <!-- নেভিগেশন -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
+                    <a href="#chapters" class="hover:text-accent transition">অধ্যায়সমূহ</a>
+                    <a href="#author" class="hover:text-accent transition">লেখক</a>
+                    <a href="#reviews" class="hover:text-accent transition">রিভিউ</a>
+                    <a href="#order" class="hover:text-accent transition">অর্ডার</a>
+                </nav>
+                
+                <!-- অর্ডার বাটন -->
+                <a href="#order">
+                    <button class="px-6 py-2 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-shopping-cart mr-2"></i> এখনই কিনুন
+                    </button>
+                </a>
+            </div>
+            
+            <!-- মোবাইল মেনু -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 pt-4 border-t border-gray-700">
+                <div class="flex flex-col space-y-4">
+                    <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
+                    <a href="#chapters" class="hover:text-accent transition">অধ্যায়সমূহ</a>
+                    <a href="#author" class="hover:text-accent transition">লেখক</a>
+                    <a href="#reviews" class="hover:text-accent transition">রিভিউ</a>
+                    <a href="#order" class="hover:text-accent transition">অর্ডার</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- হিরো সেকশন -->
+    <section class="bg-gradient-to-br from-dark to-primary text-white py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1 mb-6">
+                        <span class="text-sm">বেস্টসেলার বই</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">মৃত্যু ও তার <span class="gradient-text">পরে</span></h1>
+                    <p class="text-xl mb-8 opacity-90">জীবনের শেষ সীমানা পেরিয়ে কী আছে? মৃত্যু পরবর্তী জীবন সম্পর্কে ধর্মীয়, দার্শনিক ও বৈজ্ঞানিক দৃষ্টিভঙ্গির এক অসাধারণ সমন্বয়।</p>
+                    
+                    <div class="flex flex-wrap gap-4 mb-10">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-2"></i>
+                            <span class="font-bold" id="heroRating">৪.৮/৫</span>
+                            <span class="text-gray-300 ml-2">(<span id="heroReviewCount">১২৫০</span>+ রিভিউ)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-book-open mr-2"></i>
+                            <span>৩২০ পৃষ্ঠা</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-user-edit mr-2"></i>
+                            <span>ড. আহমেদ হাসান</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#order">
+                            <button class="px-8 py-3 bg-white text-dark font-bold rounded-lg hover:bg-gray-100 transition flex items-center">
+                                <i class="fas fa-shopping-cart mr-2"></i> এখনই অর্ডার করুন
+                            </button>
+                        </a>
+                        <button id="previewBtn" class="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition flex items-center">
+                            <i class="fas fa-eye mr-2"></i> বইয়ের অংশ পড়ুন
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- বইয়ের কভার -->
+                <div class="relative flex justify-center">
+                    <div class="floating">
+                        <div class="book-cover w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-gray-900 to-dark rounded-lg relative overflow-hidden">
+                            <!-- বইয়ের স্পাইন -->
+                            <div class="absolute left-0 top-0 w-6 h-full bg-gradient-to-b from-accent to-primary"></div>
+                            
+                            <!-- বইয়ের কভার ডিজাইন -->
+                            <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                <div>
+                                    <div class="text-white text-lg font-bold mb-2">মৃত্যু ও তার পরে</div>
+                                    <div class="h-1 w-16 bg-accent mb-4"></div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <div class="text-white text-2xl font-bold mb-2">আধ্যাত্মিক জিজ্ঞাসার উত্তর</div>
+                                    <div class="text-gray-300">ড. আহমেদ হাসান</div>
+                                </div>
+                                
+                                <div class="text-right">
+                                    <div class="text-white text-sm">প্রথম সংস্করণ</div>
+                                    <div class="text-gray-400 text-xs">২০২৪</div>
+                                </div>
+                            </div>
+                            
+                            <!-- আলোক রশ্মি ইফেক্ট -->
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- ডেকোরেশন -->
+                    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-xl"></div>
+                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-primary/20 rounded-full blur-xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- বই সম্পর্কে -->
+    <section id="about" class="section-padding bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">বইটি সম্পর্কে</h2>
+                <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">মানুষের চিরকালীন প্রশ্ন "মৃত্যুর পরে কী হয়?" এর উত্তরের সন্ধানে রচিত এই অনবদ্য গ্রন্থ</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-gray-700 mb-6 text-lg">
+                        "মৃত্যু ও তার পরে" বইটি মৃত্যু পরবর্তী জীবন সম্পর্কে মানবজাতির চিরন্তন জিজ্ঞাসার উত্তর খুঁজে বেড়ায়। এই বইতে লেখক বিভিন্ন ধর্ম, দর্শন, আধ্যাত্মিকতা এবং আধুনিক বিজ্ঞানের আলোকে মৃত্যু ও পরজীবনের ধারণা উপস্থাপন করেছেন।
+                    </p>
+                    
+                    <p class="text-gray-700 mb-6 text-lg">
+                        বইটি শুধুমাত্র ধর্মীয় বিশ্বাস নয়, বরং দার্শনিক তত্ত্ব, আধ্যাত্মিক অভিজ্ঞতা এবং বৈজ্ঞানিক গবেষণার সমন্বয়ে রচিত। নিকট-মৃত্যু অভিজ্ঞতা (NDE), পুনর্জন্ম, আত্মার অমরত্ব এবং মহাবিশ্বের সৃষ্টিতত্ত্ব নিয়ে বিস্তারিত আলোচনা করা হয়েছে।
+                    </p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-accent">
+                        <h4 class="font-bold text-dark mb-3">বইটি যাদের জন্য:</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-accent mt-1 mr-3"></i>
+                                <span>যারা মৃত্যু ও পরজীবন সম্পর্কে জানতে আগ্রহী</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-accent mt-1 mr-3"></i>
+                                <span>ধর্ম ও দর্শন নিয়ে গবেষণাকারী শিক্ষার্থী ও গবেষক</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-accent mt-1 mr-3"></i>
+                                <span>আধ্যাত্মিক অনুসন্ধানকারী ব্যক্তি</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-accent mt-1 mr-3"></i>
+                                <span>জীবনের অর্থ ও উদ্দেশ্য সম্পর্কে চিন্তাশীল পাঠক</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-dark to-primary p-8 rounded-xl text-white">
+                    <h3 class="text-2xl font-bold mb-6">বইয়ের বিশেষ বৈশিষ্ট্য</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-gem text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">বহুমাত্রিক বিশ্লেষণ</h4>
+                                <p class="text-gray-200">ধর্ম, দর্শন, বিজ্ঞান ও আধ্যাত্মিকতার সমন্বয়</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">গবেষণাধর্মী উপস্থাপনা</h4>
+                                <p class="text-gray-200">৩ বছর ব্যাপী গবেষণার ফল</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-hands-helping text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">জীবন পরিবর্তনকারী</h4>
+                                <p class="text-gray-200">মৃত্যুভীতি দূর করে জীবনদৃষ্টি পরিবর্তন করে</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-quote-right text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">বাস্তব অভিজ্ঞতা</h4>
+                                <p class="text-gray-200">১০০+ ব্যক্তির নিকট-মৃত্যু অভিজ্ঞতার আলোচনা</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- অধ্যায়সমূহ -->
+    <section id="chapters" class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">বইয়ের অধ্যায়সমূহ</h2>
+                <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">বইটির ১২টি তথ্যবহুল অধ্যায়ে মৃত্যু ও পরজীবনের বিভিন্ন দিক নিয়ে আলোচনা করা হয়েছে</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- অধ্যায় কার্ড -->
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০১</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">মৃত্যু: জীবনের চূড়ান্ত সত্য</h4>
+                    <p class="text-gray-600">মৃত্যুর ধারণার বিবর্তন ও বিভিন্ন সংস্কৃতিতে মৃত্যুর ব্যাখ্যা</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০২</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">নিকট-মৃত্যু অভিজ্ঞতা: বৈজ্ঞানিক দৃষ্টিভঙ্গি</h4>
+                    <p class="text-gray-600">এনডিই গবেষণা, বৈজ্ঞানিক ব্যাখ্যা ও ব্যক্তিগত অভিজ্ঞতার বিবরণ</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৩</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">পুনর্জন্ম: প্রমাণ ও প্রতিপক্ষ</h4>
+                    <p class="text-gray-600">পূর্বজন্মের স্মৃতি, গবেষণা ও বিভিন্ন ধর্মের দৃষ্টিভঙ্গি</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৪</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">আত্মার অমরত্ব: দার্শনিক বিশ্লেষণ</h4>
+                    <p class="text-gray-600">সক্রেটিস থেকে আধুনিক দার্শনিকদের আত্মা সম্পর্কিত ধারণা</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৫</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">ধর্মীয় দৃষ্টিভঙ্গি: ইসলাম, হিন্দু, বৌদ্ধ, খ্রিস্টান</h4>
+                    <p class="text-gray-600">বিভিন্ন ধর্মে মৃত্যু ও পরজীবনের বর্ণনা ও তুলনামূলক বিশ্লেষণ</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৬</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">মৃত্যুভীতি ও তার প্রতিকার</h4>
+                    <p class="text-gray-600">থ্যানাটোফোবিয়া, মনস্তাত্ত্বিক কারণ ও কাটিয়ে ওঠার উপায়</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৭</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">আধ্যাত্মিকতা ও চেতনার বিজ্ঞান</h4>
+                    <p class="text-gray-600">চেতনা গবেষণা, কোয়ান্টাম পদার্থবিজ্ঞান ও আধ্যাত্মিক অভিজ্ঞতা</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৮</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">পরকালের ভূগোল: স্বর্গ, নরক, বারযাখ</h4>
+                    <p class="text-gray-600">বিভিন্ন ধর্মগ্রন্থে পরকালের স্থানের বিবরণ ও প্রতীকী ব্যাখ্যা</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow">
+                    <div class="text-4xl font-bold text-accent mb-3">০৯</div>
+                    <h4 class="font-bold text-dark text-lg mb-3">মৃত্যু পূর্ব প্রস্তুতি: আধ্যাত্মিক ও ব্যবহারিক নির্দেশনা</h4>
+                    <p class="text-gray-600">মৃত্যুকে স্বাগত জানানোর জন্য আধ্যাত্মিক ও মানসিক প্রস্তুতি</p>
+                </div>
+                
+                <div class="chapter-item bg-white p-6 rounded-lg shadow md:col-span-2 lg:col-span-3">
+                    <div class="text-center p-4">
+                        <h4 class="font-bold text-dark text-xl mb-3">এবং আরও ৩টি গভীর অধ্যায়</h4>
+                        <p class="text-gray-600">সময়ের ধারণা পরজীবনে, আত্মীয়-স্বজনের সাথে পুনর্মিলন, এবং মহাবিশ্বের উদ্দেশ্যে - এই অধ্যায়গুলো বইটিকে পরিপূর্ণতা দিয়েছে</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- লেখক পরিচিতি -->
+    <section id="author" class="section-padding bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">লেখক পরিচিতি</h2>
+                <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-left">
+                    <div class="mb-8">
+                        <h3 class="text-3xl font-bold text-dark mb-2">ড. আহমেদ হাসান</h3>
+                        <p class="text-gray-600 text-lg">দার্শনিক, গবেষক ও আধ্যাত্মিক লেখক</p>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6 text-lg">
+                        ড. আহমেদ হাসান ঢাকা বিশ্ববিদ্যালয়ের দর্শন বিভাগের অধ্যাপক হিসেবে ২০ বছর যাবৎ কর্মরত আছেন। তিনি দর্শনে পিএইচডি ডিগ্রী অর্জন করেছেন কেমব্রিজ বিশ্ববিদ্যালয় থেকে।
+                    </p>
+                    
+                    <p class="text-gray-700 mb-6 text-lg">
+                        দর্শন, ধর্মতত্ত্ব এবং তুলনামূলক ধর্মীয় গবেষণায় তার বিশেষ আগ্রহ রয়েছে। "মৃত্যু ও তার পরে" তার রচিত ৭ম বই। পূর্বে প্রকাশিত তার বইগুলোর মধ্যে "আত্মার রহস্য", "ধর্ম ও বিজ্ঞানের সংলাপ", এবং "বাংলাদেশের সুফি ঐতিহ্য" বিশেষভাবে উল্লেখযোগ্য।
+                    </p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-dark mb-4">শিক্ষাগত যোগ্যতা:</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-graduation-cap text-accent mt-1 mr-3"></i>
+                                <span>পিএইচডি (দর্শন), কেমব্রিজ বিশ্ববিদ্যালয়, যুক্তরাজ্য</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-graduation-cap text-accent mt-1 mr-3"></i>
+                                <span>এমএ (দর্শন), ঢাকা বিশ্ববিদ্যালয়</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-graduation-cap text-accent mt-1 mr-3"></i>
+                                <span>বিএ (সম্মান), দর্শন, ঢাকা বিশ্ববিদ্যালয়</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="relative">
+                        <!-- লেখকের ছবি (প্লেসহোল্ডার) -->
+                        <div class="w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-dark to-primary rounded-lg shadow-2xl flex items-end justify-center overflow-hidden">
+                            <div class="w-full h-3/4 bg-gradient-to-t from-gray-900 to-transparent relative">
+                                <div class="absolute bottom-6 left-0 right-0 text-center text-white p-4">
+                                    <h4 class="text-2xl font-bold">ড. আহমেদ হাসান</h4>
+                                    <p class="text-gray-300">লেখক ও গবেষক</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- স্বাক্ষর -->
+                        <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
+                            <div class="text-center">
+                                <div class="author-signature text-2xl text-dark mb-1">আহমেদ হাসান</div>
+                                <div class="text-xs text-gray-600">লেখকের স্বাক্ষর</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- পাঠক রিভিউ (ডাইনামিক) -->
+    <section id="reviews" class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">পাঠকদের রিভিউ</h2>
+                <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">বইটি পড়ে পাঠকদের জীবনদৃষ্টি কীভাবে বদলে গেছে</p>
+            </div>
+            
+            <!-- রিভিউ সারাংশ -->
+            <div class="bg-white rounded-xl shadow p-8 max-w-3xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold text-dark mb-6 text-center">মোট রেটিং: <span class="text-accent" id="averageRating">৪.৮</span>/৫</h3>
+                
+                <div class="space-y-4 mb-6">
+                    <!-- ৫ তারকা -->
+                    <div class="flex items-center">
+                        <span class="w-16 text-gray-700">৫ তারা</span>
+                        <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 85%" id="star5"></div>
+                        </div>
+                        <span class="w-16 text-right font-bold" id="star5Percent">৮৫%</span>
+                    </div>
+                    
+                    <!-- ৪ তারকা -->
+                    <div class="flex items-center">
+                        <span class="w-16 text-gray-700">৪ তারা</span>
+                        <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 12%" id="star4"></div>
+                        </div>
+                        <span class="w-16 text-right font-bold" id="star4Percent">১২%</span>
+                    </div>
+                    
+                    <!-- ৩ তারকা -->
+                    <div class="flex items-center">
+                        <span class="w-16 text-gray-700">৩ তারা</span>
+                        <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 2%" id="star3"></div>
+                        </div>
+                        <span class="w-16 text-right font-bold" id="star3Percent">২%</span>
+                    </div>
+                    
+                    <!-- ২ তারকা -->
+                    <div class="flex items-center">
+                        <span class="w-16 text-gray-700">২ তারা</span>
+                        <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 1%" id="star2"></div>
+                        </div>
+                        <span class="w-16 text-right font-bold" id="star2Percent">১%</span>
+                    </div>
+                    
+                    <!-- ১ তারকা -->
+                    <div class="flex items-center">
+                        <span class="w-16 text-gray-700">১ তারা</span>
+                        <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 0%" id="star1"></div>
+                        </div>
+                        <span class="w-16 text-right font-bold" id="star1Percent">০%</span>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8 text-gray-600">
+                    <i class="fas fa-users mr-2"></i> <span id="approvedReviewsCount">১২৫০</span>+ পাঠকের রিভিউ এর ভিত্তিতে
+                </div>
+            </div>
+            
+            <!-- ডাইনামিক রিভিউ লিস্ট -->
+            <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- রিভিউগুলো ডাইনামিকভাবে লোড হবে -->
+                <div class="text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600">রিভিউ লোড হচ্ছে...</p>
+                </div>
+            </div>
+            
+            <!-- নতুন রিভিউ ফর্ম -->
+            <div class="max-w-2xl mx-auto">
+                <h3 class="text-2xl font-bold text-dark mb-6 text-center">আপনার রিভিউ দিন</h3>
+                <div class="bg-white p-8 rounded-xl shadow">
+                    <form id="reviewForm">
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">আপনার নাম *</label>
+                            <input type="text" id="reviewerName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">রেটিং *</label>
+                            <div class="flex space-x-2" id="ratingStars">
+                                <i class="far fa-star text-2xl text-gray-400 cursor-pointer rating-star" data-rating="1"></i>
+                                <i class="far fa-star text-2xl text-gray-400 cursor-pointer rating-star" data-rating="2"></i>
+                                <i class="far fa-star text-2xl text-gray-400 cursor-pointer rating-star" data-rating="3"></i>
+                                <i class="far fa-star text-2xl text-gray-400 cursor-pointer rating-star" data-rating="4"></i>
+                                <i class="far fa-star text-2xl text-gray-400 cursor-pointer rating-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="ratingValue" value="5" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">আপনার রিভিউ *</label>
+                            <textarea id="reviewText" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                            রিভিউ জমা দিন
+                        </button>
+                    </form>
+                    
+                    <div id="reviewSuccess" class="hidden mt-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                        <i class="fas fa-check-circle mr-2"></i> আপনার রিভিউ সফলভাবে জমা হয়েছে! অনুমোদনের পর এটি ওয়েবসাইটে দেখানো হবে।
+                    </div>
+                    
+                    <div id="reviewError" class="hidden mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                        <i class="fas fa-exclamation-circle mr-2"></i> <span id="errorText"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- অর্ডার সেকশন (দাম ২৫০ টাকা) -->
+    <section id="order" class="section-padding bg-gradient-to-br from-dark to-primary text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">বইটি অর্ডার করুন</h2>
+                <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
+                <p class="text-xl opacity-90 max-w-3xl mx-auto">জীবন পরিবর্তনকারী এই বইটি সংগ্রহ করুন এখনই। সারা বাংলাদেশে হোম ডেলিভারি সুবিধা রয়েছে।</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- মূল্য ও অফার -->
+                <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-6">মূল্য ও অফার</h3>
+                    
+                    <!-- বইয়ের সংখ্যা নিয়ন্ত্রণ -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold mb-4">বইয়ের সংখ্যা নির্বাচন করুন</h4>
+                        <div class="flex items-center justify-between bg-white/20 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-book text-xl mr-3"></i>
+                                <span class="text-lg">বইয়ের সংখ্যা</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button id="decreaseQty" class="quantity-btn">-</button>
+                                <input type="number" id="bookQuantity" min="1" max="10" value="1" class="quantity-input bg-transparent border-2 border-white/30 text-white">
+                                <button id="increaseQty" class="quantity-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- মূল্য বিবরণ -->
+                    <div class="space-y-6 mb-8">
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20">
+                            <span class="text-lg">প্রতি কপির মূল্য</span>
+                            <span class="text-xl font-bold" id="bookPriceDisplay">২৫০ ৳</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20">
+                            <span class="text-lg">বইয়ের সংখ্যা</span>
+                            <span id="quantityDisplay" class="text-xl">১ কপি</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20">
+                            <span class="text-lg">মোট বইয়ের মূল্য</span>
+                            <span id="booksTotal" class="text-xl">২৫০ ৳</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20">
+                            <span class="text-lg">ডেলিভারি চার্জ</span>
+                            <span id="deliveryCharge" class="text-xl">৬০ ৳</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20">
+                            <span class="text-lg">বিশেষ ছাড়</span>
+                            <span id="discountAmount" class="text-xl text-green-300 font-bold">-৫০ ৳</span>
+                        </div>
+                        
+                        <!-- বাল্ক ডিসকাউন্ট -->
+                        <div class="flex justify-between items-center pb-4 border-b border-white/20 hidden" id="bulkDiscountRow">
+                            <span class="text-lg">বাল্ক অর্ডার ছাড়</span>
+                            <span id="bulkDiscount" class="text-xl text-green-300 font-bold">-০ ৳</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-xl font-bold">
+                            <span>সর্বমোট</span>
+                            <span id="grandTotal" class="text-3xl text-accent">২৬০ ৳</span>
+                        </div>
+                    </div>
+                    
+                    <!-- বিশেষ অফার -->
+                    <div class="bg-gradient-to-r from-accent/30 to-purple-500/30 p-4 rounded-lg mb-8">
+                        <div class="flex items-center">
+                            <i class="fas fa-gift text-2xl mr-4"></i>
+                            <div>
+                                <h4 class="font-bold">বিশেষ অফার!</h4>
+                                <p class="text-sm">প্রথম অর্ডারে ৫০ টাকা ছাড়</p>
+                                <p class="text-sm mt-1 hidden" id="bulkOfferText">৫+ কপি অর্ডারে অতিরিক্ত ২০ টাকা ছাড় প্রতি কপিতে!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ডেলিভারি তথ্য -->
+                    <div>
+                        <h4 class="font-bold mb-4">ডেলিভারি তথ্য:</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-300 mt-1 mr-3"></i>
+                                <span>ঢাকায় ২৪-৪৮ ঘন্টায় ডেলিভারি</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-300 mt-1 mr-3"></i>
+                                <span>বাংলাদেশের যেকোনো জায়গায় ৩-৫ কার্যদিবস</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-300 mt-1 mr-3"></i>
+                                <span>ক্যাশ অন ডেলিভারি সুবিধা</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- অর্ডার ফর্ম -->
+                <div class="bg-white text-dark p-8 rounded-xl shadow-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-center">অর্ডার ফর্ম</h3>
+                    
+                    <form id="orderForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">আপনার নাম *</label>
+                                <input type="text" id="orderName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">মোবাইল নম্বর *</label>
+                                <input type="tel" id="orderPhone" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">ইমেইল</label>
+                            <input type="email" id="orderEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">ঠিকানা *</label>
+                            <textarea id="orderAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">জেলা *</label>
+                                <select id="orderDistrict" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                                    <option value="">জেলা নির্বাচন করুন</option>
+                                    <option value="dhaka">ঢাকা</option>
+                                    <option value="chittagong">চট্টগ্রাম</option>
+                                    <option value="khulna">খুলনা</option>
+                                    <option value="rajshahi">রাজশাহী</option>
+                                    <option value="sylhet">সিলেট</option>
+                                    <option value="barishal">বরিশাল</option>
+                                    <option value="rangpur">রংপুর</option>
+                                    <option value="mymensingh">ময়মনসিংহ</option>
+                                    <option value="other">অন্যান্য</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">বইয়ের সংখ্যা *</label>
+                                <div class="flex items-center">
+                                    <input type="number" id="orderQuantity" min="1" max="10" value="1" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" readonly>
+                                    <span class="ml-3 font-bold">কপি</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- অর্ডার সারাংশ -->
+                        <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                            <h4 class="font-bold text-dark mb-3">অর্ডার সারাংশ</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">বইয়ের সংখ্যা:</span>
+                                    <span id="orderSummaryQuantity" class="font-bold">১ কপি</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">মোট মূল্য:</span>
+                                    <span id="orderSummaryTotal" class="font-bold text-accent">২৬০ ৳</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="orderAgree" class="mr-2 h-5 w-5 text-accent rounded focus:ring-accent" required>
+                                <span class="text-gray-700">আমি <a href="#" class="text-accent hover:underline">শর্তাবলী</a> মেনে অর্ডার দিচ্ছি</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-xl transition text-lg pulse">
+                            <i class="fas fa-shopping-cart mr-2"></i> অর্ডার নিশ্চিত করুন
+                        </button>
+                    </form>
+                    
+                    <div id="orderSuccess" class="hidden mt-6 p-6 bg-green-100 text-green-700 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-3xl mr-4"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">অর্ডার সফল!</h4>
+                                <p id="orderMessage">আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে। অর্ডার আইডি: <span id="orderId" class="font-bold"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="orderError" class="hidden mt-6 p-6 bg-red-100 text-red-700 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle text-3xl mr-4"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">অর্ডার ব্যর্থ!</h4>
+                                <p id="orderErrorText">দুঃখিত, আপনার অর্ডার জমা দিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- যোগাযোগ -->
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold mb-6">সরাসরি অর্ডার বা তথ্যের জন্য কল করুন</h3>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="text-sm text-gray-300">হটলাইন নম্বর</div>
+                            <div class="text-xl font-bold">০১৭১২-৩৪৫৬৭৮</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <i class="fas fa-clock text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="text-sm text-gray-300">যোগাযোগ সময়</div>
+                            <div class="text-xl font-bold">সকাল ১০টা - রাত ১০টা</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ফুটার -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-book-open text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">মৃত্যু ও তার পরে</h3>
+                            <p class="text-xs text-gray-400">আধ্যাত্মিক জিজ্ঞাসার উত্তর</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400">জীবনের শেষ সীমানা পেরিয়ে কী আছে? এই চিরন্তন প্রশ্নের উত্তর সন্ধানে রচিত অসাধারণ বই।</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">লিংক</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">বই সম্পর্কে</a></li>
+                        <li><a href="#chapters" class="text-gray-400 hover:text-white transition">অধ্যায়সমূহ</a></li>
+                        <li><a href="#author" class="text-gray-400 hover:text-white transition">লেখক</a></li>
+                        <li><a href="#reviews" class="text-gray-400 hover:text-white transition">রিভিউ</a></li>
+                        <li><a href="#order" class="text-gray-400 hover:text-white transition">অর্ডার</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">প্রকাশনা</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-building text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">প্রজন্ম প্রকাশনী</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-gray-400 mt=1 mr-3"></i>
+                            <span class="text-gray-400">বাংলাবাজার, ঢাকা-১১০০</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-print text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">প্রথম প্রকাশ: মার্চ ২০২৪</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-book text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">আইএসবিএন: ৯৭৮-৯৮৪-৯২-১২৩৪-৫</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">সামাজিক যোগাযোগ</h4>
+                    <div class="flex space-x-4 mb-6">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400 text-sm">বই সম্পর্কে আপডেট পেতে আমাদের ফলো করুন</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+                <p>© ২০২৪ "মৃত্যু ও তার পরে"। সকল স্বত্ব সংরক্ষিত।</p>
+                <p class="mt-2">লেখক: ড. আহমেদ হাসান | প্রকাশক: প্রজন্ম প্রকাশনী</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- বইয়ের অংশ পড়ুন মডাল -->
+    <div id="bookPreviewModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-dark">বইয়ের নির্বাচিত অংশ পড়ুন</h3>
+                <button id="closePreviewModalBtn" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-grow">
+                <div class="text-center mb-8">
+                    <h4 class="text-xl font-bold text-primary mb-2">প্রথম অধ্যায়ের অংশবিশেষ</h4>
+                    <p class="text-gray-600">মৃত্যু: জীবনের চূড়ান্ত সত্য</p>
+                </div>
+                
+                <div class="prose max-w-none">
+                    <p class="text-gray-700 text-lg mb-4">
+                        মৃত্যু মানবজীবনের একমাত্র অনিবার্য সত্য। জন্মের পর থেকে মৃত্যুর আগ পর্যন্ত আমরা জীবন নামক এক মহাযাত্রায় অংশগ্রহণ করি। কিন্তু কী এই মৃত্যু? কেবল শারীরিক ক্রিয়ার বন্ধ হয়ে যাওয়া, নাকি আরও কিছু?
+                    </p>
+                    
+                    <p class="text-gray-700 text-lg mb-4">
+                        প্রাচীন সভ্যতাগুলো মৃত্যুকে দেখেছে এক মহান রহস্য হিসেবে। মিশরীয়রা বিশ্বাস করতেন মৃত্যুর পর আত্মা আরও এক যাত্রা শুরু করে। গ্রীক দার্শনিকরা চিন্তা করতেন আত্মার অমরত্ব নিয়ে। ভারতীয় দর্শন পুনর্জন্মের ধারণা দিয়েছে।
+                    </p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-accent my-6">
+                        <p class="text-gray-700 italic">
+                            "মৃত্যু জীবনের শেষ নয়, বরং এক ধরনের রূপান্তর। যেমন একটি কুঁড়ি ফুটে ফুল হয়ে যায়, তেমনি মৃত্যু আত্মার জন্য এক নতুন যাত্রার সূচনা।"
+                        </p>
+                        <p class="text-right text-gray-600 mt-2">- ড. আহমেদ হাসান</p>
+                    </div>
+                    
+                    <p class="text-gray-700 text-lg mb-4">
+                        আধুনিক বিজ্ঞান মৃত্যুকে ব্যাখ্যা করে শারীরবৃত্তীয় দৃষ্টিকোণ থেকে। হৃৎপিণ্ডের স্পন্দন বন্ধ হওয়া, মস্তিষ্কের কার্যক্রম থেমে যাওয়া - এগুলো মৃত্যুর চিকিৎসাগত সংজ্ঞা। কিন্তু বিজ্ঞানীরাও স্বীকার করেন যে চেতনা বা আত্মার বিষয়টি এখনও বিজ্ঞানের পূর্ণ বোধগম্যতার বাইরে রয়েছে।
+                    </p>
+                    
+                    <p class="text-gray-700 text-lg mb-4">
+                        নিকট-মৃত্যু অভিজ্ঞতা (NDE) গবেষণায় দেখা গেছে, যারা ক্লিনিক্যালি মৃত ছিলেন কিন্তু পরে ফিরে এসেছেন, তাদের অনেকেই একই ধরনের অভিজ্ঞতার কথা বর্ণনা করেছেন - একটি সুড়ঙ্গের মধ্য দিয়ে যাওয়া, উজ্জ্বল আলো দেখা, শান্তি ও প্রশান্তির অনুভূতি, পূর্বজীবনের ঘটনাগুলো দ্রুত মনে পড়া ইত্যাদি।
+                    </p>
+                    
+                    <p class="text-gray-700 text-lg">
+                        এই বইটিতে আমরা মৃত্যু ও তার পরে কী হতে পারে তা নিয়ে ধর্ম, দর্শন, বিজ্ঞান ও আধ্যাত্মিকতার আলোকে বিস্তারিত আলোচনা করব। আমরা দেখব বিভিন্ন সংস্কৃতি ও ধর্ম কীভাবে মৃত্যুকে ব্যাখ্যা করে এবং এই ব্যাখ্যাগুলো কীভাবে আমাদের বর্তমান জীবনকে প্রভাবিত করে।
+                    </p>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <p class="text-gray-600 text-sm">
+                        <i class="fas fa-info-circle mr-2"></i> এই অংশটি বইয়ের প্রথম অধ্যায়ের সংক্ষিপ্ত সংস্করণ। সম্পূর্ণ অধ্যায় পড়তে বইটি সংগ্রহ করুন।
+                    </p>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+                <div>
+                    <p class="font-bold text-dark">পুরো বই পড়তে চান?</p>
+                    <p class="text-gray-600 text-sm">এখনই অর্ডার করুন এবং বাড়িতে বসেই বইটি পেয়ে যান</p>
+                </div>
+                <a href="#order">
+                    <button class="px-6 py-2 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-shopping-cart mr-2"></i> এখনই কিনুন
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- সফল অর্ডার পপআপ -->
+    <div id="successModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8 text-center">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-check text-green-600 text-3xl"></i>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-dark mb-4">অর্ডার সফল!</h3>
+            <p class="text-gray-700 mb-6" id="modalMessage">আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে।</p>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">অর্ডার আইডি:</span>
+                    <span id="modalOrderId" class="font-bold"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">মোট মূল্য:</span>
+                    <span class="font-bold text-accent" id="modalTotalPrice">২৬০ ৳</span>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <span class="text-gray-600">বইয়ের সংখ্যা:</span>
+                    <span id="modalQuantity" class="font-bold">১ কপি</span>
+                </div>
+            </div>
+            
+            <button id="closeModalBtn" class="w-full py-3 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                ঠিক আছে
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = '/api';
+        
+        // Price configuration (UPDATED: 250 টাকা)
+        const BOOK_PRICE = 250;
+        const DELIVERY_CHARGE = 60;
+        const REGULAR_DISCOUNT = 50;
+        const BULK_DISCOUNT_PER_BOOK = 20;
+        const BULK_QUANTITY_THRESHOLD = 5;
+
+        // DOM Elements
+        const bookQuantityInput = document.getElementById('bookQuantity');
+        const orderQuantityInput = document.getElementById('orderQuantity');
+        const quantityDisplay = document.getElementById('quantityDisplay');
+        const booksTotal = document.getElementById('booksTotal');
+        const deliveryCharge = document.getElementById('deliveryCharge');
+        const discountAmount = document.getElementById('discountAmount');
+        const grandTotal = document.getElementById('grandTotal');
+        const bulkDiscountRow = document.getElementById('bulkDiscountRow');
+        const bulkDiscount = document.getElementById('bulkDiscount');
+        const bulkOfferText = document.getElementById('bulkOfferText');
+        const orderSummaryQuantity = document.getElementById('orderSummaryQuantity');
+        const orderSummaryTotal = document.getElementById('orderSummaryTotal');
+        const decreaseQtyBtn = document.getElementById('decreaseQty');
+        const increaseQtyBtn = document.getElementById('increaseQty');
+        const previewBtn = document.getElementById('previewBtn');
+        const ratingStars = document.querySelectorAll('.rating-star');
+        const ratingValue = document.getElementById('ratingValue');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewSuccess = document.getElementById('reviewSuccess');
+        const reviewError = document.getElementById('reviewError');
+        const orderForm = document.getElementById('orderForm');
+        const orderSuccess = document.getElementById('orderSuccess');
+        const orderError = document.getElementById('orderError');
+        const successModal = document.getElementById('successModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalOrderId = document.getElementById('modalOrderId');
+        const modalQuantity = document.getElementById('modalQuantity');
+        const modalTotalPrice = document.getElementById('modalTotalPrice');
+        const bookPreviewModal = document.getElementById('bookPreviewModal');
+        const closePreviewModalBtn = document.getElementById('closePreviewModalBtn');
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        const approvedReviewsCount = document.getElementById('approvedReviewsCount');
+        const averageRating = document.getElementById('averageRating');
+        const heroRating = document.getElementById('heroRating');
+        const heroReviewCount = document.getElementById('heroReviewCount');
+        
+        // Review rating distribution elements
+        const star1 = document.getElementById('star1');
+        const star2 = document.getElementById('star2');
+        const star3 = document.getElementById('star3');
+        const star4 = document.getElementById('star4');
+        const star5 = document.getElementById('star5');
+        const star1Percent = document.getElementById('star1Percent');
+        const star2Percent = document.getElementById('star2Percent');
+        const star3Percent = document.getElementById('star3Percent');
+        const star4Percent = document.getElementById('star4Percent');
+        const star5Percent = document.getElementById('star5Percent');
+
+        // Global variables
+        let currentQuantity = 1;
+        let approvedReviews = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+        });
+
+        async function initializeApp() {
+            // Calculate initial total
+            calculateTotal();
+            
+            // Setup rating stars
+            setupRatingStars();
+            
+            // Load approved reviews
+            await loadApprovedReviews();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Start auto-refresh for reviews
+            startAutoRefresh();
+        }
+
+        function setupEventListeners() {
+            // Quantity controls
+            decreaseQtyBtn.addEventListener('click', () => {
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                    bookQuantityInput.value = currentQuantity;
+                    orderQuantityInput.value = currentQuantity;
+                    calculateTotal();
+                }
+            });
+
+            increaseQtyBtn.addEventListener('click', () => {
+                if (currentQuantity < 10) {
+                    currentQuantity++;
+                    bookQuantityInput.value = currentQuantity;
+                    orderQuantityInput.value = currentQuantity;
+                    calculateTotal();
+                } else {
+                    alert('সর্বোচ্চ ১০ কপি পর্যন্ত অর্ডার করা যাবে।');
+                }
+            });
+
+            bookQuantityInput.addEventListener('change', () => {
+                let value = parseInt(bookQuantityInput.value);
+                if (value < 1) value = 1;
+                if (value > 10) {
+                    value = 10;
+                    alert('সর্বোচ্চ ১০ কপি পর্যন্ত অর্ডার করা যাবে।');
+                }
+                currentQuantity = value;
+                bookQuantityInput.value = value;
+                orderQuantityInput.value = value;
+                calculateTotal();
+            });
+
+            // Preview modal
+            previewBtn.addEventListener('click', () => {
+                bookPreviewModal.classList.remove('hidden');
+                bookPreviewModal.classList.add('flex');
+            });
+
+            closePreviewModalBtn.addEventListener('click', () => {
+                bookPreviewModal.classList.add('hidden');
+                bookPreviewModal.classList.remove('flex');
+            });
+
+            bookPreviewModal.addEventListener('click', (e) => {
+                if (e.target === bookPreviewModal) {
+                    bookPreviewModal.classList.add('hidden');
+                    bookPreviewModal.classList.remove('flex');
+                }
+            });
+
+            // Success modal
+            closeModalBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                successModal.classList.remove('flex');
+            });
+
+            successModal.addEventListener('click', (e) => {
+                if (e.target === successModal) {
+                    successModal.classList.add('hidden');
+                    successModal.classList.remove('flex');
+                }
+            });
+
+            // Review form submission
+            reviewForm.addEventListener('submit', handleReviewSubmit);
+
+            // Order form submission
+            orderForm.addEventListener('submit', handleOrderSubmit);
+
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu
+                        document.getElementById('mobileMenu').classList.add('hidden');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            document.querySelector('header button:last-child')?.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.toggle('hidden');
+            });
+        }
+
+        function setupRatingStars() {
+            ratingStars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    ratingValue.value = rating;
+                    
+                    // Reset all stars
+                    ratingStars.forEach(s => {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    });
+                    
+                    // Fill stars up to selected rating
+                    for (let i = 0; i < rating; i++) {
+                        ratingStars[i].classList.remove('far');
+                        ratingStars[i].classList.add('fas');
+                    }
+                });
+            });
+
+            // Set default to 5 stars
+            ratingStars[4].classList.remove('far');
+            ratingStars[4].classList.add('fas');
+        }
+
+        function calculateTotal() {
+            // Calculate books price
+            const booksPrice = BOOK_PRICE * currentQuantity;
+            
+            // Delivery charge
+            const delivery = currentQuantity > 0 ? DELIVERY_CHARGE : 0;
+            
+            // Calculate discounts
+            let discount = REGULAR_DISCOUNT;
+            let bulkDiscountAmount = 0;
+            
+            // Bulk discount for 5+ books
+            if (currentQuantity >= BULK_QUANTITY_THRESHOLD) {
+                bulkDiscountAmount = BULK_DISCOUNT_PER_BOOK * currentQuantity;
+                discount += bulkDiscountAmount;
+                
+                // Show bulk discount row
+                bulkDiscountRow.classList.remove('hidden');
+                bulkDiscount.textContent = `-${bulkDiscountAmount} ৳`;
+                bulkOfferText.classList.remove('hidden');
+            } else {
+                bulkDiscountRow.classList.add('hidden');
+                bulkOfferText.classList.add('hidden');
+            }
+            
+            // Calculate grand total
+            const total = booksPrice + delivery - discount;
+            
+            // Update UI
+            quantityDisplay.textContent = `${currentQuantity} কপি`;
+            booksTotal.textContent = `${booksPrice} ৳`;
+            discountAmount.textContent = `-${discount} ৳`;
+            grandTotal.textContent = `${total} ৳`;
+            
+            // Update order summary
+            orderSummaryQuantity.textContent = `${currentQuantity} কপি`;
+            orderSummaryTotal.textContent = `${total} ৳`;
+            
+            return total;
+        }
+
+        async function loadApprovedReviews() {
+            try {
+                // Try to load from the approved reviews endpoint first
+                let response = await fetch(`${API_BASE_URL}/reviews/approved`);
+                
+                if (!response.ok) {
+                    // Fallback to admin API
+                    response = await fetch(`${API_BASE_URL}/admin/reviews?approved=true`);
+                }
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        approvedReviews = data.reviews;
+                        renderReviews();
+                        updateReviewStats();
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } else {
+                    throw new Error('Failed to load reviews');
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                // Fallback to default reviews
+                approvedReviews = getDefaultReviews();
+                renderReviews();
+                updateReviewStats();
+            }
+        }
+
+        function getDefaultReviews() {
+            return [
+                {
+                    reviewerName: 'আরিফ রহমান',
+                    rating: 5,
+                    reviewText: 'জীবনে এই প্রথম এমন একটি বই পড়লাম যা আমাকে গভীরভাবে নাড়া দিয়েছে। মৃত্যুভীতি দূর করে বইটি আমাকে শান্তি দিয়েছে। প্রতিটি অধ্যায় চিন্তার নতুন দিগন্ত খুলে দিয়েছে।',
+                    createdAt: new Date('2024-01-15').toISOString()
+                },
+                {
+                    reviewerName: 'সামিয়া আহমেদ',
+                    rating: 4,
+                    reviewText: 'লেখক ধর্ম, দর্শন ও বিজ্ঞানের সমন্বয় করে যা লিখেছেন তা সত্যিই প্রশংসার দাবিদার। বইটি পড়ে আমার মৃত্যু সম্পর্কিত সব ভুল ধারণা দূর হয়েছে। বিশেষ করে নিকট-মৃত্যু অভিজ্ঞতা অধ্যায়টি অসাধারণ।',
+                    createdAt: new Date('2024-01-20').toISOString()
+                },
+                {
+                    reviewerName: 'মো. রাজিব হাসান',
+                    rating: 5,
+                    reviewText: 'দীর্ঘদিন ধরে মৃত্যু ও পরজীবন নিয়ে পড়াশোনা করছি, কিন্তু এত সুসংগঠিত ও গবেষণাধর্মী বই আর দেখিনি। লেখকের নিরপেক্ষ দৃষ্টিভঙ্গি এবং গভীর জ্ঞানের পরিচয় বইয়ের প্রতিটি পাতায়।',
+                    createdAt: new Date('2024-02-01').toISOString()
+                }
+            ];
+        }
+
+        function renderReviews() {
+            if (approvedReviews.length === 0) {
+                reviewsContainer.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-comment-slash text-4xl text-gray-400 mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-700 mb-2">কোনো রিভিউ পাওয়া যায়নি</h4>
+                        <p class="text-gray-600">প্রথম রিভিউ দিন এবং অন্য পাঠকদের সাহায্য করুন!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date (newest first)
+            const sortedReviews = [...approvedReviews].sort((a, b) => 
+                new Date(b.createdAt) - new Date(a.createdAt)
+            );
+
+            // Take only latest 6 reviews
+            const latestReviews = sortedReviews.slice(0, 6);
+
+            let html = '';
+            latestReviews.forEach(review => {
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const date = new Date(review.createdAt).toLocaleDateString('bn-BD');
+                const initials = review.reviewerName.charAt(0);
+                
+                html += `
+                    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition fade-in">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-accent to-primary rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                ${initials}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">${review.reviewerName}</h4>
+                                <div class="text-yellow-500 text-sm">${stars}</div>
+                                <div class="text-xs text-gray-500">${review.rating}/5</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic mb-4">"${review.reviewText.substring(0, 150)}${review.reviewText.length > 150 ? '...' : ''}"</p>
+                        <div class="text-right text-sm text-gray-500">${date}</div>
+                    </div>
+                `;
+            });
+
+            reviewsContainer.innerHTML = html;
+        }
+
+        function updateReviewStats() {
+            const total = approvedReviews.length;
+            
+            if (total === 0) {
+                // Set default values
+                approvedReviewsCount.textContent = '১২৫০';
+                heroReviewCount.textContent = '১২৫০';
+                averageRating.textContent = '৪.৮';
+                heroRating.textContent = '৪.৮/৫';
+                
+                // Set default distribution
+                star5.style.width = '85%';
+                star4.style.width = '12%';
+                star3.style.width = '2%';
+                star2.style.width = '1%';
+                star1.style.width = '0%';
+                
+                star5Percent.textContent = '85%';
+                star4Percent.textContent = '12%';
+                star3Percent.textContent = '2%';
+                star2Percent.textContent = '1%';
+                star1Percent.textContent = '0%';
+                
+                return;
+            }
+
+            // Calculate average rating
+            const totalRating = approvedReviews.reduce((sum, review) => sum + review.rating, 0);
+            const avgRating = (totalRating / total).toFixed(1);
+            
+            // Calculate rating distribution
+            const ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            approvedReviews.forEach(review => {
+                ratingCounts[review.rating]++;
+            });
+
+            // Update UI
+            approvedReviewsCount.textContent = total;
+            heroReviewCount.textContent = total;
+            averageRating.textContent = avgRating;
+            heroRating.textContent = `${avgRating}/৫`;
+            
+            // Update rating distribution
+            for (let i = 1; i <= 5; i++) {
+                const percentage = Math.round((ratingCounts[i] / total) * 100);
+                document.getElementById(`star${i}`).style.width = `${percentage}%`;
+                document.getElementById(`star${i}Percent`).textContent = `${percentage}%`;
+            }
+        }
+
+        async function handleReviewSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('reviewerName').value.trim();
+            const rating = parseInt(ratingValue.value);
+            const reviewText = document.getElementById('reviewText').value.trim();
+
+            // Validation
+            if (!name) {
+                alert('আপনার নাম লিখুন');
+                return;
+            }
+            
+            if (!reviewText) {
+                alert('রিভিউ লিখুন');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/reviews`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reviewerName: name,
+                        rating: rating,
+                        reviewText: reviewText
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Show success message
+                    reviewSuccess.classList.remove('hidden');
+                    reviewError.classList.add('hidden');
+                    
+                    // Reset form
+                    reviewForm.reset();
+                    
+                    // Reset stars to default (5)
+                    ratingStars.forEach(s => {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    });
+                    ratingStars[4].classList.remove('far');
+                    ratingStars[4].classList.add('fas');
+                    ratingValue.value = 5;
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        reviewSuccess.classList.add('hidden');
+                    }, 5000);
+                } else {
+                    // Show error
+                    reviewError.classList.remove('hidden');
+                    document.getElementById('errorText').textContent = data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে।';
+                    reviewSuccess.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                reviewError.classList.remove('hidden');
+                document.getElementById('errorText').textContent = 'নেটওয়ার্ক সমস্যা। পরে আবার চেষ্টা করুন।';
+                reviewSuccess.classList.add('hidden');
+            }
+        }
+
+        async function handleOrderSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('orderName').value.trim();
+            const phone = document.getElementById('orderPhone').value.trim();
+            const email = document.getElementById('orderEmail').value.trim() || '';
+            const address = document.getElementById('orderAddress').value.trim();
+            const district = document.getElementById('orderDistrict').value;
+            const total = calculateTotal();
+
+            // Validation
+            if (!name) {
+                alert('আপনার নাম লিখুন');
+                return;
+            }
+            
+            if (!phone) {
+                alert('মোবাইল নম্বর লিখুন');
+                return;
+            }
+            
+            // Phone validation (Bangladeshi format)
+            const phoneRegex = /^(?:\+88|88)?(01[3-9]\d{8})$/;
+            if (!phoneRegex.test(phone)) {
+                alert('সঠিক মোবাইল নম্বর লিখুন (উদাহরণ: 01712345678)');
+                return;
+            }
+            
+            if (!address) {
+                alert('ঠিকানা লিখুন');
+                return;
+            }
+            
+            if (!district) {
+                alert('জেলা নির্বাচন করুন');
+                return;
+            }
+            
+            if (!document.getElementById('orderAgree').checked) {
+                alert('শর্তাবলী মেনে নিন');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customerName: name,
+                        phone: phone,
+                        email: email,
+                        address: address,
+                        district: district,
+                        quantity: currentQuantity,
+                        total: total
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const orderId = data.order.orderId || generateOrderId();
+                    
+                    // Update modal content
+                    modalMessage.textContent = `ধন্যবাদ ${name}! আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি ২৪ ঘন্টার মধ্যে ${phone} নম্বরে আপনার সাথে যোগাযোগ করবে।`;
+                    modalOrderId.textContent = orderId;
+                    modalQuantity.textContent = `${currentQuantity} কপি`;
+                    modalTotalPrice.textContent = `${total} ৳`;
+                    
+                    // Update inline success message
+                    document.getElementById('orderId').textContent = orderId;
+                    document.getElementById('orderMessage').textContent = `আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে। অর্ডার আইডি: ${orderId}`;
+                    
+                    // Show success messages
+                    orderSuccess.classList.remove('hidden');
+                    orderError.classList.add('hidden');
+                    successModal.classList.remove('hidden');
+                    successModal.classList.add('flex');
+                    
+                    // Reset form
+                    orderForm.reset();
+                    currentQuantity = 1;
+                    bookQuantityInput.value = 1;
+                    orderQuantityInput.value = 1;
+                    calculateTotal();
+                    
+                    // Reset terms checkbox
+                    document.getElementById('orderAgree').checked = false;
+                    
+                    // Scroll to top
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Hide inline success after 10 seconds
+                    setTimeout(() => {
+                        orderSuccess.classList.add('hidden');
+                    }, 10000);
+                } else {
+                    // Show error
+                    orderError.classList.remove('hidden');
+                    document.getElementById('orderErrorText').textContent = data.message || 'অর্ডার জমা দিতে সমস্যা হয়েছে।';
+                    orderSuccess.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Error submitting order:', error);
+                orderError.classList.remove('hidden');
+                document.getElementById('orderErrorText').textContent = 'নেটওয়ার্ক সমস্যা। পরে আবার চেষ্টা করুন।';
+                orderSuccess.classList.add('hidden');
+            }
+        }
+
+        function generateOrderId() {
+            const prefix = 'BMP';
+            const year = new Date().getFullYear();
+            const month = String(new Date().getMonth() + 1).padStart(2, '0');
+            const day = String(new Date().getDate()).padStart(2, '0');
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            return `${prefix}-${year}${month}${day}-${randomNum}`;
+        }
+
+        function startAutoRefresh() {
+            // Auto-refresh reviews every 30 seconds
+            setInterval(async () => {
+                await loadApprovedReviews();
+            }, 30000);
+        }
+
+        // Global function to refresh reviews (can be called from admin panel)
+        window.refreshReviews = async function() {
+            await loadApprovedReviews();
+            showToast('রিভিউ রিফ্রেশ করা হয়েছে', 'success');
+        };
+
+        // Simple toast function
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white z-50 ${
+                type === 'success' ? 'bg-green-600' :
+                type === 'error' ? 'bg-red-600' :
+                type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600'
+            }`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

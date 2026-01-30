@@ -1,0 +1,701 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/MyBook';
+let mongooseConnected = false;
+
+// JSON ফাইলের পাথ
+const DATA_FILE = path.join(__dirname, 'data.json');
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/admin', express.static(path.join(__dirname, '../admin-panel')));
+
+// MongoDB সেটআপ (ঐচ্ছিক)
+if (process.env.USE_MONGODB === 'true') {
+    mongoose.connect(MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }).then(() => {
+        console.log('✅ MongoDB Connected');
+        mongooseConnected = true;
+        initializeMongoDB();
+    }).catch(err => {
+        console.error('❌ MongoDB Connection Error:', err.message);
+        console.log('⚠️ Using JSON file storage');
+        mongooseConnected = false;
+        initializeJSON();
+    });
+} else {
+    console.log('ℹ️ Using JSON file storage');
+    mongooseConnected = false;
+    initializeJSON();
+}
+
+// MongoDB Schemas
+const orderSchema = new mongoose.Schema({
+    orderId: String,
+    customerName: String,
+    phone: String,
+    email: String,
+    address: String,
+    district: String,
+    quantity: Number,
+    total: Number,
+    status: { type: String, default: 'pending' },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+const reviewSchema = new mongoose.Schema({
+    reviewerName: String,
+    rating: Number,
+    reviewText: String,
+    approved: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    email: String,
+    role: { type: String, default: 'admin' },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const settingsSchema = new mongoose.Schema({
+    bookPrice: { type: Number, default: 250 }, // UPDATED: 250 টাকা
+    deliveryCharge: { type: Number, default: 60 },
+    discount: { type: Number, default: 50 },
+    bulkDiscountThreshold: { type: Number, default: 5 },
+    bulkDiscountAmount: { type: Number, default: 20 },
+    currency: { type: String, default: '৳' },
+    siteTitle: { type: String, default: 'মৃত্যু ও তার পরে' },
+    siteDescription: { type: String, default: 'আধ্যাত্মিক জিজ্ঞাসার উত্তর' },
+    hotlineNumber: { type: String, default: '০১৭১২-৩৪৫৬৭৮' },
+    contactHours: { type: String, default: 'সকাল ১০টা - রাত ১০টা' }
+});
+
+// MongoDB Models
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
+const Review = mongoose.models.Review || mongoose.model('Review', reviewSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+const Settings = mongoose.models.Settings || mongoose.model('Settings', settingsSchema);
+
+// JSON ডেটা ফাংশন
+function readJSONData() {
+    if (!fs.existsSync(DATA_FILE)) {
+        const hashedPassword = bcrypt.hashSync('admin123', 10);
+        const initialData = {
+            orders: [],
+            reviews: [],
+            users: [{
+                id: 'admin001',
+                username: 'admin',
+                password: hashedPassword,
+                email: 'admin@MyBook.com',
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            }],
+            settings: {
+                bookPrice: 250, // UPDATED: 250 টাকা
+                deliveryCharge: 60,
+                discount: 50,
+                bulkDiscountThreshold: 5,
+                bulkDiscountAmount: 20,
+                currency: '৳',
+                siteTitle: 'মৃত্যু ও তার পরে',
+                siteDescription: 'আধ্যাত্মিক জিজ্ঞাসার উত্তর',
+                hotlineNumber: '০১৭১২-৩৪৫৬৭৮',
+                contactHours: 'সকাল ১০টা - রাত ১০টা'
+            }
+        };
+        fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+        return initialData;
+    }
+    const data = fs.readFileSync(DATA_FILE, 'utf8');
+    return JSON.parse(data);
+}
+
+function writeJSONData(data) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+}
+
+async function initializeMongoDB() {
+    try {
+        const adminExists = await User.findOne({ username: 'admin' });
+        if (!adminExists) {
+            const hashedPassword = bcrypt.hashSync('admin123', 10);
+            await User.create({
+                username: 'admin',
+                password: hashedPassword,
+                email: 'admin@MyBook.com',
+                role: 'admin'
+            });
+            console.log('✅ Admin user created');
+        }
+        
+        const settingsExist = await Settings.findOne();
+        if (!settingsExist) {
+            await Settings.create({});
+            console.log('✅ Default settings created');
+        }
+    } catch (error) {
+        console.error('❌ MongoDB initialization error:', error);
+    }
+}
+
+function initializeJSON() {
+    if (!fs.existsSync(DATA_FILE)) {
+        const hashedPassword = bcrypt.hashSync('admin123', 10);
+        const initialData = {
+            orders: [],
+            reviews: [],
+            users: [{
+                id: 'admin001',
+                username: 'admin',
+                password: hashedPassword,
+                email: 'admin@MyBook.com',
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            }],
+            settings: {
+                bookPrice: 250, // UPDATED: 250 টাকা
+                deliveryCharge: 60,
+                discount: 50,
+                bulkDiscountThreshold: 5,
+                bulkDiscountAmount: 20,
+                currency: '৳',
+                siteTitle: 'মৃত্যু ও তার পরে',
+                siteDescription: 'আধ্যাত্মিক জিজ্ঞাসার উত্তর',
+                hotlineNumber: '০১৭১২-৩৪৫৬৭৮',
+                contactHours: 'সকাল ১০টা - রাত ১০টা'
+            }
+        };
+        fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+        console.log('✅ JSON data initialized');
+    }
+}
+
+// Auth Middleware
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ 
+            success: false, 
+            message: 'Access token required' 
+        });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET || 'MyBook-secret-key-2024', (err, user) => {
+        if (err) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Invalid token' 
+            });
+        }
+        req.user = user;
+        next();
+    });
+};
+
+const isAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ 
+            success: false, 
+            message: 'Admin access required' 
+        });
+    }
+    next();
+};
+
+// API Routes
+
+// 1. Health Check
+app.get('/api/health', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Server is running',
+        timestamp: new Date(),
+        database: mongooseConnected ? 'MongoDB' : 'JSON file'
+    });
+});
+
+// 2. Public API - Settings
+app.get('/api/settings', async (req, res) => {
+    try {
+        if (mongooseConnected) {
+            const settings = await Settings.findOne() || {};
+            res.json({ success: true, settings });
+        } else {
+            const data = readJSONData();
+            res.json({ success: true, settings: data.settings });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 3. Public API - Approved Reviews
+app.get('/api/reviews/approved', async (req, res) => {
+    try {
+        let reviews = [];
+        
+        if (mongooseConnected) {
+            reviews = await Review.find({ approved: true }).sort({ createdAt: -1 });
+        } else {
+            const data = readJSONData();
+            reviews = data.reviews.filter(review => review.approved).sort((a, b) => 
+                new Date(b.createdAt) - new Date(a.createdAt)
+            );
+        }
+        
+        res.json({
+            success: true,
+            reviews,
+            total: reviews.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load reviews: ' + error.message
+        });
+    }
+});
+
+// 4. Public API - Submit Order
+app.post('/api/orders', async (req, res) => {
+    try {
+        const orderData = {
+            ...req.body,
+            orderId: 'ORD' + Date.now() + Math.floor(Math.random() * 1000),
+            status: 'pending',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+
+        if (mongooseConnected) {
+            const order = new Order(orderData);
+            await order.save();
+            res.json({ success: true, message: 'Order placed successfully', order });
+        } else {
+            const data = readJSONData();
+            data.orders.push(orderData);
+            writeJSONData(data);
+            res.json({ success: true, message: 'Order placed successfully', order: orderData });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 5. Public API - Submit Review
+app.post('/api/reviews', async (req, res) => {
+    try {
+        const reviewData = {
+            ...req.body,
+            approved: false,
+            createdAt: new Date()
+        };
+
+        if (mongooseConnected) {
+            const review = new Review(reviewData);
+            await review.save();
+            res.json({ success: true, message: 'Review submitted successfully', review });
+        } else {
+            const data = readJSONData();
+            reviewData.id = 'REV' + Date.now();
+            data.reviews.push(reviewData);
+            writeJSONData(data);
+            res.json({ success: true, message: 'Review submitted successfully', review: reviewData });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 6. Authentication
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        
+        if (mongooseConnected) {
+            const user = await User.findOne({ username });
+            if (!user) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
+            
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
+            
+            const token = jwt.sign(
+                { userId: user._id, username: user.username, role: user.role },
+                process.env.JWT_SECRET || 'MyBook-secret-key-2024',
+                { expiresIn: '24h' }
+            );
+            
+            res.json({
+                success: true,
+                message: 'Login successful',
+                token,
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
+            });
+        } else {
+            const data = readJSONData();
+            const user = data.users.find(u => u.username === username);
+            
+            if (!user) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
+            
+            const validPassword = bcrypt.compareSync(password, user.password);
+            if (!validPassword) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
+            
+            const token = jwt.sign(
+                { userId: user.id, username: user.username, role: user.role },
+                process.env.JWT_SECRET || 'MyBook-secret-key-2024',
+                { expiresIn: '24h' }
+            );
+            
+            res.json({
+                success: true,
+                message: 'Login successful',
+                token,
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 7. Admin API - Orders
+app.get('/api/admin/orders', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { status, page = 1, limit = 10 } = req.query;
+        const pageNum = parseInt(page);
+        const limitNum = parseInt(limit);
+        
+        let orders = [];
+        let total = 0;
+        
+        if (mongooseConnected) {
+            const query = status && status !== 'all' ? { status } : {};
+            orders = await Order.find(query)
+                .sort({ createdAt: -1 })
+                .skip((pageNum - 1) * limitNum)
+                .limit(limitNum);
+            total = await Order.countDocuments(query);
+        } else {
+            const data = readJSONData();
+            let filteredOrders = data.orders || [];
+            
+            if (status && status !== 'all') {
+                filteredOrders = filteredOrders.filter(order => order.status === status);
+            }
+            
+            filteredOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            total = filteredOrders.length;
+            const start = (pageNum - 1) * limitNum;
+            orders = filteredOrders.slice(start, start + limitNum);
+        }
+        
+        res.json({
+            success: true,
+            orders,
+            pagination: {
+                currentPage: pageNum,
+                totalPages: Math.ceil(total / limitNum),
+                totalOrders: total,
+                hasNextPage: pageNum * limitNum < total,
+                hasPrevPage: pageNum > 1
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 8. Admin API - Reviews
+app.get('/api/admin/reviews', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { approved, page = 1, limit = 10 } = req.query;
+        const pageNum = parseInt(page);
+        const limitNum = parseInt(limit);
+        
+        let reviews = [];
+        let total = 0;
+        
+        if (mongooseConnected) {
+            const query = approved !== undefined ? { approved: approved === 'true' } : {};
+            reviews = await Review.find(query)
+                .sort({ createdAt: -1 })
+                .skip((pageNum - 1) * limitNum)
+                .limit(limitNum);
+            total = await Review.countDocuments(query);
+        } else {
+            const data = readJSONData();
+            let filteredReviews = data.reviews || [];
+            
+            if (approved !== undefined) {
+                filteredReviews = filteredReviews.filter(review => review.approved === (approved === 'true'));
+            }
+            
+            filteredReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            total = filteredReviews.length;
+            const start = (pageNum - 1) * limitNum;
+            reviews = filteredReviews.slice(start, start + limitNum);
+        }
+        
+        res.json({
+            success: true,
+            reviews,
+            pagination: {
+                currentPage: pageNum,
+                totalPages: Math.ceil(total / limitNum),
+                totalReviews: total,
+                hasNextPage: pageNum * limitNum < total,
+                hasPrevPage: pageNum > 1
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 9. Admin API - Statistics
+app.get('/api/admin/statistics', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        let orders = [];
+        let reviews = [];
+        
+        if (mongooseConnected) {
+            orders = await Order.find();
+            reviews = await Review.find();
+        } else {
+            const data = readJSONData();
+            orders = data.orders || [];
+            reviews = data.reviews || [];
+        }
+        
+        const stats = {
+            orders: {
+                total: orders.length,
+                pending: orders.filter(o => o.status === 'pending').length,
+                confirmed: orders.filter(o => o.status === 'confirmed').length,
+                shipped: orders.filter(o => o.status === 'shipped').length,
+                delivered: orders.filter(o => o.status === 'delivered').length,
+                cancelled: orders.filter(o => o.status === 'cancelled').length
+            },
+            reviews: {
+                total: reviews.length,
+                approved: reviews.filter(r => r.approved).length,
+                pending: reviews.filter(r => !r.approved).length
+            },
+            revenue: {
+                total: orders
+                    .filter(o => o.status === 'delivered')
+                    .reduce((sum, order) => sum + (order.total || 0), 0)
+            }
+        };
+        
+        res.json({ success: true, statistics: stats });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 10. Admin API - Update Order
+app.put('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+        
+        if (mongooseConnected) {
+            const order = await Order.findByIdAndUpdate(
+                id,
+                { ...updates, updatedAt: new Date() },
+                { new: true }
+            );
+            if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+            res.json({ success: true, message: 'Order updated', order });
+        } else {
+            const data = readJSONData();
+            const orderIndex = data.orders.findIndex(o => o.orderId === id || o.id === id);
+            if (orderIndex === -1) return res.status(404).json({ success: false, message: 'Order not found' });
+            
+            data.orders[orderIndex] = { 
+                ...data.orders[orderIndex], 
+                ...updates,
+                updatedAt: new Date().toISOString()
+            };
+            writeJSONData(data);
+            res.json({ success: true, message: 'Order updated', order: data.orders[orderIndex] });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 11. Admin API - Approve Review
+app.put('/api/admin/reviews/:id/approve', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        if (mongooseConnected) {
+            const review = await Review.findByIdAndUpdate(
+                id,
+                { approved: true },
+                { new: true }
+            );
+            if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+            res.json({ success: true, message: 'Review approved', review });
+        } else {
+            const data = readJSONData();
+            const reviewIndex = data.reviews.findIndex(r => r.id === id);
+            if (reviewIndex === -1) return res.status(404).json({ success: false, message: 'Review not found' });
+            
+            data.reviews[reviewIndex].approved = true;
+            writeJSONData(data);
+            res.json({ success: true, message: 'Review approved', review: data.reviews[reviewIndex] });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 12. Admin API - Delete Review
+app.delete('/api/admin/reviews/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        if (mongooseConnected) {
+            const review = await Review.findByIdAndDelete(id);
+            if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+            res.json({ success: true, message: 'Review deleted' });
+        } else {
+            const data = readJSONData();
+            const reviewIndex = data.reviews.findIndex(r => r.id === id);
+            if (reviewIndex === -1) return res.status(404).json({ success: false, message: 'Review not found' });
+            
+            data.reviews.splice(reviewIndex, 1);
+            writeJSONData(data);
+            res.json({ success: true, message: 'Review deleted' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 13. Admin API - Delete Order
+app.delete('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        if (mongooseConnected) {
+            const order = await Order.findByIdAndDelete(id);
+            if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+            res.json({ success: true, message: 'Order deleted' });
+        } else {
+            const data = readJSONData();
+            const orderIndex = data.orders.findIndex(o => o.orderId === id || o.id === id);
+            if (orderIndex === -1) return res.status(404).json({ success: false, message: 'Order not found' });
+            
+            data.orders.splice(orderIndex, 1);
+            writeJSONData(data);
+            res.json({ success: true, message: 'Order deleted' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 14. Dashboard Chart Data
+app.get('/api/dashboard/chart-data', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        // Simple chart data for demo
+        const chartData = {
+            labels: ['১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯', '১০', '১১', '১২', '১৩', '১৪', '১৫'],
+            datasets: [{
+                label: 'দৈনিক অর্ডার',
+                data: [2, 3, 1, 4, 2, 3, 2, 5, 3, 4, 6, 7, 5, 4, 6],
+                backgroundColor: 'rgba(124, 58, 237, 0.2)',
+                borderColor: 'rgba(124, 58, 237, 1)',
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        };
+        
+        const statusData = {
+            labels: ['পেন্ডিং', 'কনফার্মড', 'শিপড', 'ডেলিভারড', 'ক্যান্সেলড'],
+            datasets: [{
+                data: [5, 3, 2, 8, 1],
+                backgroundColor: ['#fbbf24', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444']
+            }]
+        };
+        
+        res.json({
+            success: true,
+            chartData,
+            statusData
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 15. Debug endpoint
+app.get('/api/debug/data', authenticateToken, isAdmin, (req, res) => {
+    try {
+        const data = readJSONData();
+        res.json({ success: true, data });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Serve frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Frontend: http://localhost:${PORT}`);
+    console.log(`👑 Admin Panel: http://localhost:${PORT}/admin`);
+    console.log(`📊 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`🔐 Demo Login: admin / admin123`);
+    console.log(`💾 Database: ${mongooseConnected ? 'MongoDB' : 'JSON file'}`);
+    console.log(`💰 বইয়ের দাম: ২৫০ টাকা`);
+    console.log(`🔧 Debug: http://localhost:${PORT}/api/health`);
+});
