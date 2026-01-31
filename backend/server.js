@@ -361,7 +361,7 @@ app.post('/api/orders', async (req, res) => {
     }
 });
 
-// 5. Public API - Submit Review (UPDATED)
+// 5. Public API - Submit Review
 app.post('/api/reviews', async (req, res) => {
     try {
         const reviewData = {
@@ -563,7 +563,7 @@ app.get('/api/admin/reviews', authenticateToken, isAdmin, async (req, res) => {
     }
 });
 
-// 9. Admin API - Statistics
+// 9. Admin API - Statistics (UPDATED)
 app.get('/api/admin/statistics', authenticateToken, isAdmin, async (req, res) => {
     try {
         let orders = [];
@@ -578,14 +578,15 @@ app.get('/api/admin/statistics', authenticateToken, isAdmin, async (req, res) =>
             reviews = data.reviews || [];
         }
         
+        // সঠিকভাবে স্ট্যাটাস গণনা করুন
         const stats = {
             orders: {
                 total: orders.length,
-                pending: orders.filter(o => o.status === 'pending').length,
-                confirmed: orders.filter(o => o.status === 'confirmed').length,
-                shipped: orders.filter(o => o.status === 'shipped').length,
-                delivered: orders.filter(o => o.status === 'delivered').length,
-                cancelled: orders.filter(o => o.status === 'cancelled').length
+                pending: orders.filter(o => o.status === 'pending' || o.status === 'পেন্ডিং').length,
+                confirmed: orders.filter(o => o.status === 'confirmed' || o.status === 'কনফার্মড').length,
+                shipped: orders.filter(o => o.status === 'shipped' || o.status === 'শিপড').length,
+                delivered: orders.filter(o => o.status === 'delivered' || o.status === 'ডেলিভারড').length,
+                cancelled: orders.filter(o => o.status === 'cancelled' || o.status === 'ক্যান্সেলড').length
             },
             reviews: {
                 total: reviews.length,
@@ -594,18 +595,21 @@ app.get('/api/admin/statistics', authenticateToken, isAdmin, async (req, res) =>
             },
             revenue: {
                 total: orders
-                    .filter(o => o.status === 'delivered')
+                    .filter(o => o.status === 'delivered' || o.status === 'ডেলিভারড')
                     .reduce((sum, order) => sum + (order.total || 0), 0)
             }
         };
         
+        console.log('Statistics calculated:', stats.orders); // ডিবাগ লগ
+        
         res.json({ success: true, statistics: stats });
     } catch (error) {
+        console.error('Error in statistics:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 10. Admin API - Update Order (UPDATED)
+// 10. Admin API - Update Order
 app.put('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
@@ -678,7 +682,7 @@ app.put('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res) =>
     }
 });
 
-// 11. Admin API - Approve Review (UPDATED)
+// 11. Admin API - Approve Review
 app.put('/api/admin/reviews/:id/approve', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
@@ -739,7 +743,7 @@ app.put('/api/admin/reviews/:id/approve', authenticateToken, isAdmin, async (req
     }
 });
 
-// 12. Admin API - Delete Review (UPDATED)
+// 12. Admin API - Delete Review
 app.delete('/api/admin/reviews/:id', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
@@ -838,14 +842,43 @@ app.delete('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res)
     }
 });
 
-// 14. Dashboard Chart Data
+// 14. Dashboard Chart Data (UPDATED)
 app.get('/api/dashboard/chart-data', authenticateToken, isAdmin, async (req, res) => {
     try {
-        const chartData = {
-            labels: ['১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯', '১০', '১১', '১২', '১৩', '১৪', '১৫'],
+        let orders = [];
+        
+        if (mongooseConnected) {
+            orders = await Order.find().sort({ createdAt: -1 }).limit(15);
+        } else {
+            const data = readJSONData();
+            orders = data.orders || [];
+            orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 15);
+        }
+        
+        // আসল অর্ডার ডেটা থেকে চার্ট তৈরি
+        const chartLabels = Array.from({length: 7}, (_, i) => (i + 1).toString());
+        const chartData = Array.from({length: 7}, () => 0);
+        
+        orders.forEach(order => {
+            const orderDate = new Date(order.createdAt);
+            const dayIndex = orderDate.getDate() % 7;
+            if (dayIndex >= 0 && dayIndex < 7) {
+                chartData[dayIndex]++;
+            }
+        });
+        
+        // স্ট্যাটাস ডেটা
+        const pendingCount = orders.filter(o => o.status === 'pending' || o.status === 'পেন্ডিং').length;
+        const confirmedCount = orders.filter(o => o.status === 'confirmed' || o.status === 'কনফার্মড').length;
+        const shippedCount = orders.filter(o => o.status === 'shipped' || o.status === 'শিপড').length;
+        const deliveredCount = orders.filter(o => o.status === 'delivered' || o.status === 'ডেলিভারড').length;
+        const cancelledCount = orders.filter(o => o.status === 'cancelled' || o.status === 'ক্যান্সেলড').length;
+        
+        const chartDataResponse = {
+            labels: chartLabels,
             datasets: [{
                 label: 'দৈনিক অর্ডার',
-                data: [2, 3, 1, 4, 2, 3, 2, 5, 3, 4, 6, 7, 5, 4, 6],
+                data: chartData,
                 backgroundColor: 'rgba(124, 58, 237, 0.2)',
                 borderColor: 'rgba(124, 58, 237, 1)',
                 borderWidth: 2,
@@ -853,7 +886,42 @@ app.get('/api/dashboard/chart-data', authenticateToken, isAdmin, async (req, res
             }]
         };
         
-        const statusData = {
+        const statusDataResponse = {
+            labels: ['পেন্ডিং', 'কনফার্মড', 'শিপড', 'ডেলিভারড', 'ক্যান্সেলড'],
+            datasets: [{
+                data: [
+                    pendingCount,
+                    confirmedCount,
+                    shippedCount,
+                    deliveredCount,
+                    cancelledCount
+                ],
+                backgroundColor: ['#fbbf24', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444']
+            }]
+        };
+        
+        res.json({
+            success: true,
+            chartData: chartDataResponse,
+            statusData: statusDataResponse,
+            realData: true
+        });
+    } catch (error) {
+        console.error('Chart data error:', error);
+        // ইরর হলেও ডিফল্ট ডেটা পাঠান
+        const defaultChartData = {
+            labels: ['১', '২', '৩', '৪', '৫', '৬', '৭'],
+            datasets: [{
+                label: 'দৈনিক অর্ডার',
+                data: [2, 3, 1, 4, 2, 3, 2],
+                backgroundColor: 'rgba(124, 58, 237, 0.2)',
+                borderColor: 'rgba(124, 58, 237, 1)',
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        };
+        
+        const defaultStatusData = {
             labels: ['পেন্ডিং', 'কনফার্মড', 'শিপড', 'ডেলিভারড', 'ক্যান্সেলড'],
             datasets: [{
                 data: [5, 3, 2, 8, 1],
@@ -863,11 +931,10 @@ app.get('/api/dashboard/chart-data', authenticateToken, isAdmin, async (req, res
         
         res.json({
             success: true,
-            chartData,
-            statusData
+            chartData: defaultChartData,
+            statusData: defaultStatusData,
+            realData: false
         });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
     }
 });
 
