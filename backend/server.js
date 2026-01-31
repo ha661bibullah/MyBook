@@ -1,17 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-// server.js - CORS সেটআপ
 const cors = require('cors');
-const corsOptions = {
-  origin: [
-    'https://your-netlify-site.netlify.app',
-    'https://your-render-backend.onrender.com',
-    'http://localhost:3000'
-  ],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
@@ -20,23 +9,36 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const app = express();
+
+// Render স্বয়ংক্রিয়ভাবে PORT সেট করে
 const PORT = process.env.PORT || 3000;
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/MyBook';
-// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://billaharif661_db_user:2GCmDhaEOQUteXow@iwonttotast0.mza6qgz.mongodb.net/BillahArif?appName=IWontToTast0'
-let mongooseConnected = false;
+// CORS সেটআপ - Netlify ও অন্যান্য ডোমেইন এর জন্য
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'https://mybook-site.netlify.app', // আপনার Netlify URL
+    'https://*.netlify.app' // সব Netlify সাবডোমেইনের জন্য
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
+app.use(bodyParser.json());
+app.use(express.json());
+
+// Static files serving
+app.use(express.static(path.join(__dirname, 'public')));
 
 // JSON ফাইলের পাথ
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/admin', express.static(path.join(__dirname, '../admin-panel')));
+// MongoDB Connection (ঐচ্ছিক)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/MyBook';
+let mongooseConnected = false;
 
-// MongoDB সেটআপ (ঐচ্ছিক)
 if (process.env.USE_MONGODB === 'true') {
     mongoose.connect(MONGODB_URI, {
         useNewUrlParser: true,
@@ -89,7 +91,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const settingsSchema = new mongoose.Schema({
-    bookPrice: { type: Number, default: 250 }, // UPDATED: 250 টাকা
+    bookPrice: { type: Number, default: 250 },
     deliveryCharge: { type: Number, default: 60 },
     discount: { type: Number, default: 50 },
     bulkDiscountThreshold: { type: Number, default: 5 },
@@ -123,7 +125,7 @@ function readJSONData() {
                 createdAt: new Date().toISOString()
             }],
             settings: {
-                bookPrice: 250, // UPDATED: 250 টাকা
+                bookPrice: 250,
                 deliveryCharge: 60,
                 discount: 50,
                 bulkDiscountThreshold: 5,
@@ -185,7 +187,7 @@ function initializeJSON() {
                 createdAt: new Date().toISOString()
             }],
             settings: {
-                bookPrice: 250, // UPDATED: 250 টাকা
+                bookPrice: 250,
                 deliveryCharge: 60,
                 discount: 50,
                 bulkDiscountThreshold: 5,
@@ -244,7 +246,8 @@ app.get('/api/health', (req, res) => {
         success: true,
         message: 'Server is running',
         timestamp: new Date(),
-        database: mongooseConnected ? 'MongoDB' : 'JSON file'
+        database: mongooseConnected ? 'MongoDB' : 'JSON file',
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 
@@ -695,19 +698,43 @@ app.get('/api/debug/data', authenticateToken, isAdmin, (req, res) => {
     }
 });
 
-// Serve frontend
+// API documentation endpoint
+app.get('/api', (req, res) => {
+    res.json({
+        message: 'MyBook API',
+        endpoints: {
+            health: '/api/health',
+            settings: '/api/settings',
+            reviews: {
+                approved: '/api/reviews/approved',
+                submit: 'POST /api/reviews'
+            },
+            orders: 'POST /api/orders',
+            auth: 'POST /api/auth/login',
+            admin: {
+                orders: 'GET /api/admin/orders',
+                reviews: 'GET /api/admin/reviews',
+                statistics: 'GET /api/admin/statistics'
+            }
+        }
+    });
+});
+
+// Catch-all route for frontend (Netlify will handle this)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.json({
+        success: false,
+        message: 'API endpoint not found. Please check the documentation at /api'
+    });
 });
 
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`🌐 Frontend: http://localhost:${PORT}`);
-    console.log(`👑 Admin Panel: http://localhost:${PORT}/admin`);
+    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`📊 API Base URL: http://localhost:${PORT}/api`);
     console.log(`🔐 Demo Login: admin / admin123`);
     console.log(`💾 Database: ${mongooseConnected ? 'MongoDB' : 'JSON file'}`);
     console.log(`💰 বইয়ের দাম: ২৫০ টাকা`);
-    console.log(`🔧 Debug: http://localhost:${PORT}/api/health`);
+    console.log(`🔧 Health Check: http://localhost:${PORT}/api/health`);
 });

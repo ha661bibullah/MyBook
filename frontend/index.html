@@ -986,12 +986,12 @@
     </div>
 
     <script>
-        const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend.onrender.com/api' 
-  : '/api';
         // Configuration
-        // const API_BASE_URL = '/api';
-        
+         // Dynamic API URL based on environment
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const API_BASE_URL = isLocalhost 
+            ? 'http://localhost:3000/api' 
+            : 'https://your-render-backend.onrender.com/api'; // আপনার Render URL
         // Price configuration (UPDATED: 250 টাকা)
         const BOOK_PRICE = 250;
         const DELIVERY_CHARGE = 60;
