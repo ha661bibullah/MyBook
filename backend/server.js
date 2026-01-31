@@ -18,8 +18,8 @@ const allowedOrigins = [
   'http://localhost:5500',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5500',
-  'https://697d9f097a017cd8fbfb4287--enchanting-narwhal-d8a7c0.netlify.app',
-  'https://enchanting-narwhal-d8a7c0.netlify.app',
+  'https://moonlit-tarsier-7325a8.netlify.app',
+  'https://heartfelt-lebkuchen-97c297.netlify.app',
   'https://*.netlify.app'
 ];
 
