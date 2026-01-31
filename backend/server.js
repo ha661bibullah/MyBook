@@ -1,6 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+// server.js - CORS সেটআপ
 const cors = require('cors');
+const corsOptions = {
+  origin: [
+    'https://your-netlify-site.netlify.app',
+    'https://your-render-backend.onrender.com',
+    'http://localhost:3000'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
@@ -13,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/MyBook';
+// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://billaharif661_db_user:2GCmDhaEOQUteXow@iwonttotast0.mza6qgz.mongodb.net/BillahArif?appName=IWontToTast0'
 let mongooseConnected = false;
 
 // JSON ফাইলের পাথ

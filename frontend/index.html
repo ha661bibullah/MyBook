@@ -986,8 +986,11 @@
     </div>
 
     <script>
+        const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://your-backend.onrender.com/api' 
+  : '/api';
         // Configuration
-        const API_BASE_URL = '/api';
+        // const API_BASE_URL = '/api';
         
         // Price configuration (UPDATED: 250 টাকা)
         const BOOK_PRICE = 250;
