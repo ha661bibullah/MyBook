@@ -18,8 +18,8 @@ const allowedOrigins = [
   'http://localhost:5500',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5500',
-  'https://moonlit-tarsier-7325a8.netlify.app',
-  'https://heartfelt-lebkuchen-97c297.netlify.app',
+  'https://mrittuandafter.shop',
+  'https://admin.mrittuandafter.shop',
   'https://*.netlify.app'
 ];
 
