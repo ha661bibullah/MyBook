@@ -402,785 +402,844 @@
         </div>
     </div>
 
-    <script>
-        // Configuration
-        const isLocalhost = window.location.hostname === 'localhost' || 
-                            window.location.hostname === '127.0.0.1' || 
-                            window.location.hostname.startsWith('192.168.');
+   <script>
+    // Configuration
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                        window.location.hostname === '127.0.0.1' || 
+                        window.location.hostname.startsWith('192.168.');
+    
+    const API_BASE_URL = isLocalhost 
+        ? 'http://localhost:3000/api' 
+        : 'https://mybook-2.onrender.com/api';
+    
+    const TOKEN_KEY = 'admin_token';
+    const USER_KEY = 'admin_user';
+    
+    // Global variables
+    let authToken = null;
+    let currentUser = null;
+    let ordersChart = null;
+    let statusChart = null;
+    let allOrders = [];
+    let allReviews = [];
+    let currentFilter = 'all';
+    let currentReviewFilter = 'all';
+
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', initializeApp);
+
+    async function initializeApp() {
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
         
-        const API_BASE_URL = isLocalhost 
-            ? 'http://localhost:3000/api' 
-            : 'https://mybook-2.onrender.com/api';
+        await checkServerHealth();
         
-        const TOKEN_KEY = 'admin_token';
-        const USER_KEY = 'admin_user';
+        const savedToken = localStorage.getItem(TOKEN_KEY);
+        const savedUser = localStorage.getItem(USER_KEY);
         
-        // Global variables
-        let authToken = null;
-        let currentUser = null;
-        let ordersChart = null;
-        let statusChart = null;
-        let allOrders = [];
-        let allReviews = [];
-        let currentFilter = 'all';
-        let currentReviewFilter = 'all';
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', initializeApp);
-
-        async function initializeApp() {
-            updateDateTime();
-            setInterval(updateDateTime, 60000);
-            
-            await checkServerHealth();
-            
-            const savedToken = localStorage.getItem(TOKEN_KEY);
-            const savedUser = localStorage.getItem(USER_KEY);
-            
-            if (savedToken && savedUser) {
-                try {
-                    authToken = savedToken;
-                    currentUser = JSON.parse(savedUser);
-                    
-                    const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
-                        headers: { 'Authorization': `Bearer ${authToken}` }
-                    });
-                    
-                    if (response.ok) {
-                        showAdminPanel();
-                        loadDashboardData();
-                    } else {
-                        showLogin();
-                    }
-                } catch (error) {
-                    showLogin();
-                }
-            } else {
-                showLogin();
-            }
-        }
-
-        function updateDateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            };
-            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('bn-BD', options);
-        }
-
-        async function checkServerHealth() {
+        if (savedToken && savedUser) {
             try {
-                const response = await fetch(`${API_BASE_URL}/health`);
-                const data = await response.json();
+                authToken = savedToken;
+                currentUser = JSON.parse(savedUser);
                 
-                if (data.success) {
-                    document.getElementById('serverStatusIcon').className = 'fas fa-circle text-green-500 mr-1';
-                    document.getElementById('serverStatusText').textContent = 'সার্ভার চালু';
-                    return true;
-                }
-            } catch (error) {
-                document.getElementById('serverStatusIcon').className = 'fas fa-circle text-red-500 mr-1';
-                document.getElementById('serverStatusText').textContent = 'সার্ভার ডাউন';
-                return false;
-            }
-        }
-
-        function showLogin() {
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('adminLayout').classList.add('hidden');
-        }
-
-        function showAdminPanel() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('adminLayout').classList.remove('hidden');
-            document.getElementById('currentUser').textContent = currentUser.username;
-        }
-
-        // Login form
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('loginError');
-            const loginBtn = document.getElementById('loginBtn');
-            
-            loginBtn.disabled = true;
-            errorDiv.classList.add('hidden');
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 
-                const data = await response.json();
-                
-                if (data.success) {
-                    authToken = data.token;
-                    currentUser = data.user;
-                    
-                    localStorage.setItem(TOKEN_KEY, authToken);
-                    localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
-                    
+                if (response.ok) {
                     showAdminPanel();
                     loadDashboardData();
-                    showToast('লগইন সফল!', 'success');
                 } else {
-                    errorDiv.classList.remove('hidden');
-                    document.getElementById('errorMessage').textContent = data.message;
+                    showLogin();
                 }
             } catch (error) {
-                errorDiv.classList.remove('hidden');
-                document.getElementById('errorMessage').textContent = 'নেটওয়ার্ক ত্রুটি';
-            } finally {
-                loginBtn.disabled = false;
-            }
-        });
-
-        function logout() {
-            if (confirm('আপনি কি লগআউট করতে চান?')) {
-                localStorage.removeItem(TOKEN_KEY);
-                localStorage.removeItem(USER_KEY);
-                authToken = null;
-                currentUser = null;
                 showLogin();
             }
+        } else {
+            showLogin();
         }
+    }
 
-        function showToast(message, type = 'info') {
-            console.log(`${type}: ${message}`);
-        }
+    function updateDateTime() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
+        document.getElementById('currentDateTime').textContent = now.toLocaleDateString('bn-BD', options);
+    }
 
-        // Dashboard functions
-        async function loadDashboardData() {
-            try {
-                const statsResponse = await fetch(`${API_BASE_URL}/admin/statistics`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (statsResponse.ok) {
-                    const statsData = await statsResponse.json();
-                    if (statsData.success) {
-                        updateStatistics(statsData.statistics);
-                    }
-                }
-                
-                const ordersResponse = await fetch(`${API_BASE_URL}/admin/orders?limit=5`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (ordersResponse.ok) {
-                    const ordersData = await ordersResponse.json();
-                    if (ordersData.success) {
-                        renderRecentOrders(ordersData.orders);
-                    }
-                }
-                
-                loadChartData();
-                updateNotificationBadges();
-                
-            } catch (error) {
-                console.error('Dashboard error:', error);
-            }
-        }
-
-        function updateStatistics(stats) {
-            document.getElementById('statTotalOrders').textContent = stats.orders.total;
-            document.getElementById('statTotalRevenue').textContent = `৳ ${stats.revenue.total}`;
-            document.getElementById('statTotalReviews').textContent = stats.reviews.total;
-            document.getElementById('statPendingOrders').textContent = stats.orders.pending;
-            document.getElementById('debugOrderCount').textContent = stats.orders.total;
-        }
-
-        function renderRecentOrders(orders) {
-            const container = document.getElementById('recentOrdersTable');
+    async function checkServerHealth() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/health`);
+            const data = await response.json();
             
-            if (!orders || orders.length === 0) {
-                container.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
-                            কোনো অর্ডার পাওয়া যায়নি
-                        </td>
-                    </tr>
-                `;
-                return;
+            if (data.success) {
+                document.getElementById('serverStatusIcon').className = 'fas fa-circle text-green-500 mr-1';
+                document.getElementById('serverStatusText').textContent = 'সার্ভার চালু';
+                return true;
             }
-            
-            let html = '';
-            orders.forEach(order => {
-                const statusClass = getStatusClass(order.status);
-                const statusText = getStatusText(order.status);
-                const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
-                
-                html += `
-                    <tr>
-                        <td class="px-6 py-4">${order.orderId}</td>
-                        <td class="px-6 py-4">${order.customerName}</td>
-                        <td class="px-6 py-4">${order.quantity}</td>
-                        <td class="px-6 py-4">৳ ${order.total}</td>
-                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
+        } catch (error) {
+            document.getElementById('serverStatusIcon').className = 'fas fa-circle text-red-500 mr-1';
+            document.getElementById('serverStatusText').textContent = 'সার্ভার ডাউন';
+            return false;
+        }
+    }
+
+    function showLogin() {
+        document.getElementById('loginModal').classList.remove('hidden');
+        document.getElementById('adminLayout').classList.add('hidden');
+    }
+
+    function showAdminPanel() {
+        document.getElementById('loginModal').classList.add('hidden');
+        document.getElementById('adminLayout').classList.remove('hidden');
+        document.getElementById('currentUser').textContent = currentUser.username;
+    }
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        loginBtn.disabled = true;
+        errorDiv.classList.add('hidden');
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
             });
             
-            container.innerHTML = html;
-        }
-
-        async function loadChartData() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/dashboard/chart-data`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
+            const data = await response.json();
+            
+            if (data.success) {
+                authToken = data.token;
+                currentUser = data.user;
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        renderCharts(data);
-                    }
-                }
-            } catch (error) {
-                renderDefaultCharts();
-            }
-        }
-
-        function renderCharts(data) {
-            const ctx1 = document.getElementById('ordersChart').getContext('2d');
-            const ctx2 = document.getElementById('statusChart').getContext('2d');
-            
-            if (ordersChart) ordersChart.destroy();
-            if (statusChart) statusChart.destroy();
-            
-            ordersChart = new Chart(ctx1, {
-                type: 'line',
-                data: data.chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
-            });
-            
-            statusChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: data.statusData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
-
-        function renderDefaultCharts() {
-            const ctx1 = document.getElementById('ordersChart').getContext('2d');
-            const ctx2 = document.getElementById('statusChart').getContext('2d');
-            
-            ordersChart = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: ['১', '২', '৩', '৪', '৫', '৬', '৭'],
-                    datasets: [{
-                        label: 'অর্ডার',
-                        data: [2, 3, 1, 4, 2, 3, 2],
-                        borderColor: '#4f46e5',
-                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
-            });
-            
-            statusChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['পেন্ডিং', 'কনফার্মড', 'ডেলিভারড'],
-                    datasets: [{
-                        data: [5, 3, 8],
-                        backgroundColor: ['#fbbf24', '#3b82f6', '#10b981']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
-
-        // Page navigation
-        function showPage(page) {
-            document.getElementById('dashboardPage').classList.add('hidden');
-            document.getElementById('ordersPage').classList.add('hidden');
-            document.getElementById('reviewsPage').classList.add('hidden');
-            document.getElementById('debugPage').classList.add('hidden');
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('bg-white/20');
-            });
-            
-            document.getElementById(page + 'Page').classList.remove('hidden');
-            
-            const titles = {
-                dashboard: 'ড্যাশবোর্ড',
-                orders: 'অর্ডারসমূহ',
-                reviews: 'রিভিউ',
-                debug: 'ডিবাগ প্যানেল'
-            };
-            
-            document.getElementById('pageTitle').textContent = titles[page];
-            
-            event.currentTarget.classList.add('bg-white/20');
-            
-            if (page === 'orders') {
-                loadOrders();
-            } else if (page === 'reviews') {
-                loadReviews();
-            }
-        }
-
-        // Order management
-        async function loadOrders() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/orders?status=${currentFilter}`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
+                localStorage.setItem(TOKEN_KEY, authToken);
+                localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        allOrders = data.orders;
-                        renderOrdersTable(data.orders);
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading orders:', error);
+                showAdminPanel();
+                loadDashboardData();
+                showToast('লগইন সফল!', 'success');
+            } else {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('errorMessage').textContent = data.message;
             }
+        } catch (error) {
+            errorDiv.classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = 'নেটওয়ার্ক ত্রুটি';
+        } finally {
+            loginBtn.disabled = false;
         }
+    });
 
-        function renderOrdersTable(orders) {
-            const container = document.getElementById('ordersTableBody');
-            
-            if (!orders || orders.length === 0) {
-                container.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
-                            কোনো অর্ডার পাওয়া যায়নি
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            let html = '';
-            orders.forEach(order => {
-                const statusClass = getStatusClass(order.status);
-                const statusText = getStatusText(order.status);
-                const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
-                
-                html += `
-                    <tr>
-                        <td class="px-6 py-4">${order.orderId}</td>
-                        <td class="px-6 py-4">${order.customerName}</td>
-                        <td class="px-6 py-4">${order.quantity}</td>
-                        <td class="px-6 py-4">৳ ${order.total}</td>
-                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex space-x-2">
-                                <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="text-green-600 hover:text-green-800">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                                <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="text-purple-600 hover:text-purple-800">
-                                    <i class="fas fa-truck"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+    function logout() {
+        if (confirm('আপনি কি লগআউট করতে চান?')) {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            authToken = null;
+            currentUser = null;
+            showLogin();
+        }
+    }
+
+    function showToast(message, type = 'info') {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white z-50 ${
+            type === 'success' ? 'bg-green-600' :
+            type === 'error' ? 'bg-red-600' :
+            type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600'
+        }`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                               type === 'error' ? 'fa-exclamation-circle' : 
+                               type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+        
+        console.log(`${type}: ${message}`);
+    }
+
+    // Dashboard functions
+    async function loadDashboardData() {
+        try {
+            const statsResponse = await fetch(`${API_BASE_URL}/admin/statistics`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
             });
             
-            container.innerHTML = html;
-        }
-
-        function filterOrders(status) {
-            currentFilter = status === 'all' ? '' : status;
-            loadOrders();
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.remove('bg-blue-100', 'text-blue-800');
-            });
-            event.currentTarget.classList.add('active');
-            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
-        }
-
-        // Review management
-        async function loadReviews() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/reviews?${currentReviewFilter !== 'all' ? `approved=${currentReviewFilter === 'approved'}` : ''}`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        allReviews = data.reviews;
-                        renderReviewsTable(data.reviews);
-                    }
+            if (statsResponse.ok) {
+                const statsData = await statsResponse.json();
+                if (statsData.success) {
+                    updateStatistics(statsData.statistics);
                 }
-            } catch (error) {
-                console.error('Error loading reviews:', error);
-            }
-        }
-
-        function renderReviewsTable(reviews) {
-            const container = document.getElementById('reviewsTableBody');
-            
-            if (!reviews || reviews.length === 0) {
-                container.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                            কোনো রিভিউ পাওয়া যায়নি
-                        </td>
-                    </tr>
-                `;
-                return;
             }
             
-            let html = '';
-            reviews.forEach(review => {
-                const status = review.approved ? 'অনুমোদিত' : 'পেন্ডিং';
-                const statusClass = review.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-                const date = new Date(review.createdAt).toLocaleDateString('bn-BD');
-                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-                
-                html += `
-                    <tr>
-                        <td class="px-6 py-4">${review.reviewerName}</td>
-                        <td class="px-6 py-4">
-                            <div class="text-yellow-500">${stars}</div>
-                            <div class="text-sm text-gray-500">${review.rating}/5</div>
-                        </td>
-                        <td class="px-6 py-4">${review.reviewText.substring(0, 100)}...</td>
-                        <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-sm ${statusClass}">${status}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex space-x-2">
-                                ${!review.approved ? `
-                                    <button onclick="approveReview('${review.id}')" class="text-green-600 hover:text-green-800">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                ` : ''}
-                                <button onclick="deleteReview('${review.id}')" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            const ordersResponse = await fetch(`${API_BASE_URL}/admin/orders?limit=5`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
             });
             
-            container.innerHTML = html;
-        }
-
-        function filterReviews(status) {
-            currentReviewFilter = status;
-            loadReviews();
-            
-            document.querySelectorAll('.review-filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.remove('bg-blue-100', 'text-blue-800');
-            });
-            event.currentTarget.classList.add('active');
-            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
-        }
-
-        async function approveReview(reviewId) {
-            if (!confirm('এই রিভিউটি অনুমোদন করতে চান?')) return;
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}/approve`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        showToast('রিভিউ অনুমোদন করা হয়েছে', 'success');
-                        loadReviews();
-                        updateNotificationBadges();
-                    }
+            if (ordersResponse.ok) {
+                const ordersData = await ordersResponse.json();
+                if (ordersData.success) {
+                    renderRecentOrders(ordersData.orders);
                 }
-            } catch (error) {
-                showToast('রিভিউ অনুমোদন করতে সমস্যা', 'error');
             }
-        }
-
-        async function deleteReview(reviewId) {
-            if (!confirm('এই রিভিউটি ডিলিট করতে চান?')) return;
             
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        showToast('রিভিউ ডিলিট করা হয়েছে', 'success');
-                        loadReviews();
-                    }
-                }
-            } catch (error) {
-                showToast('রিভিউ ডিলিট করতে সমস্যা', 'error');
-            }
+            loadChartData();
+            updateNotificationBadges();
+            
+        } catch (error) {
+            console.error('Dashboard error:', error);
         }
+    }
 
-        async function viewOrderDetails(orderId) {
-            try {
-                let order = allOrders.find(o => o.orderId === orderId);
-                if (!order) {
-                    const response = await fetch(`${API_BASE_URL}/admin/orders`, {
-                        headers: { 'Authorization': `Bearer ${authToken}` }
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        order = data.orders.find(o => o.orderId === orderId);
-                    }
-                }
-                
-                if (order) {
-                    displayOrderDetails(order);
-                }
-            } catch (error) {
-                console.error('Error viewing order:', error);
-            }
+    function updateStatistics(stats) {
+        document.getElementById('statTotalOrders').textContent = stats.orders.total;
+        document.getElementById('statTotalRevenue').textContent = `৳ ${stats.revenue.total}`;
+        document.getElementById('statTotalReviews').textContent = stats.reviews.total;
+        document.getElementById('statPendingOrders').textContent = stats.orders.pending;
+        document.getElementById('debugOrderCount').textContent = stats.orders.total;
+    }
+
+    function renderRecentOrders(orders) {
+        const container = document.getElementById('recentOrdersTable');
+        
+        if (!orders || orders.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        কোনো অর্ডার পাওয়া যায়নি
+                    </td>
+                </tr>
+            `;
+            return;
         }
-
-        function displayOrderDetails(order) {
+        
+        let html = '';
+        orders.forEach(order => {
+            const statusClass = getStatusClass(order.status);
             const statusText = getStatusText(order.status);
             const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
             
-            const content = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">অর্ডার আইডি</h4>
-                            <p class="font-bold">${order.orderId}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">তারিখ</h4>
-                            <p>${date}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">গ্রাহক নাম</h4>
-                            <p>${order.customerName}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">মোবাইল</h4>
-                            <p>${order.phone}</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">বইয়ের সংখ্যা</h4>
-                            <p>${order.quantity} কপি</p>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-500">মোট মূল্য</h4>
-                            <p class="font-bold text-blue-600">৳ ${order.total}</p>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-500">ঠিকানা</h4>
-                        <p>${order.address}, ${order.district}</p>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">স্ট্যাটাস পরিবর্তন</h4>
+            html += `
+                <tr>
+                    <td class="px-6 py-4">${order.orderId}</td>
+                    <td class="px-6 py-4">${order.customerName}</td>
+                    <td class="px-6 py-4">${order.quantity}</td>
+                    <td class="px-6 py-4">৳ ${order.total}</td>
+                    <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
+                    <td class="px-6 py-4">${date}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+
+    async function loadChartData() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/dashboard/chart-data`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    renderCharts(data);
+                }
+            }
+        } catch (error) {
+            renderDefaultCharts();
+        }
+    }
+
+    function renderCharts(data) {
+        const ctx1 = document.getElementById('ordersChart').getContext('2d');
+        const ctx2 = document.getElementById('statusChart').getContext('2d');
+        
+        if (ordersChart) ordersChart.destroy();
+        if (statusChart) statusChart.destroy();
+        
+        ordersChart = new Chart(ctx1, {
+            type: 'line',
+            data: data.chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+        
+        statusChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: data.statusData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+    function renderDefaultCharts() {
+        const ctx1 = document.getElementById('ordersChart').getContext('2d');
+        const ctx2 = document.getElementById('statusChart').getContext('2d');
+        
+        ordersChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['১', '২', '৩', '৪', '৫', '৬', '৭'],
+                datasets: [{
+                    label: 'অর্ডার',
+                    data: [2, 3, 1, 4, 2, 3, 2],
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+        
+        statusChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['পেন্ডিং', 'কনফার্মড', 'ডেলিভারড'],
+                datasets: [{
+                    data: [5, 3, 8],
+                    backgroundColor: ['#fbbf24', '#3b82f6', '#10b981']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+    // Page navigation
+    function showPage(page) {
+        document.getElementById('dashboardPage').classList.add('hidden');
+        document.getElementById('ordersPage').classList.add('hidden');
+        document.getElementById('reviewsPage').classList.add('hidden');
+        document.getElementById('debugPage').classList.add('hidden');
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('bg-white/20');
+        });
+        
+        document.getElementById(page + 'Page').classList.remove('hidden');
+        
+        const titles = {
+            dashboard: 'ড্যাশবোর্ড',
+            orders: 'অর্ডারসমূহ',
+            reviews: 'রিভিউ',
+            debug: 'ডিবাগ প্যানেল'
+        };
+        
+        document.getElementById('pageTitle').textContent = titles[page];
+        
+        event.currentTarget.classList.add('bg-white/20');
+        
+        if (page === 'orders') {
+            loadOrders();
+        } else if (page === 'reviews') {
+            loadReviews();
+        }
+    }
+
+    // Order management
+    async function loadOrders() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/orders?status=${currentFilter}`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    allOrders = data.orders;
+                    renderOrdersTable(data.orders);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading orders:', error);
+        }
+    }
+
+    function renderOrdersTable(orders) {
+        const container = document.getElementById('ordersTableBody');
+        
+        if (!orders || orders.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        কোনো অর্ডার পাওয়া যায়নি
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        let html = '';
+        orders.forEach(order => {
+            const statusClass = getStatusClass(order.status);
+            const statusText = getStatusText(order.status);
+            const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
+            
+            html += `
+                <tr>
+                    <td class="px-6 py-4">${order.orderId}</td>
+                    <td class="px-6 py-4">${order.customerName}</td>
+                    <td class="px-6 py-4">${order.quantity}</td>
+                    <td class="px-6 py-4">৳ ${order.total}</td>
+                    <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
+                    <td class="px-6 py-4">${date}</td>
+                    <td class="px-6 py-4">
                         <div class="flex space-x-2">
-                            <button onclick="updateOrderStatus('${order.orderId}', 'pending')" class="px-4 py-2 bg-yellow-500 text-white rounded-lg">পেন্ডিং</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="px-4 py-2 bg-blue-500 text-white rounded-lg">কনফার্মড</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'shipped')" class="px-4 py-2 bg-purple-500 text-white rounded-lg">শিপড</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="px-4 py-2 bg-green-500 text-white rounded-lg">ডেলিভারড</button>
+                            <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="text-purple-600 hover:text-purple-800">
+                                <i class="fas fa-truck"></i>
+                            </button>
                         </div>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+
+    function filterOrders(status) {
+        currentFilter = status === 'all' ? '' : status;
+        loadOrders();
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.remove('bg-blue-100', 'text-blue-800');
+        });
+        event.currentTarget.classList.add('active');
+        event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+    }
+
+    // Review management
+    async function loadReviews() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/reviews?${currentReviewFilter !== 'all' ? `approved=${currentReviewFilter === 'approved'}` : ''}`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    allReviews = data.reviews;
+                    renderReviewsTable(data.reviews);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading reviews:', error);
+        }
+    }
+
+    function renderReviewsTable(reviews) {
+        const container = document.getElementById('reviewsTableBody');
+        
+        if (!reviews || reviews.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        কোনো রিভিউ পাওয়া যায়নি
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        let html = '';
+        reviews.forEach(review => {
+            const status = review.approved ? 'অনুমোদিত' : 'পেন্ডিং';
+            const statusClass = review.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+            const date = new Date(review.createdAt).toLocaleDateString('bn-BD');
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            
+            html += `
+                <tr>
+                    <td class="px-6 py-4">${review.reviewerName}</td>
+                    <td class="px-6 py-4">
+                        <div class="text-yellow-500">${stars}</div>
+                        <div class="text-sm text-gray-500">${review.rating}/5</div>
+                    </td>
+                    <td class="px-6 py-4">${review.reviewText.substring(0, 100)}...</td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-sm ${statusClass}">${status}</span></td>
+                    <td class="px-6 py-4">${date}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            ${!review.approved ? `
+                                <button onclick="approveReview('${review.id || review._id}')" class="text-green-600 hover:text-green-800">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            ` : ''}
+                            <button onclick="deleteReview('${review.id || review._id}')" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+
+    function filterReviews(status) {
+        currentReviewFilter = status;
+        loadReviews();
+        
+        document.querySelectorAll('.review-filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.remove('bg-blue-100', 'text-blue-800');
+        });
+        event.currentTarget.classList.add('active');
+        event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+    }
+
+    async function approveReview(reviewId) {
+        if (!confirm('এই রিভিউটি অনুমোদন করতে চান?')) return;
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}/approve`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    showToast('রিভিউ অনুমোদন করা হয়েছে', 'success');
+                    loadReviews();
+                    updateNotificationBadges();
+                } else {
+                    showToast('রিভিউ অনুমোদন ব্যর্থ: ' + data.message, 'error');
+                }
+            } else {
+                const errorData = await response.json();
+                showToast('রিভিউ অনুমোদন ব্যর্থ: ' + errorData.message, 'error');
+            }
+        } catch (error) {
+            showToast('রিভিউ অনুমোদন করতে সমস্যা', 'error');
+        }
+    }
+
+    async function deleteReview(reviewId) {
+        if (!confirm('এই রিভিউটি ডিলিট করতে চান?')) return;
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/reviews/${reviewId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    showToast('রিভিউ ডিলিট করা হয়েছে', 'success');
+                    loadReviews();
+                } else {
+                    showToast('রিভিউ ডিলিট ব্যর্থ: ' + data.message, 'error');
+                }
+            } else {
+                const errorData = await response.json();
+                showToast('রিভিউ ডিলিট ব্যর্থ: ' + errorData.message, 'error');
+            }
+        } catch (error) {
+            showToast('রিভিউ ডিলিট করতে সমস্যা', 'error');
+        }
+    }
+
+    async function viewOrderDetails(orderId) {
+        try {
+            let order = allOrders.find(o => o.orderId === orderId);
+            if (!order) {
+                const response = await fetch(`${API_BASE_URL}/admin/orders`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    order = data.orders.find(o => o.orderId === orderId);
+                }
+            }
+            
+            if (order) {
+                displayOrderDetails(order);
+            }
+        } catch (error) {
+            console.error('Error viewing order:', error);
+        }
+    }
+
+    function displayOrderDetails(order) {
+        const statusText = getStatusText(order.status);
+        const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
+        
+        const content = `
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">অর্ডার আইডি</h4>
+                        <p class="font-bold">${order.orderId}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">তারিখ</h4>
+                        <p>${date}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">গ্রাহক নাম</h4>
+                        <p>${order.customerName}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">মোবাইল</h4>
+                        <p>${order.phone}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">বইয়ের সংখ্যা</h4>
+                        <p>${order.quantity} কপি</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-500">মোট মূল্য</h4>
+                        <p class="font-bold text-blue-600">৳ ${order.total}</p>
                     </div>
                 </div>
-            `;
+                
+                <div>
+                    <h4 class="text-sm font-medium text-gray-500">ঠিকানা</h4>
+                    <p>${order.address}, ${order.district}</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-medium text-gray-500 mb-2">স্ট্যাটাস পরিবর্তন</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="updateOrderStatus('${order.orderId}', 'pending')" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg">পেন্ডিং</button>
+                        <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">কনফার্মড</button>
+                        <button onclick="updateOrderStatus('${order.orderId}', 'shipped')" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg">শিপড</button>
+                        <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">ডেলিভারড</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('orderDetailsContent').innerHTML = content;
+        document.getElementById('orderDetailsModal').classList.remove('hidden');
+    }
+
+    function closeOrderDetails() {
+        document.getElementById('orderDetailsModal').classList.add('hidden');
+    }
+
+    // UPDATED: Order status update function
+    async function updateOrderStatus(orderId, status) {
+        const statusText = getStatusText(status);
+        if (!confirm(`আপনি কি এই অর্ডারের স্ট্যাটাস "${statusText}" করতে চান?`)) return;
+        
+        try {
+            // প্রথমে orderId দিয়ে খুঁজুন
+            let orderToUpdate = allOrders.find(order => order.orderId === orderId);
             
-            document.getElementById('orderDetailsContent').innerHTML = content;
-            document.getElementById('orderDetailsModal').classList.remove('hidden');
-        }
-
-        function closeOrderDetails() {
-            document.getElementById('orderDetailsModal').classList.add('hidden');
-        }
-
-        async function updateOrderStatus(orderId, status) {
-            const statusText = getStatusText(status);
-            if (!confirm(`আপনি কি এই অর্ডারের স্ট্যাটাস "${statusText}" করতে চান?`)) return;
+            // যদি orderId না মেলে, তাহলে _id বা id দিয়ে খুঁজুন
+            if (!orderToUpdate) {
+                orderToUpdate = allOrders.find(order => 
+                    order._id === orderId || order.id === orderId
+                );
+            }
             
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/orders/${orderId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status })
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        showToast(`অর্ডার স্ট্যাটাস "${statusText}" করা হয়েছে`, 'success');
-                        closeOrderDetails();
-                        loadOrders();
-                        loadDashboardData();
+            if (!orderToUpdate) {
+                showToast('অর্ডারটি খুঁজে পাওয়া যায়নি', 'error');
+                return;
+            }
+            
+            // যেকোনো ID (orderId, _id, id) দিয়ে API কল করুন
+            const updateId = orderToUpdate._id || orderToUpdate.id || orderToUpdate.orderId;
+            
+            const response = await fetch(`${API_BASE_URL}/admin/orders/${updateId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    showToast(`অর্ডার স্ট্যাটাস "${statusText}" করা হয়েছে`, 'success');
+                    closeOrderDetails();
+                    
+                    // সব পেজ রিফ্রেশ করুন
+                    await loadOrders();
+                    await loadDashboardData();
+                    updateNotificationBadges();
+                } else {
+                    showToast(data.message || 'স্ট্যাটাস আপডেট ব্যর্থ', 'error');
+                }
+            } else {
+                const errorData = await response.json();
+                showToast(errorData.message || 'স্ট্যাটাস আপডেট ব্যর্থ', 'error');
+            }
+        } catch (error) {
+            console.error('Order status update error:', error);
+            showToast('অর্ডার স্ট্যাটাস আপডেট করতে সমস্যা', 'error');
+        }
+    }
+
+    async function updateNotificationBadges() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/orders?status=pending`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    const pendingCount = data.orders.length;
+                    const badge = document.getElementById('pendingBadge');
+                    
+                    if (pendingCount > 0) {
+                        badge.textContent = pendingCount;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
                     }
                 }
-            } catch (error) {
-                showToast('অর্ডার স্ট্যাটাস আপডেট করতে সমস্যা', 'error');
             }
-        }
-
-        async function updateNotificationBadges() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/orders?status=pending`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        const pendingCount = data.orders.length;
-                        const badge = document.getElementById('pendingBadge');
-                        
-                        if (pendingCount > 0) {
-                            badge.textContent = pendingCount;
-                            badge.classList.remove('hidden');
-                        } else {
-                            badge.classList.add('hidden');
-                        }
+            
+            const reviewsResponse = await fetch(`${API_BASE_URL}/admin/reviews?approved=false`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            
+            if (reviewsResponse.ok) {
+                const reviewsData = await reviewsResponse.json();
+                if (reviewsData.success) {
+                    const pendingReviews = reviewsData.reviews.length;
+                    const reviewBadge = document.getElementById('reviewBadge');
+                    
+                    if (pendingReviews > 0) {
+                        reviewBadge.textContent = pendingReviews;
+                        reviewBadge.classList.remove('hidden');
+                    } else {
+                        reviewBadge.classList.add('hidden');
                     }
                 }
-                
-                const reviewsResponse = await fetch(`${API_BASE_URL}/admin/reviews?approved=false`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (reviewsResponse.ok) {
-                    const reviewsData = await reviewsResponse.json();
-                    if (reviewsData.success) {
-                        const pendingReviews = reviewsData.reviews.length;
-                        const reviewBadge = document.getElementById('reviewBadge');
-                        
-                        if (pendingReviews > 0) {
-                            reviewBadge.textContent = pendingReviews;
-                            reviewBadge.classList.remove('hidden');
-                        } else {
-                            reviewBadge.classList.add('hidden');
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error updating badges:', error);
             }
+        } catch (error) {
+            console.error('Error updating badges:', error);
         }
+    }
 
-        // Debug functions
-        function logDebug(message) {
-            const console = document.getElementById('debugConsole');
-            const timestamp = new Date().toLocaleTimeString();
-            console.innerHTML += `[${timestamp}] ${message}<br>`;
-            console.scrollTop = console.scrollHeight;
-        }
+    // Debug functions
+    function logDebug(message) {
+        const console = document.getElementById('debugConsole');
+        const timestamp = new Date().toLocaleTimeString();
+        console.innerHTML += `[${timestamp}] ${message}<br>`;
+        console.scrollTop = console.scrollHeight;
+    }
 
-        async function testOrderAPI() {
-            try {
-                logDebug('টেস্ট অর্ডার তৈরি করা হচ্ছে...');
-                
-                const testOrder = {
-                    customerName: 'টেস্ট গ্রাহক',
-                    phone: '017' + Math.floor(Math.random() * 10000000).toString().padStart(8, '0'),
-                    email: 'test@example.com',
-                    address: 'টেস্ট ঠিকানা, ঢাকা',
-                    district: 'dhaka',
-                    quantity: Math.floor(Math.random() * 5) + 1,
-                    total: 460
-                };
-                
-                const response = await fetch(`${API_BASE_URL}/orders`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(testOrder)
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        showToast('টেস্ট অর্ডার সফল!', 'success');
-                        logDebug('টেস্ট অর্ডার সফলভাবে তৈরি হয়েছে');
-                        loadDashboardData();
-                    }
-                }
-            } catch (error) {
-                logDebug(`টেস্ট অর্ডার ব্যর্থ: ${error.message}`);
-                showToast('টেস্ট অর্ডার ব্যর্থ', 'error');
-            }
-        }
-
-        function clearLocalStorage() {
-            if (confirm('লোকাল স্টোরেজ ক্লিয়ার করবেন? লগইন তথ্য মুছে যাবে।')) {
-                localStorage.clear();
-                showToast('লোকাল স্টোরেজ ক্লিয়ার করা হয়েছে', 'info');
-                location.reload();
-            }
-        }
-
-        // Utility functions
-        function getStatusClass(status) {
-            const classes = {
-                'pending': 'badge-pending',
-                'confirmed': 'badge-confirmed',
-                'shipped': 'badge-shipped',
-                'delivered': 'badge-delivered',
-                'cancelled': 'badge-cancelled'
+    async function testOrderAPI() {
+        try {
+            logDebug('টেস্ট অর্ডার তৈরি করা হচ্ছে...');
+            
+            const testOrder = {
+                customerName: 'টেস্ট গ্রাহক',
+                phone: '017' + Math.floor(Math.random() * 10000000).toString().padStart(8, '0'),
+                email: 'test@example.com',
+                address: 'টেস্ট ঠিকানা, ঢাকা',
+                district: 'dhaka',
+                quantity: Math.floor(Math.random() * 5) + 1,
+                total: 460
             };
-            return classes[status] || 'badge-pending';
+            
+            const response = await fetch(`${API_BASE_URL}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testOrder)
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    showToast('টেস্ট অর্ডার সফল!', 'success');
+                    logDebug('টেস্ট অর্ডার সফলভাবে তৈরি হয়েছে');
+                    loadDashboardData();
+                }
+            }
+        } catch (error) {
+            logDebug(`টেস্ট অর্ডার ব্যর্থ: ${error.message}`);
+            showToast('টেস্ট অর্ডার ব্যর্থ', 'error');
         }
+    }
 
-        function getStatusText(status) {
-            const texts = {
-                'pending': 'পেন্ডিং',
-                'confirmed': 'কনফার্মড',
-                'shipped': 'শিপড',
-                'delivered': 'ডেলিভারড',
-                'cancelled': 'ক্যান্সেলড'
-            };
-            return texts[status] || status;
+    function clearLocalStorage() {
+        if (confirm('লোকাল স্টোরেজ ক্লিয়ার করবেন? লগইন তথ্য মুছে যাবে।')) {
+            localStorage.clear();
+            showToast('লোকাল স্টোরেজ ক্লিয়ার করা হয়েছে', 'info');
+            location.reload();
         }
-    </script>
+    }
+
+    // Utility functions
+    function getStatusClass(status) {
+        const classes = {
+            'pending': 'badge-pending',
+            'confirmed': 'badge-confirmed',
+            'shipped': 'badge-shipped',
+            'delivered': 'badge-delivered',
+            'cancelled': 'badge-cancelled'
+        };
+        return classes[status] || 'badge-pending';
+    }
+
+    function getStatusText(status) {
+        const texts = {
+            'pending': 'পেন্ডিং',
+            'confirmed': 'কনফার্মড',
+            'shipped': 'শিপড',
+            'delivered': 'ডেলিভারড',
+            'cancelled': 'ক্যান্সেলড'
+        };
+        return texts[status] || status;
+    }
+</script>
 </body>
 </html>

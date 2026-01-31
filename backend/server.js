@@ -338,24 +338,34 @@ app.post('/api/orders', async (req, res) => {
         if (mongooseConnected) {
             const order = new Order(orderData);
             await order.save();
-            res.json({ success: true, message: 'Order placed successfully', order });
+            res.json({ 
+                success: true, 
+                message: 'Order placed successfully', 
+                order: {
+                    id: order._id,
+                    ...order.toObject()
+                }
+            });
         } else {
             const data = readJSONData();
             data.orders.push(orderData);
             writeJSONData(data);
-            res.json({ success: true, message: 'Order placed successfully', order: orderData });
+            res.json({ 
+                success: true, 
+                message: 'Order placed successfully', 
+                order: orderData 
+            });
         }
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 5. Public API - Submit Review
+// 5. Public API - Submit Review (UPDATED)
 app.post('/api/reviews', async (req, res) => {
     try {
         const reviewData = {
             ...req.body,
-            id: 'REV' + Date.now(),
             approved: false,
             createdAt: new Date()
         };
@@ -363,12 +373,27 @@ app.post('/api/reviews', async (req, res) => {
         if (mongooseConnected) {
             const review = new Review(reviewData);
             await review.save();
-            res.json({ success: true, message: 'Review submitted successfully', review });
+            res.json({ 
+                success: true, 
+                message: 'Review submitted successfully', 
+                review: {
+                    id: review._id,
+                    ...review.toObject()
+                }
+            });
         } else {
             const data = readJSONData();
-            data.reviews.push(reviewData);
+            const newReview = {
+                ...reviewData,
+                id: 'REV' + Date.now() + Math.floor(Math.random() * 1000)
+            };
+            data.reviews.push(newReview);
             writeJSONData(data);
-            res.json({ success: true, message: 'Review submitted successfully', review: reviewData });
+            res.json({ 
+                success: true, 
+                message: 'Review submitted successfully', 
+                review: newReview 
+            });
         }
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -580,85 +605,188 @@ app.get('/api/admin/statistics', authenticateToken, isAdmin, async (req, res) =>
     }
 });
 
-// 10. Admin API - Update Order
+// 10. Admin API - Update Order (UPDATED)
 app.put('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
         
         if (mongooseConnected) {
-            const order = await Order.findByIdAndUpdate(
-                id,
-                { ...updates, updatedAt: new Date() },
-                { new: true }
-            );
-            if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
-            res.json({ success: true, message: 'Order updated', order });
+            let order;
+            // প্রথমে _id হিসেবে খুঁজুন
+            try {
+                order = await Order.findById(id);
+            } catch (err) {
+                // _id ব্যর্থ হলে orderId হিসেবে খুঁজুন
+                order = await Order.findOne({ orderId: id });
+            }
+            
+            if (!order) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Order not found' 
+                });
+            }
+            
+            // আপডেট করুন
+            Object.assign(order, updates);
+            order.updatedAt = new Date();
+            await order.save();
+            
+            res.json({ 
+                success: true, 
+                message: 'Order updated successfully', 
+                order: {
+                    id: order._id,
+                    ...order.toObject()
+                }
+            });
         } else {
             const data = readJSONData();
-            const orderIndex = data.orders.findIndex(o => o.orderId === id || o.id === id);
-            if (orderIndex === -1) return res.status(404).json({ success: false, message: 'Order not found' });
+            // orderId বা id দিয়ে খুঁজুন
+            const orderIndex = data.orders.findIndex(o => 
+                o.orderId === id || o.id === id || o._id === id
+            );
+            
+            if (orderIndex === -1) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Order not found' 
+                });
+            }
             
             data.orders[orderIndex] = { 
                 ...data.orders[orderIndex], 
                 ...updates,
                 updatedAt: new Date().toISOString()
             };
+            
             writeJSONData(data);
-            res.json({ success: true, message: 'Order updated', order: data.orders[orderIndex] });
+            
+            res.json({ 
+                success: true, 
+                message: 'Order updated successfully', 
+                order: data.orders[orderIndex] 
+            });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error('Order update error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
     }
 });
 
-// 11. Admin API - Approve Review
+// 11. Admin API - Approve Review (UPDATED)
 app.put('/api/admin/reviews/:id/approve', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         
         if (mongooseConnected) {
-            const review = await Review.findByIdAndUpdate(
-                id,
-                { approved: true },
-                { new: true }
-            );
-            if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
-            res.json({ success: true, message: 'Review approved', review });
+            // ObjectId হিসেবে চেষ্টা করুন, না হলে string হিসেবে খুঁজুন
+            let review;
+            try {
+                // প্রথমে ObjectId হিসেবে খুঁজুন
+                review = await Review.findById(id);
+            } catch (err) {
+                // ObjectId ব্যর্থ হলে string ID হিসেবে খুঁজুন
+                review = await Review.findOne({ id: id });
+            }
+            
+            if (!review) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Review not found' 
+                });
+            }
+            
+            review.approved = true;
+            await review.save();
+            
+            res.json({ 
+                success: true, 
+                message: 'Review approved', 
+                review: {
+                    id: review._id,
+                    ...review.toObject()
+                }
+            });
         } else {
             const data = readJSONData();
             const reviewIndex = data.reviews.findIndex(r => r.id === id);
-            if (reviewIndex === -1) return res.status(404).json({ success: false, message: 'Review not found' });
+            if (reviewIndex === -1) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Review not found' 
+                });
+            }
             
             data.reviews[reviewIndex].approved = true;
             writeJSONData(data);
-            res.json({ success: true, message: 'Review approved', review: data.reviews[reviewIndex] });
+            
+            res.json({ 
+                success: true, 
+                message: 'Review approved', 
+                review: data.reviews[reviewIndex] 
+            });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
     }
 });
 
-// 12. Admin API - Delete Review
+// 12. Admin API - Delete Review (UPDATED)
 app.delete('/api/admin/reviews/:id', authenticateToken, isAdmin, async (req, res) => {
     try {
         const { id } = req.params;
         
         if (mongooseConnected) {
-            const review = await Review.findByIdAndDelete(id);
-            if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
-            res.json({ success: true, message: 'Review deleted' });
+            // ObjectId হিসেবে চেষ্টা করুন, না হলে string হিসেবে খুঁজুন
+            let deletedReview;
+            try {
+                deletedReview = await Review.findByIdAndDelete(id);
+            } catch (err) {
+                deletedReview = await Review.findOneAndDelete({ id: id });
+            }
+            
+            if (!deletedReview) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Review not found' 
+                });
+            }
+            
+            res.json({ 
+                success: true, 
+                message: 'Review deleted' 
+            });
         } else {
             const data = readJSONData();
             const reviewIndex = data.reviews.findIndex(r => r.id === id);
-            if (reviewIndex === -1) return res.status(404).json({ success: false, message: 'Review not found' });
+            if (reviewIndex === -1) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Review not found' 
+                });
+            }
             
             data.reviews.splice(reviewIndex, 1);
             writeJSONData(data);
-            res.json({ success: true, message: 'Review deleted' });
+            
+            res.json({ 
+                success: true, 
+                message: 'Review deleted' 
+            });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
     }
 });
 
@@ -668,17 +796,42 @@ app.delete('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res)
         const { id } = req.params;
         
         if (mongooseConnected) {
-            const order = await Order.findByIdAndDelete(id);
-            if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+            // ObjectId হিসেবে চেষ্টা করুন, না হলে orderId হিসেবে খুঁজুন
+            let deletedOrder;
+            try {
+                deletedOrder = await Order.findByIdAndDelete(id);
+            } catch (err) {
+                deletedOrder = await Order.findOneAndDelete({ orderId: id });
+            }
+            
+            if (!deletedOrder) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Order not found' 
+                });
+            }
+            
             res.json({ success: true, message: 'Order deleted' });
         } else {
             const data = readJSONData();
-            const orderIndex = data.orders.findIndex(o => o.orderId === id || o.id === id);
-            if (orderIndex === -1) return res.status(404).json({ success: false, message: 'Order not found' });
+            const orderIndex = data.orders.findIndex(o => 
+                o.orderId === id || o.id === id || o._id === id
+            );
+            
+            if (orderIndex === -1) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Order not found' 
+                });
+            }
             
             data.orders.splice(orderIndex, 1);
             writeJSONData(data);
-            res.json({ success: true, message: 'Order deleted' });
+            
+            res.json({ 
+                success: true, 
+                message: 'Order deleted' 
+            });
         }
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
