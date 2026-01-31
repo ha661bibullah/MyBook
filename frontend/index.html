@@ -26,90 +26,25 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-        }
-        .section-padding {
-            padding: 5rem 0;
-        }
-        .book-cover {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: all 0.5s ease;
-        }
-        .book-cover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6);
-        }
-        .floating {
-            animation: floating 6s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        .pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .testimonial-card {
-            transition: all 0.3s ease;
-        }
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
-        }
-        .chapter-item {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-        .chapter-item:hover {
-            border-left-color: #7c3aed;
-            background-color: rgba(124, 58, 237, 0.05);
-            transform: translateX(5px);
-        }
-        .author-signature {
-            font-family: 'Dancing Script', cursive;
-        }
-        .quantity-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .quantity-btn:hover {
-            background-color: #7c3aed;
-            color: white;
-        }
-        .quantity-input {
-            width: 60px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+        .section-padding { padding: 5rem 0; }
+        .book-cover { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); transition: all 0.5s ease; }
+        .book-cover:hover { transform: translateY(-10px); box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6); }
+        .floating { animation: floating 6s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        .pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .testimonial-card { transition: all 0.3s ease; }
+        .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2); }
+        .chapter-item { transition: all 0.3s ease; border-left: 4px solid transparent; }
+        .chapter-item:hover { border-left-color: #7c3aed; background-color: rgba(124, 58, 237, 0.05); transform: translateX(5px); }
+        .author-signature { font-family: 'Dancing Script', cursive; }
+        .quantity-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-size: 1.2rem; }
+        .quantity-btn:hover { background-color: #7c3aed; color: white; }
+        .quantity-input { width: 60px; text-align: center; font-weight: bold; font-size: 1.2rem; border: 2px solid #e5e7eb; border-radius: 8px; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -118,7 +53,6 @@
     <header class="sticky top-0 z-50 bg-dark text-white shadow-lg">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <!-- লোগো -->
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center mr-3">
                         <i class="fas fa-book-open text-white text-xl"></i>
@@ -129,7 +63,6 @@
                     </div>
                 </div>
                 
-                <!-- নেভিগেশন -->
                 <nav class="hidden md:flex space-x-8">
                     <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
                     <a href="#chapters" class="hover:text-accent transition">অধ্যায়সমূহ</a>
@@ -138,7 +71,6 @@
                     <a href="#order" class="hover:text-accent transition">অর্ডার</a>
                 </nav>
                 
-                <!-- অর্ডার বাটন -->
                 <a href="#order">
                     <button class="px-6 py-2 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
                         <i class="fas fa-shopping-cart mr-2"></i> এখনই কিনুন
@@ -146,7 +78,6 @@
                 </a>
             </div>
             
-            <!-- মোবাইল মেনু -->
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 pt-4 border-t border-gray-700">
                 <div class="flex flex-col space-y-4">
                     <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
@@ -198,14 +129,11 @@
                     </div>
                 </div>
                 
-                <!-- বইয়ের কভার -->
                 <div class="relative flex justify-center">
                     <div class="floating">
                         <div class="book-cover w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-gray-900 to-dark rounded-lg relative overflow-hidden">
-                            <!-- বইয়ের স্পাইন -->
                             <div class="absolute left-0 top-0 w-6 h-full bg-gradient-to-b from-accent to-primary"></div>
                             
-                            <!-- বইয়ের কভার ডিজাইন -->
                             <div class="absolute inset-0 p-6 flex flex-col justify-between">
                                 <div>
                                     <div class="text-white text-lg font-bold mb-2">মৃত্যু ও তার পরে</div>
@@ -223,12 +151,10 @@
                                 </div>
                             </div>
                             
-                            <!-- আলোক রশ্মি ইফেক্ট -->
                             <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full"></div>
                         </div>
                     </div>
                     
-                    <!-- ডেকোরেশন -->
                     <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-xl"></div>
                     <div class="absolute -top-6 -right-6 w-40 h-40 bg-primary/20 rounded-full blur-xl"></div>
                 </div>
@@ -337,7 +263,6 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- অধ্যায় কার্ড -->
                 <div class="chapter-item bg-white p-6 rounded-lg shadow">
                     <div class="text-4xl font-bold text-accent mb-3">০১</div>
                     <h4 class="font-bold text-dark text-lg mb-3">মৃত্যু: জীবনের চূড়ান্ত সত্য</h4>
@@ -446,7 +371,6 @@
                 
                 <div class="flex justify-center">
                     <div class="relative">
-                        <!-- লেখকের ছবি (প্লেসহোল্ডার) -->
                         <div class="w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-dark to-primary rounded-lg shadow-2xl flex items-end justify-center overflow-hidden">
                             <div class="w-full h-3/4 bg-gradient-to-t from-gray-900 to-transparent relative">
                                 <div class="absolute bottom-6 left-0 right-0 text-center text-white p-4">
@@ -456,7 +380,6 @@
                             </div>
                         </div>
                         
-                        <!-- স্বাক্ষর -->
                         <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
                             <div class="text-center">
                                 <div class="author-signature text-2xl text-dark mb-1">আহমেদ হাসান</div>
@@ -469,7 +392,7 @@
         </div>
     </section>
 
-    <!-- পাঠক রিভিউ (ডাইনামিক) -->
+    <!-- পাঠক রিভিউ -->
     <section id="reviews" class="section-padding bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
@@ -478,12 +401,10 @@
                 <p class="text-gray-600 max-w-3xl mx-auto text-lg">বইটি পড়ে পাঠকদের জীবনদৃষ্টি কীভাবে বদলে গেছে</p>
             </div>
             
-            <!-- রিভিউ সারাংশ -->
             <div class="bg-white rounded-xl shadow p-8 max-w-3xl mx-auto mb-12">
                 <h3 class="text-2xl font-bold text-dark mb-6 text-center">মোট রেটিং: <span class="text-accent" id="averageRating">৪.৮</span>/৫</h3>
                 
                 <div class="space-y-4 mb-6">
-                    <!-- ৫ তারকা -->
                     <div class="flex items-center">
                         <span class="w-16 text-gray-700">৫ তারা</span>
                         <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
@@ -492,7 +413,6 @@
                         <span class="w-16 text-right font-bold" id="star5Percent">৮৫%</span>
                     </div>
                     
-                    <!-- ৪ তারকা -->
                     <div class="flex items-center">
                         <span class="w-16 text-gray-700">৪ তারা</span>
                         <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
@@ -501,7 +421,6 @@
                         <span class="w-16 text-right font-bold" id="star4Percent">১২%</span>
                     </div>
                     
-                    <!-- ৩ তারকা -->
                     <div class="flex items-center">
                         <span class="w-16 text-gray-700">৩ তারা</span>
                         <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
@@ -510,7 +429,6 @@
                         <span class="w-16 text-right font-bold" id="star3Percent">২%</span>
                     </div>
                     
-                    <!-- ২ তারকা -->
                     <div class="flex items-center">
                         <span class="w-16 text-gray-700">২ তারা</span>
                         <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
@@ -519,7 +437,6 @@
                         <span class="w-16 text-right font-bold" id="star2Percent">১%</span>
                     </div>
                     
-                    <!-- ১ তারকা -->
                     <div class="flex items-center">
                         <span class="w-16 text-gray-700">১ তারা</span>
                         <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-4">
@@ -534,16 +451,13 @@
                 </div>
             </div>
             
-            <!-- ডাইনামিক রিভিউ লিস্ট -->
             <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <!-- রিভিউগুলো ডাইনামিকভাবে লোড হবে -->
                 <div class="text-center py-12">
                     <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
                     <p class="text-gray-600">রিভিউ লোড হচ্ছে...</p>
                 </div>
             </div>
             
-            <!-- নতুন রিভিউ ফর্ম -->
             <div class="max-w-2xl mx-auto">
                 <h3 class="text-2xl font-bold text-dark mb-6 text-center">আপনার রিভিউ দিন</h3>
                 <div class="bg-white p-8 rounded-xl shadow">
@@ -587,7 +501,7 @@
         </div>
     </section>
 
-    <!-- অর্ডার সেকশন (দাম ২৫০ টাকা) -->
+    <!-- অর্ডার সেকশন -->
     <section id="order" class="section-padding bg-gradient-to-br from-dark to-primary text-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
@@ -597,11 +511,9 @@
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- মূল্য ও অফার -->
                 <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl">
                     <h3 class="text-2xl font-bold mb-6">মূল্য ও অফার</h3>
                     
-                    <!-- বইয়ের সংখ্যা নিয়ন্ত্রণ -->
                     <div class="mb-8">
                         <h4 class="text-lg font-bold mb-4">বইয়ের সংখ্যা নির্বাচন করুন</h4>
                         <div class="flex items-center justify-between bg-white/20 p-4 rounded-lg">
@@ -617,7 +529,6 @@
                         </div>
                     </div>
                     
-                    <!-- মূল্য বিবরণ -->
                     <div class="space-y-6 mb-8">
                         <div class="flex justify-between items-center pb-4 border-b border-white/20">
                             <span class="text-lg">প্রতি কপির মূল্য</span>
@@ -644,7 +555,6 @@
                             <span id="discountAmount" class="text-xl text-green-300 font-bold">-৫০ ৳</span>
                         </div>
                         
-                        <!-- বাল্ক ডিসকাউন্ট -->
                         <div class="flex justify-between items-center pb-4 border-b border-white/20 hidden" id="bulkDiscountRow">
                             <span class="text-lg">বাল্ক অর্ডার ছাড়</span>
                             <span id="bulkDiscount" class="text-xl text-green-300 font-bold">-০ ৳</span>
@@ -656,7 +566,6 @@
                         </div>
                     </div>
                     
-                    <!-- বিশেষ অফার -->
                     <div class="bg-gradient-to-r from-accent/30 to-purple-500/30 p-4 rounded-lg mb-8">
                         <div class="flex items-center">
                             <i class="fas fa-gift text-2xl mr-4"></i>
@@ -668,7 +577,6 @@
                         </div>
                     </div>
                     
-                    <!-- ডেলিভারি তথ্য -->
                     <div>
                         <h4 class="font-bold mb-4">ডেলিভারি তথ্য:</h4>
                         <ul class="space-y-3">
@@ -688,7 +596,6 @@
                     </div>
                 </div>
                 
-                <!-- অর্ডার ফর্ম -->
                 <div class="bg-white text-dark p-8 rounded-xl shadow-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-center">অর্ডার ফর্ম</h3>
                     
@@ -741,7 +648,6 @@
                             </div>
                         </div>
                         
-                        <!-- অর্ডার সারাংশ -->
                         <div class="bg-gray-50 p-4 rounded-lg mb-6">
                             <h4 class="font-bold text-dark mb-3">অর্ডার সারাংশ</h4>
                             <div class="space-y-2">
@@ -790,7 +696,6 @@
                 </div>
             </div>
             
-            <!-- যোগাযোগ -->
             <div class="mt-16 text-center">
                 <h3 class="text-2xl font-bold mb-6">সরাসরি অর্ডার বা তথ্যের জন্য কল করুন</h3>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8">
@@ -987,12 +892,15 @@
 
     <script>
         // Configuration
-         // Dynamic API URL based on environment
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                            window.location.hostname === '127.0.0.1' || 
+                            window.location.hostname.startsWith('192.168.');
+        
         const API_BASE_URL = isLocalhost 
             ? 'http://localhost:3000/api' 
-            : 'https://mybook-2.onrender.com/api'; // আপনার Render URL
-        // Price configuration (UPDATED: 250 টাকা)
+            : 'https://mybook-2.onrender.com/api';
+        
+        // Price configuration
         const BOOK_PRICE = 250;
         const DELIVERY_CHARGE = 60;
         const REGULAR_DISCOUNT = 50;
@@ -1004,8 +912,6 @@
         const orderQuantityInput = document.getElementById('orderQuantity');
         const quantityDisplay = document.getElementById('quantityDisplay');
         const booksTotal = document.getElementById('booksTotal');
-        const deliveryCharge = document.getElementById('deliveryCharge');
-        const discountAmount = document.getElementById('discountAmount');
         const grandTotal = document.getElementById('grandTotal');
         const bulkDiscountRow = document.getElementById('bulkDiscountRow');
         const bulkDiscount = document.getElementById('bulkDiscount');
@@ -1059,19 +965,10 @@
         });
 
         async function initializeApp() {
-            // Calculate initial total
             calculateTotal();
-            
-            // Setup rating stars
             setupRatingStars();
-            
-            // Load approved reviews
             await loadApprovedReviews();
-            
-            // Setup event listeners
             setupEventListeners();
-            
-            // Start auto-refresh for reviews
             startAutoRefresh();
         }
 
@@ -1080,18 +977,14 @@
             decreaseQtyBtn.addEventListener('click', () => {
                 if (currentQuantity > 1) {
                     currentQuantity--;
-                    bookQuantityInput.value = currentQuantity;
-                    orderQuantityInput.value = currentQuantity;
-                    calculateTotal();
+                    updateQuantity();
                 }
             });
 
             increaseQtyBtn.addEventListener('click', () => {
                 if (currentQuantity < 10) {
                     currentQuantity++;
-                    bookQuantityInput.value = currentQuantity;
-                    orderQuantityInput.value = currentQuantity;
-                    calculateTotal();
+                    updateQuantity();
                 } else {
                     alert('সর্বোচ্চ ১০ কপি পর্যন্ত অর্ডার করা যাবে।');
                 }
@@ -1105,9 +998,7 @@
                     alert('সর্বোচ্চ ১০ কপি পর্যন্ত অর্ডার করা যাবে।');
                 }
                 currentQuantity = value;
-                bookQuantityInput.value = value;
-                orderQuantityInput.value = value;
-                calculateTotal();
+                updateQuantity();
             });
 
             // Preview modal
@@ -1162,7 +1053,6 @@
                             behavior: 'smooth'
                         });
                         
-                        // Close mobile menu
                         document.getElementById('mobileMenu').classList.add('hidden');
                     }
                 });
@@ -1174,19 +1064,23 @@
             });
         }
 
+        function updateQuantity() {
+            bookQuantityInput.value = currentQuantity;
+            orderQuantityInput.value = currentQuantity;
+            calculateTotal();
+        }
+
         function setupRatingStars() {
             ratingStars.forEach(star => {
                 star.addEventListener('click', () => {
                     const rating = parseInt(star.dataset.rating);
                     ratingValue.value = rating;
                     
-                    // Reset all stars
                     ratingStars.forEach(s => {
                         s.classList.remove('fas');
                         s.classList.add('far');
                     });
                     
-                    // Fill stars up to selected rating
                     for (let i = 0; i < rating; i++) {
                         ratingStars[i].classList.remove('far');
                         ratingStars[i].classList.add('fas');
@@ -1194,28 +1088,20 @@
                 });
             });
 
-            // Set default to 5 stars
             ratingStars[4].classList.remove('far');
             ratingStars[4].classList.add('fas');
         }
 
         function calculateTotal() {
-            // Calculate books price
             const booksPrice = BOOK_PRICE * currentQuantity;
-            
-            // Delivery charge
             const delivery = currentQuantity > 0 ? DELIVERY_CHARGE : 0;
-            
-            // Calculate discounts
             let discount = REGULAR_DISCOUNT;
             let bulkDiscountAmount = 0;
             
-            // Bulk discount for 5+ books
             if (currentQuantity >= BULK_QUANTITY_THRESHOLD) {
                 bulkDiscountAmount = BULK_DISCOUNT_PER_BOOK * currentQuantity;
                 discount += bulkDiscountAmount;
                 
-                // Show bulk discount row
                 bulkDiscountRow.classList.remove('hidden');
                 bulkDiscount.textContent = `-${bulkDiscountAmount} ৳`;
                 bulkOfferText.classList.remove('hidden');
@@ -1224,16 +1110,13 @@
                 bulkOfferText.classList.add('hidden');
             }
             
-            // Calculate grand total
             const total = booksPrice + delivery - discount;
             
-            // Update UI
             quantityDisplay.textContent = `${currentQuantity} কপি`;
             booksTotal.textContent = `${booksPrice} ৳`;
-            discountAmount.textContent = `-${discount} ৳`;
+            document.getElementById('discountAmount').textContent = `-${discount} ৳`;
             grandTotal.textContent = `${total} ৳`;
             
-            // Update order summary
             orderSummaryQuantity.textContent = `${currentQuantity} কপি`;
             orderSummaryTotal.textContent = `${total} ৳`;
             
@@ -1242,11 +1125,9 @@
 
         async function loadApprovedReviews() {
             try {
-                // Try to load from the approved reviews endpoint first
                 let response = await fetch(`${API_BASE_URL}/reviews/approved`);
                 
                 if (!response.ok) {
-                    // Fallback to admin API
                     response = await fetch(`${API_BASE_URL}/admin/reviews?approved=true`);
                 }
                 
@@ -1264,7 +1145,6 @@
                 }
             } catch (error) {
                 console.error('Error loading reviews:', error);
-                // Fallback to default reviews
                 approvedReviews = getDefaultReviews();
                 renderReviews();
                 updateReviewStats();
@@ -1306,12 +1186,10 @@
                 return;
             }
 
-            // Sort by date (newest first)
             const sortedReviews = [...approvedReviews].sort((a, b) => 
                 new Date(b.createdAt) - new Date(a.createdAt)
             );
 
-            // Take only latest 6 reviews
             const latestReviews = sortedReviews.slice(0, 6);
 
             let html = '';
@@ -1345,13 +1223,11 @@
             const total = approvedReviews.length;
             
             if (total === 0) {
-                // Set default values
                 approvedReviewsCount.textContent = '১২৫০';
                 heroReviewCount.textContent = '১২৫০';
                 averageRating.textContent = '৪.৮';
                 heroRating.textContent = '৪.৮/৫';
                 
-                // Set default distribution
                 star5.style.width = '85%';
                 star4.style.width = '12%';
                 star3.style.width = '2%';
@@ -1367,23 +1243,19 @@
                 return;
             }
 
-            // Calculate average rating
             const totalRating = approvedReviews.reduce((sum, review) => sum + review.rating, 0);
             const avgRating = (totalRating / total).toFixed(1);
             
-            // Calculate rating distribution
             const ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
             approvedReviews.forEach(review => {
                 ratingCounts[review.rating]++;
             });
 
-            // Update UI
             approvedReviewsCount.textContent = total;
             heroReviewCount.textContent = total;
             averageRating.textContent = avgRating;
             heroRating.textContent = `${avgRating}/৫`;
             
-            // Update rating distribution
             for (let i = 1; i <= 5; i++) {
                 const percentage = Math.round((ratingCounts[i] / total) * 100);
                 document.getElementById(`star${i}`).style.width = `${percentage}%`;
@@ -1398,7 +1270,6 @@
             const rating = parseInt(ratingValue.value);
             const reviewText = document.getElementById('reviewText').value.trim();
 
-            // Validation
             if (!name) {
                 alert('আপনার নাম লিখুন');
                 return;
@@ -1423,14 +1294,11 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Show success message
                     reviewSuccess.classList.remove('hidden');
                     reviewError.classList.add('hidden');
                     
-                    // Reset form
                     reviewForm.reset();
                     
-                    // Reset stars to default (5)
                     ratingStars.forEach(s => {
                         s.classList.remove('fas');
                         s.classList.add('far');
@@ -1439,12 +1307,10 @@
                     ratingStars[4].classList.add('fas');
                     ratingValue.value = 5;
                     
-                    // Hide success message after 5 seconds
                     setTimeout(() => {
                         reviewSuccess.classList.add('hidden');
                     }, 5000);
                 } else {
-                    // Show error
                     reviewError.classList.remove('hidden');
                     document.getElementById('errorText').textContent = data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে।';
                     reviewSuccess.classList.add('hidden');
@@ -1467,7 +1333,6 @@
             const district = document.getElementById('orderDistrict').value;
             const total = calculateTotal();
 
-            // Validation
             if (!name) {
                 alert('আপনার নাম লিখুন');
                 return;
@@ -1478,7 +1343,6 @@
                 return;
             }
             
-            // Phone validation (Bangladeshi format)
             const phoneRegex = /^(?:\+88|88)?(01[3-9]\d{8})$/;
             if (!phoneRegex.test(phone)) {
                 alert('সঠিক মোবাইল নম্বর লিখুন (উদাহরণ: 01712345678)');
@@ -1520,44 +1384,34 @@
                 if (data.success) {
                     const orderId = data.order.orderId || generateOrderId();
                     
-                    // Update modal content
                     modalMessage.textContent = `ধন্যবাদ ${name}! আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি ২৪ ঘন্টার মধ্যে ${phone} নম্বরে আপনার সাথে যোগাযোগ করবে।`;
                     modalOrderId.textContent = orderId;
                     modalQuantity.textContent = `${currentQuantity} কপি`;
                     modalTotalPrice.textContent = `${total} ৳`;
                     
-                    // Update inline success message
                     document.getElementById('orderId').textContent = orderId;
                     document.getElementById('orderMessage').textContent = `আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে। অর্ডার আইডি: ${orderId}`;
                     
-                    // Show success messages
                     orderSuccess.classList.remove('hidden');
                     orderError.classList.add('hidden');
                     successModal.classList.remove('hidden');
                     successModal.classList.add('flex');
                     
-                    // Reset form
                     orderForm.reset();
                     currentQuantity = 1;
-                    bookQuantityInput.value = 1;
-                    orderQuantityInput.value = 1;
-                    calculateTotal();
+                    updateQuantity();
                     
-                    // Reset terms checkbox
                     document.getElementById('orderAgree').checked = false;
                     
-                    // Scroll to top
                     window.scrollTo({
                         top: 0,
                         behavior: 'smooth'
                     });
                     
-                    // Hide inline success after 10 seconds
                     setTimeout(() => {
                         orderSuccess.classList.add('hidden');
                     }, 10000);
                 } else {
-                    // Show error
                     orderError.classList.remove('hidden');
                     document.getElementById('orderErrorText').textContent = data.message || 'অর্ডার জমা দিতে সমস্যা হয়েছে।';
                     orderSuccess.classList.add('hidden');
@@ -1580,13 +1434,12 @@
         }
 
         function startAutoRefresh() {
-            // Auto-refresh reviews every 30 seconds
             setInterval(async () => {
                 await loadApprovedReviews();
             }, 30000);
         }
 
-        // Global function to refresh reviews (can be called from admin panel)
+        // Global function to refresh reviews
         window.refreshReviews = async function() {
             await loadApprovedReviews();
             showToast('রিভিউ রিফ্রেশ করা হয়েছে', 'success');
@@ -1594,7 +1447,6 @@
 
         // Simple toast function
         function showToast(message, type = 'info') {
-            // Create toast element
             const toast = document.createElement('div');
             toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white z-50 ${
                 type === 'success' ? 'bg-green-600' :
@@ -1604,7 +1456,6 @@
             toast.textContent = message;
             document.body.appendChild(toast);
             
-            // Remove toast after 3 seconds
             setTimeout(() => {
                 toast.remove();
             }, 3000);

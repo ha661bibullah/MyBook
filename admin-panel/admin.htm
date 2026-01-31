@@ -404,11 +404,14 @@
 
     <script>
         // Configuration
-          // Dynamic API URL based on environment
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                            window.location.hostname === '127.0.0.1' || 
+                            window.location.hostname.startsWith('192.168.');
+        
         const API_BASE_URL = isLocalhost 
             ? 'http://localhost:3000/api' 
-            : 'https://mybook-2.onrender.com/api'; // আপনার Render URL
+            : 'https://mybook-2.onrender.com/api';
+        
         const TOKEN_KEY = 'admin_token';
         const USER_KEY = 'admin_user';
         
@@ -553,14 +556,12 @@
         }
 
         function showToast(message, type = 'info') {
-            // Simple toast implementation
             console.log(`${type}: ${message}`);
         }
 
         // Dashboard functions
         async function loadDashboardData() {
             try {
-                // Load statistics
                 const statsResponse = await fetch(`${API_BASE_URL}/admin/statistics`, {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
@@ -572,7 +573,6 @@
                     }
                 }
                 
-                // Load recent orders
                 const ordersResponse = await fetch(`${API_BASE_URL}/admin/orders?limit=5`, {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
@@ -584,7 +584,6 @@
                     }
                 }
                 
-                // Load charts
                 loadChartData();
                 updateNotificationBadges();
                 
@@ -726,21 +725,17 @@
 
         // Page navigation
         function showPage(page) {
-            // Hide all pages
             document.getElementById('dashboardPage').classList.add('hidden');
             document.getElementById('ordersPage').classList.add('hidden');
             document.getElementById('reviewsPage').classList.add('hidden');
             document.getElementById('debugPage').classList.add('hidden');
             
-            // Remove active class from all nav items
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('bg-white/20');
             });
             
-            // Show selected page
             document.getElementById(page + 'Page').classList.remove('hidden');
             
-            // Update page title
             const titles = {
                 dashboard: 'ড্যাশবোর্ড',
                 orders: 'অর্ডারসমূহ',
@@ -750,10 +745,8 @@
             
             document.getElementById('pageTitle').textContent = titles[page];
             
-            // Add active class to nav item
             event.currentTarget.classList.add('bg-white/20');
             
-            // Load page data
             if (page === 'orders') {
                 loadOrders();
             } else if (page === 'reviews') {
@@ -832,7 +825,6 @@
             currentFilter = status === 'all' ? '' : status;
             loadOrders();
             
-            // Update active button
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
                 btn.classList.remove('bg-blue-100', 'text-blue-800');
@@ -914,7 +906,6 @@
             currentReviewFilter = status;
             loadReviews();
             
-            // Update active button
             document.querySelectorAll('.review-filter-btn').forEach(btn => {
                 btn.classList.remove('active');
                 btn.classList.remove('bg-blue-100', 'text-blue-800');
@@ -968,9 +959,8 @@
 
         async function viewOrderDetails(orderId) {
             try {
-                const order = allOrders.find(o => o.orderId === orderId);
+                let order = allOrders.find(o => o.orderId === orderId);
                 if (!order) {
-                    // Try to fetch from API
                     const response = await fetch(`${API_BASE_URL}/admin/orders`, {
                         headers: { 'Authorization': `Bearer ${authToken}` }
                     });
@@ -1141,7 +1131,7 @@
                     total: 460
                 };
                 
-                const response = await fetch('/api/orders', {
+                const response = await fetch(`${API_BASE_URL}/orders`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(testOrder)
