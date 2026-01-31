@@ -10,21 +10,51 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// Render স্বয়ংক্রিয়ভাবে PORT সেট করে
 const PORT = process.env.PORT || 3000;
 
-// CORS সেটআপ - Netlify ও অন্যান্য ডোমেইন এর জন্য
+// CORS Configuration for Netlify and Render
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5500',
+  'https://697d9f097a017cd8fbfb4287--enchanting-narwhal-d8a7c0.netlify.app',
+  'https://enchanting-narwhal-d8a7c0.netlify.app',
+  'https://*.netlify.app'
+];
+
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5500',
-    'https://moonlit-tarsier-7325a8.netlify.app', // আপনার Netlify URL
-    'https://*.netlify.app' // সব Netlify সাবডোমেইনের জন্য
-  ],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      const isAllowed = allowedOrigins.some(allowedOrigin => {
+        if (allowedOrigin.includes('*')) {
+          const pattern = allowedOrigin.replace('*', '.*');
+          const regex = new RegExp(pattern);
+          return regex.test(origin);
+        }
+        return false;
+      });
+      
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        console.log('Blocked by CORS:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 };
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -35,10 +65,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // JSON ফাইলের পাথ
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// MongoDB Connection (ঐচ্ছিক)
+// MongoDB Connection (Optional)
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://billaharif661_db_user:2GCmDhaEOQUteXow@iwonttotast0.mza6qgz.mongodb.net/BillahArif?appName=IWontToTast0';
-let mongooseConnected = true;
+let mongooseConnected = false;
 
+// Use JSON file storage by default (for Render deployment)
 if (process.env.USE_MONGODB === 'true') {
     mongoose.connect(MONGODB_URI, {
         useNewUrlParser: true,
@@ -59,7 +90,7 @@ if (process.env.USE_MONGODB === 'true') {
     initializeJSON();
 }
 
-// MongoDB Schemas
+// MongoDB Schemas (for optional use)
 const orderSchema = new mongoose.Schema({
     orderId: String,
     customerName: String,
@@ -324,6 +355,7 @@ app.post('/api/reviews', async (req, res) => {
     try {
         const reviewData = {
             ...req.body,
+            id: 'REV' + Date.now(),
             approved: false,
             createdAt: new Date()
         };
@@ -334,7 +366,6 @@ app.post('/api/reviews', async (req, res) => {
             res.json({ success: true, message: 'Review submitted successfully', review });
         } else {
             const data = readJSONData();
-            reviewData.id = 'REV' + Date.now();
             data.reviews.push(reviewData);
             writeJSONData(data);
             res.json({ success: true, message: 'Review submitted successfully', review: reviewData });
@@ -657,7 +688,6 @@ app.delete('/api/admin/orders/:id', authenticateToken, isAdmin, async (req, res)
 // 14. Dashboard Chart Data
 app.get('/api/dashboard/chart-data', authenticateToken, isAdmin, async (req, res) => {
     try {
-        // Simple chart data for demo
         const chartData = {
             labels: ['১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯', '১০', '১১', '১২', '১৩', '১৪', '১৫'],
             datasets: [{
@@ -720,7 +750,7 @@ app.get('/api', (req, res) => {
     });
 });
 
-// Catch-all route for frontend (Netlify will handle this)
+// Catch-all route
 app.get('*', (req, res) => {
     res.json({
         success: false,
