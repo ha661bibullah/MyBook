@@ -2,60 +2,149 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>এডমিন প্যানেল - মৃত্যু ও তার পরে</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { font-family: 'Hind Siliguri', sans-serif; }
-        .sidebar { background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%); }
-        .modal-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
-        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        * { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .sidebar { 
+            background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%); 
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay { 
+            background: rgba(0,0,0,0.5); 
+            backdrop-filter: blur(5px); 
+        }
+        .badge { 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 600; 
+        }
         .badge-pending { background: #fef3c7; color: #92400e; }
         .badge-confirmed { background: #dbeafe; color: #1e40af; }
         .badge-shipped { background: #e9d5ff; color: #6b21a8; }
         .badge-delivered { background: #d1fae5; color: #065f46; }
         .badge-cancelled { background: #fee2e2; color: #991b1b; }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            table { font-size: 14px; }
+            .table-cell { padding: 8px 4px !important; }
+            .mobile-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .mobile-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .mobile-full-grid { grid-template-columns: 1fr !important; }
+            .mobile-text-sm { font-size: 0.875rem !important; }
+            .mobile-text-xs { font-size: 0.75rem !important; }
+            .mobile-p-2 { padding: 0.5rem !important; }
+            .mobile-p-3 { padding: 0.75rem !important; }
+        }
+        
+        /* Swipe gestures for mobile */
+        .swipe-area {
+            touch-action: pan-y;
+        }
+        
+        /* Better touch targets */
+        button, a {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Mobile sidebar */
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            transform: translateX(-100%);
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Mobile bottom navigation */
+        .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            z-index: 50;
+            padding: 8px 0;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex;
+            }
+            #adminLayout {
+                padding-bottom: 70px !important;
+            }
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 swipe-area">
     <!-- লগইন মডাল -->
-    <div id="loginModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-lock text-white text-2xl"></i>
+    <div id="loginModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6 mobile-p-3">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 mobile:w-14 mobile:h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-white text-xl mobile:text-lg"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800">এডমিন লগইন</h2>
-                <p class="text-gray-600 mt-2">এডমিন প্যানেলে অ্যাক্সেস করতে লগইন করুন</p>
+                <h2 class="text-xl mobile-text-sm font-bold text-gray-800">এডমিন লগইন</h2>
+                <p class="text-gray-600 mt-2 mobile-text-xs">এডমিন প্যানেলে অ্যাক্সেস করতে লগইন করুন</p>
             </div>
             
-            <form id="loginForm" class="space-y-6">
+            <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">ইউজারনেম</label>
-                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="admin" value="admin" required>
+                    <label class="block text-sm mobile-text-xs font-medium text-gray-700 mb-2">ইউজারনেম</label>
+                    <input type="text" id="username" class="w-full px-4 py-3 mobile:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base mobile:text-sm" placeholder="admin" value="admin" required>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">পাসওয়ার্ড</label>
-                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="admin123" value="admin123" required>
+                    <label class="block text-sm mobile-text-xs font-medium text-gray-700 mb-2">পাসওয়ার্ড</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 mobile:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base mobile:text-sm" placeholder="admin123" value="admin123" required>
                 </div>
                 
-                <div id="loginError" class="hidden p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div id="loginError" class="hidden p-3 bg-red-50 border border-red-200 rounded-lg">
                     <div class="flex items-center">
-                        <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
-                        <span id="errorMessage" class="text-red-700 text-sm"></span>
+                        <i class="fas fa-exclamation-circle text-red-500 mr-3 text-sm"></i>
+                        <span id="errorMessage" class="text-red-700 text-sm mobile-text-xs"></span>
                     </div>
                 </div>
                 
-                <button type="submit" id="loginBtn" class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition">
-                    লগইন করুন
+                <button type="submit" id="loginBtn" class="w-full py-3 mobile:py-2 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition text-base mobile:text-sm flex items-center justify-center">
+                    <span id="loginText">লগইন করুন</span>
+                    <div id="loginSpinner" class="spinner ml-2 hidden"></div>
                 </button>
                 
                 <div class="text-center pt-4 border-t border-gray-200">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm mobile-text-xs text-gray-600">
                         <strong>ডেমো অ্যাকাউন্ট:</strong><br>
                         ইউজারনেম: <span class="font-bold">admin</span><br>
                         পাসওয়ার্ড: <span class="font-bold">admin123</span>
@@ -65,55 +154,125 @@
         </div>
     </div>
 
+    <!-- মোবাইল হ্যাডার -->
+    <div id="mobileHeader" class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between z-40 hidden">
+        <button onclick="toggleMobileSidebar()" class="text-gray-700">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div>
+            <h1 class="text-lg font-bold text-gray-800" id="mobilePageTitle">ড্যাশবোর্ড</h1>
+        </div>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- মোবাইল সাইডবার -->
+    <div id="mobileSidebar" class="sidebar sidebar-mobile w-64 text-white flex flex-col">
+        <div class="p-4 border-b border-white/10 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-crown text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold">মৃত্যু ও তার পরে</h2>
+                    <p class="text-xs text-gray-300">এডমিন প্যানেল</p>
+                </div>
+            </div>
+            <button onclick="toggleMobileSidebar()" class="text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="flex-1 p-2 space-y-1 overflow-y-auto">
+            <a href="#" onclick="showPage('dashboard'); toggleMobileSidebar()" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-tachometer-alt w-6 mr-3"></i>
+                <span>ড্যাশবোর্ড</span>
+            </a>
+            
+            <a href="#" onclick="showPage('orders'); toggleMobileSidebar()" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-shopping-cart w-6 mr-3"></i>
+                <span>অর্ডারসমূহ</span>
+                <span id="pendingBadgeMobile" class="badge badge-pending ml-auto hidden">0</span>
+            </a>
+            
+            <a href="#" onclick="showPage('reviews'); toggleMobileSidebar()" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-star w-6 mr-3"></i>
+                <span>রিভিউ</span>
+                <span id="reviewBadgeMobile" class="badge badge-pending ml-auto hidden">0</span>
+            </a>
+            
+            <div class="pt-2">
+                <a href="#" onclick="showPage('debug'); toggleMobileSidebar()" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-bug w-6 mr-3"></i>
+                    <span>ডিবাগ</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="p-4 border-t border-white/10">
+            <div class="flex items-center">
+                <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                <div class="ml-3">
+                    <div class="font-semibold text-sm" id="currentUserMobile">লোড হচ্ছে...</div>
+                    <div class="text-xs text-gray-300" id="userRoleMobile">এডমিন</div>
+                </div>
+                <button onclick="logout()" class="ml-auto text-gray-300 hover:text-white">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- মেইন লেআউট -->
     <div class="flex h-screen overflow-hidden hidden" id="adminLayout">
-        <!-- সাইডবার -->
-        <div id="sidebar" class="sidebar w-64 text-white flex flex-col">
-            <div class="p-6 border-b border-white/10">
+        <!-- ডেস্কটপ সাইডবার -->
+        <div id="desktopSidebar" class="sidebar w-64 text-white flex flex-col hidden md:flex">
+            <div class="p-6 mobile-p-3 border-b border-white/10">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+                    <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
                         <i class="fas fa-crown text-white"></i>
                     </div>
                     <div>
-                        <h2 class="text-lg font-bold">মৃত্যু ও তার পরে</h2>
+                        <h2 class="text-lg mobile-text-sm font-bold">মৃত্যু ও তার পরে</h2>
                         <p class="text-xs text-gray-300">এডমিন প্যানেল</p>
                     </div>
                 </div>
             </div>
             
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="#" onclick="showPage('dashboard')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+            <nav class="flex-1 p-4 mobile-p-2 space-y-2">
+                <a href="#" onclick="showPage('dashboard')" class="nav-item flex items-center p-3 mobile-p-2 rounded-lg hover:bg-white/10 transition">
                     <i class="fas fa-tachometer-alt w-6 mr-3"></i>
                     <span>ড্যাশবোর্ড</span>
                 </a>
                 
-                <a href="#" onclick="showPage('orders')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                <a href="#" onclick="showPage('orders')" class="nav-item flex items-center p-3 mobile-p-2 rounded-lg hover:bg-white/10 transition">
                     <i class="fas fa-shopping-cart w-6 mr-3"></i>
                     <span>অর্ডারসমূহ</span>
                     <span id="pendingBadge" class="badge badge-pending ml-auto hidden">0</span>
                 </a>
                 
-                <a href="#" onclick="showPage('reviews')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                <a href="#" onclick="showPage('reviews')" class="nav-item flex items-center p-3 mobile-p-2 rounded-lg hover:bg-white/10 transition">
                     <i class="fas fa-star w-6 mr-3"></i>
                     <span>রিভিউ</span>
                     <span id="reviewBadge" class="badge badge-pending ml-auto hidden">0</span>
                 </a>
                 
                 <div class="pt-4">
-                    <a href="#" onclick="showPage('debug')" class="nav-item flex items-center p-3 rounded-lg hover:bg-white/10 transition">
+                    <a href="#" onclick="showPage('debug')" class="nav-item flex items-center p-3 mobile-p-2 rounded-lg hover:bg-white/10 transition">
                         <i class="fas fa-bug w-6 mr-3"></i>
                         <span>ডিবাগ</span>
                     </a>
                 </div>
             </nav>
             
-            <div class="p-4 border-t border-white/10">
+            <div class="p-4 mobile-p-3 border-t border-white/10">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                    <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
                         <i class="fas fa-user text-white"></i>
                     </div>
                     <div class="ml-3">
-                        <div class="font-semibold" id="currentUser">লোড হচ্ছে...</div>
+                        <div class="font-semibold text-sm" id="currentUser">লোড হচ্ছে...</div>
                         <div class="text-xs text-gray-300" id="userRole">এডমিন</div>
                     </div>
                     <button onclick="logout()" class="ml-auto text-gray-300 hover:text-white">
@@ -125,15 +284,16 @@
         
         <!-- মূল কন্টেন্ট -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white border-b border-gray-200 px-6 py-4">
+            <!-- ডেস্কটপ হেডার -->
+            <header id="desktopHeader" class="bg-white border-b border-gray-200 px-6 mobile-p-3 py-4 hidden md:block">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 id="pageTitle" class="text-xl font-bold text-gray-800">ড্যাশবোর্ড</h1>
-                        <p id="pageSubtitle" class="text-sm text-gray-600">সিস্টেম ওভারভিউ</p>
+                        <h1 id="pageTitle" class="text-xl mobile-text-sm font-bold text-gray-800">ড্যাশবোর্ড</h1>
+                        <p id="pageSubtitle" class="text-sm mobile-text-xs text-gray-600">সিস্টেম ওভারভিউ</p>
                     </div>
                     
                     <div class="text-right">
-                        <div class="text-sm font-medium text-gray-800" id="currentDateTime"></div>
+                        <div class="text-sm mobile-text-xs font-medium text-gray-800" id="currentDateTime"></div>
                         <div class="text-xs text-gray-600">
                             <i class="fas fa-circle text-green-500 mr-1" id="serverStatusIcon"></i>
                             <span id="serverStatusText">সার্ভার চালু</span>
@@ -142,95 +302,94 @@
                 </div>
             </header>
             
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-4 mobile-p-2 mt-14 md:mt-0">
                 <!-- ড্যাশবোর্ড -->
                 <div id="dashboardPage">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div class="bg-white rounded-xl shadow p-6">
+                    <div class="grid grid-cols-1 mobile-grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="fas fa-shopping-cart text-white text-xl"></i>
+                                <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-shopping-cart text-white text-lg"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600">মোট অর্ডার</p>
-                                    <h3 id="statTotalOrders" class="text-2xl font-bold text-gray-800">0</h3>
+                                    <p class="text-sm mobile-text-xs text-gray-600">মোট অর্ডার</p>
+                                    <h3 id="statTotalOrders" class="text-xl mobile-text-sm font-bold text-gray-800">0</h3>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow p-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="fas fa-money-bill-wave text-white text-xl"></i>
+                                <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-money-bill-wave text-white text-lg"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600">মোট আয়</p>
-                                    <h3 id="statTotalRevenue" class="text-2xl font-bold text-gray-800">৳ 0</h3>
+                                    <p class="text-sm mobile-text-xs text-gray-600">মোট আয়</p>
+                                    <h3 id="statTotalRevenue" class="text-xl mobile-text-sm font-bold text-gray-800">৳ 0</h3>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow p-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="fas fa-star text-white text-xl"></i>
+                                <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-star text-white text-lg"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600">মোট রিভিউ</p>
-                                    <h3 id="statTotalReviews" class="text-2xl font-bold text-gray-800">0</h3>
+                                    <p class="text-sm mobile-text-xs text-gray-600">মোট রিভিউ</p>
+                                    <h3 id="statTotalReviews" class="text-xl mobile-text-sm font-bold text-gray-800">0</h3>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow p-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center mr-4">
-                                    <i class="fas fa-users text-white text-xl"></i>
+                                <div class="w-10 h-10 mobile:w-8 mobile:h-8 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-users text-white text-lg"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600">পেন্ডিং অর্ডার</p>
-                                    <h3 id="statPendingOrders" class="text-2xl font-bold text-gray-800">0</h3>
+                                    <p class="text-sm mobile-text-xs text-gray-600">পেন্ডিং অর্ডার</p>
+                                    <h3 id="statPendingOrders" class="text-xl mobile-text-sm font-bold text-gray-800">0</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-6">অর্ডার ট্রেন্ড</h3>
-                            <div style="height: 300px;">
+                    <div class="grid grid-cols-1 mobile-full-grid lg:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
+                            <h3 class="text-base mobile-text-sm font-bold text-gray-800 mb-4">অর্ডার ট্রেন্ড</h3>
+                            <div style="height: 250px;">
                                 <canvas id="ordersChart"></canvas>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-6">অর্ডার স্ট্যাটাস</h3>
-                            <div style="height: 300px;">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
+                            <h3 class="text-base mobile-text-sm font-bold text-gray-800 mb-4">অর্ডার স্ট্যাটাস</h3>
+                            <div style="height: 250px;">
                                 <canvas id="statusChart"></canvas>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-bold text-gray-800">সাম্প্রতিক অর্ডার</h3>
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-4 mobile-p-3 py-3 border-b border-gray-200">
+                            <h3 class="text-base mobile-text-sm font-bold text-gray-800">সাম্প্রতিক অর্ডার</h3>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
+                        <div class="overflow-x-auto mobile-scroll">
+                            <table class="w-full min-w-max">
                                 <thead>
                                     <tr class="bg-gray-50">
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">বইয়ের সংখ্যা</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">সংখ্যা</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
                                     </tr>
                                 </thead>
-                                <tbody id="recentOrdersTable">
+                                <tbody id="recentOrdersTable" class="text-sm mobile-text-xs">
                                     <tr>
-                                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                        <td colspan="6" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                                             লোড হচ্ছে...
                                         </td>
                                     </tr>
@@ -242,43 +401,45 @@
                 
                 <!-- অর্ডার ম্যানেজমেন্ট -->
                 <div id="ordersPage" class="hidden">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">অর্ডার ম্যানেজমেন্ট</h2>
-                        <p class="text-gray-600">সমস্ত অর্ডার দেখুন এবং ম্যানেজ করুন</p>
+                    <div class="mb-4">
+                        <h2 class="text-xl mobile-text-sm font-bold text-gray-800">অর্ডার ম্যানেজমেন্ট</h2>
+                        <p class="text-sm mobile-text-xs text-gray-600">সমস্ত অর্ডার দেখুন এবং ম্যানেজ করুন</p>
                     </div>
                     
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <button onclick="filterOrders('all')" class="filter-btn active px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                    <div class="flex flex-wrap gap-2 mb-4 overflow-x-auto mobile-scroll pb-2">
+                        <button onclick="filterOrders('all')" class="filter-btn active px-3 py-2 mobile:py-1 text-sm bg-blue-100 text-blue-800 rounded-lg font-medium whitespace-nowrap">
                             সব অর্ডার
                         </button>
-                        <button onclick="filterOrders('pending')" class="filter-btn px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                        <button onclick="filterOrders('pending')" class="filter-btn px-3 py-2 mobile:py-1 text-sm bg-yellow-100 text-yellow-800 rounded-lg font-medium whitespace-nowrap">
                             পেন্ডিং
                         </button>
-                        <button onclick="filterOrders('confirmed')" class="filter-btn px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                        <button onclick="filterOrders('confirmed')" class="filter-btn px-3 py-2 mobile:py-1 text-sm bg-blue-100 text-blue-800 rounded-lg font-medium whitespace-nowrap">
                             কনফার্মড
                         </button>
-                        <button onclick="filterOrders('delivered')" class="filter-btn px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium">
+                        <button onclick="filterOrders('delivered')" class="filter-btn px-3 py-2 mobile:py-1 text-sm bg-green-100 text-green-800 rounded-lg font-medium whitespace-nowrap">
                             ডেলিভারড
+                        </button>
+                        <button onclick="filterOrders('cancelled')" class="filter-btn px-3 py-2 mobile:py-1 text-sm bg-red-100 text-red-800 rounded-lg font-medium whitespace-nowrap">
+                            ক্যান্সেলড
                         </button>
                     </div>
                     
                     <div class="bg-white rounded-xl shadow overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
+                        <div class="overflow-x-auto mobile-scroll">
+                            <table class="w-full min-w-max">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">বইয়ের সংখ্যা</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার আইডি</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">গ্রাহক</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">সংখ্যা</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">মোট</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
                                     </tr>
                                 </thead>
-                                <tbody id="ordersTableBody">
+                                <tbody id="ordersTableBody" class="text-sm mobile-text-xs">
                                     <tr>
-                                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                        <td colspan="6" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                                             লোড হচ্ছে...
                                         </td>
                                     </tr>
@@ -290,39 +451,37 @@
                 
                 <!-- রিভিউ ম্যানেজমেন্ট -->
                 <div id="reviewsPage" class="hidden">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">রিভিউ ম্যানেজমেন্ট</h2>
-                        <p class="text-gray-600">গ্রাহক রিভিউ ম্যানেজ করুন</p>
+                    <div class="mb-4">
+                        <h2 class="text-xl mobile-text-sm font-bold text-gray-800">রিভিউ ম্যানেজমেন্ট</h2>
+                        <p class="text-sm mobile-text-xs text-gray-600">গ্রাহক রিভিউ ম্যানেজ করুন</p>
                     </div>
                     
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <button onclick="filterReviews('all')" class="review-filter-btn active px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+                    <div class="flex flex-wrap gap-2 mb-4 overflow-x-auto mobile-scroll pb-2">
+                        <button onclick="filterReviews('all')" class="review-filter-btn active px-3 py-2 mobile:py-1 text-sm bg-blue-100 text-blue-800 rounded-lg font-medium whitespace-nowrap">
                             সব রিভিউ
                         </button>
-                        <button onclick="filterReviews('pending')" class="review-filter-btn px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                        <button onclick="filterReviews('pending')" class="review-filter-btn px-3 py-2 mobile:py-1 text-sm bg-yellow-100 text-yellow-800 rounded-lg font-medium whitespace-nowrap">
                             পেন্ডিং
                         </button>
-                        <button onclick="filterReviews('approved')" class="review-filter-btn px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium">
+                        <button onclick="filterReviews('approved')" class="review-filter-btn px-3 py-2 mobile:py-1 text-sm bg-green-100 text-green-800 rounded-lg font-medium whitespace-nowrap">
                             অনুমোদিত
                         </button>
                     </div>
                     
                     <div class="bg-white rounded-xl shadow overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
+                        <div class="overflow-x-auto mobile-scroll">
+                            <table class="w-full min-w-max">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">নাম</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">রেটিং</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">রিভিউ</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">নাম</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">রেটিং</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                                        <th class="px-4 mobile-p-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">অ্যাকশন</th>
                                     </tr>
                                 </thead>
-                                <tbody id="reviewsTableBody">
+                                <tbody id="reviewsTableBody" class="text-sm mobile-text-xs">
                                     <tr>
-                                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                        <td colspan="4" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                                             লোড হচ্ছে...
                                         </td>
                                     </tr>
@@ -334,51 +493,51 @@
                 
                 <!-- ডিবাগ প্যানেল -->
                 <div id="debugPage" class="hidden">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">ডিবাগ প্যানেল</h2>
-                        <p class="text-gray-600">সিস্টেম ডিবাগ এবং ট্রাবলশুটিং</p>
+                    <div class="mb-4">
+                        <h2 class="text-xl mobile-text-sm font-bold text-gray-800">ডিবাগ প্যানেল</h2>
+                        <p class="text-sm mobile-text-xs text-gray-600">সিস্টেম ডিবাগ এবং ট্রাবলশুটিং</p>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">সার্ভার স্ট্যাটাস</h3>
-                            <div class="space-y-3">
+                    <div class="grid grid-cols-1 mobile-full-grid md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
+                            <h3 class="text-base mobile-text-sm font-bold text-gray-800 mb-3">সার্ভার স্ট্যাটাস</h3>
+                            <div class="space-y-2">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">API কানেকশন:</span>
-                                    <span id="apiStatus" class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">চেক করা হচ্ছে...</span>
+                                    <span class="text-sm mobile-text-xs text-gray-600">API কানেকশন:</span>
+                                    <span id="apiStatus" class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">চেক করা হচ্ছে...</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">টোকেন:</span>
-                                    <span id="tokenStatus" class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm">চেক করা হচ্ছে...</span>
+                                    <span class="text-sm mobile-text-xs text-gray-600">টোকেন:</span>
+                                    <span id="tokenStatus" class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">চেক করা হচ্ছে...</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">অর্ডার সংখ্যা:</span>
+                                    <span class="text-sm mobile-text-xs text-gray-600">অর্ডার সংখ্যা:</span>
                                     <span id="debugOrderCount" class="font-bold">0</span>
                                 </div>
                             </div>
-                            <div class="mt-6">
-                                <button onclick="checkServerHealth()" class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
+                            <div class="mt-4">
+                                <button onclick="checkServerHealth()" class="w-full py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
                                     স্বাস্থ্য পরীক্ষা করুন
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">ডিবাগ টুলস</h3>
-                            <div class="space-y-3">
-                                <button onclick="testOrderAPI()" class="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">
+                        <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
+                            <h3 class="text-base mobile-text-sm font-bold text-gray-800 mb-3">ডিবাগ টুলস</h3>
+                            <div class="space-y-2">
+                                <button onclick="testOrderAPI()" class="w-full py-2 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">
                                     টেস্ট অর্ডার করুন
                                 </button>
-                                <button onclick="clearLocalStorage()" class="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium">
+                                <button onclick="clearLocalStorage()" class="w-full py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium">
                                     লোকাল স্টোরেজ ক্লিয়ার
                                 </button>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow p-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">ডিবাগ লগ</h3>
-                        <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm max-h-48 overflow-y-auto" id="debugConsole">
+                    <div class="bg-white rounded-xl shadow p-4 mobile-p-3">
+                        <h3 class="text-base mobile-text-sm font-bold text-gray-800 mb-3">ডিবাগ লগ</h3>
+                        <div class="bg-gray-900 text-green-400 p-3 rounded-lg font-mono text-xs max-h-40 overflow-y-auto" id="debugConsole">
                             [SYSTEM] ডিবাগ কনসোল প্রস্তুত...
                         </div>
                     </div>
@@ -387,16 +546,38 @@
         </div>
     </div>
 
+    <!-- মোবাইল বটম নেভিগেশন -->
+    <div class="mobile-bottom-nav">
+        <a href="#" onclick="showPage('dashboard')" class="flex-1 flex flex-col items-center justify-center text-gray-600 hover:text-blue-600 transition">
+            <i class="fas fa-tachometer-alt text-lg mb-1"></i>
+            <span class="text-xs">ড্যাশবোর্ড</span>
+        </a>
+        <a href="#" onclick="showPage('orders')" class="flex-1 flex flex-col items-center justify-center text-gray-600 hover:text-blue-600 transition relative">
+            <i class="fas fa-shopping-cart text-lg mb-1"></i>
+            <span class="text-xs">অর্ডার</span>
+            <span id="bottomPendingBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hidden">0</span>
+        </a>
+        <a href="#" onclick="showPage('reviews')" class="flex-1 flex flex-col items-center justify-center text-gray-600 hover:text-blue-600 transition relative">
+            <i class="fas fa-star text-lg mb-1"></i>
+            <span class="text-xs">রিভিউ</span>
+            <span id="bottomReviewBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hidden">0</span>
+        </a>
+        <a href="#" onclick="showPage('debug')" class="flex-1 flex flex-col items-center justify-center text-gray-600 hover:text-blue-600 transition">
+            <i class="fas fa-bug text-lg mb-1"></i>
+            <span class="text-xs">ডিবাগ</span>
+        </a>
+    </div>
+
     <!-- অর্ডার ডিটেইলস মডাল -->
-    <div id="orderDetailsModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl">
-            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 class="text-xl font-bold text-gray-800">অর্ডার বিস্তারিত</h3>
-                <button onclick="closeOrderDetails()" class="text-gray-500 hover:text-gray-700">
+    <div id="orderDetailsModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-2">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            <div class="px-4 mobile-p-3 py-3 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                <h3 class="text-lg mobile-text-sm font-bold text-gray-800">অর্ডার বিস্তারিত</h3>
+                <button onclick="closeOrderDetails()" class="text-gray-500 hover:text-gray-700 p-2">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <div class="p-6" id="orderDetailsContent">
+            <div class="p-4 mobile-p-3 overflow-y-auto max-h-[calc(90vh-60px)]" id="orderDetailsContent">
                 লোড হচ্ছে...
             </div>
         </div>
@@ -428,9 +609,23 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', initializeApp);
 
+        // Detect mobile device
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Toggle mobile sidebar
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mobileSidebar');
+            sidebar.classList.toggle('open');
+        }
+
         async function initializeApp() {
             updateDateTime();
             setInterval(updateDateTime, 60000);
+            
+            // Handle window resize
+            window.addEventListener('resize', handleResize);
             
             await checkServerHealth();
             
@@ -458,6 +653,58 @@
             } else {
                 showLogin();
             }
+            
+            // Update UI based on screen size
+            handleResize();
+            
+            // Add swipe gesture for mobile sidebar
+            setupSwipeGestures();
+        }
+
+        function handleResize() {
+            const isMobileDevice = isMobile();
+            const mobileHeader = document.getElementById('mobileHeader');
+            const desktopHeader = document.getElementById('desktopHeader');
+            
+            if (isMobileDevice) {
+                mobileHeader.classList.remove('hidden');
+                desktopHeader.classList.add('hidden');
+                document.getElementById('mobilePageTitle').textContent = 
+                    document.getElementById('pageTitle').textContent;
+            } else {
+                mobileHeader.classList.add('hidden');
+                desktopHeader.classList.remove('hidden');
+                // Close mobile sidebar if open
+                document.getElementById('mobileSidebar').classList.remove('open');
+            }
+        }
+
+        function setupSwipeGestures() {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            document.addEventListener('touchend', e => {
+                if (!isMobile()) return;
+                
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchEndX - touchStartX;
+                
+                // Swipe right to open sidebar from left edge
+                if (touchStartX < 50 && diff > 100) {
+                    toggleMobileSidebar();
+                }
+                // Swipe left to close sidebar
+                else if (touchStartX > 200 && diff < -100) {
+                    const sidebar = document.getElementById('mobileSidebar');
+                    if (sidebar.classList.contains('open')) {
+                        toggleMobileSidebar();
+                    }
+                }
+            }, { passive: true });
         }
 
         function updateDateTime() {
@@ -494,12 +741,20 @@
         function showLogin() {
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('adminLayout').classList.add('hidden');
+            if (isMobile()) {
+                document.getElementById('mobileHeader').classList.add('hidden');
+            }
         }
 
         function showAdminPanel() {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('adminLayout').classList.remove('hidden');
             document.getElementById('currentUser').textContent = currentUser.username;
+            document.getElementById('currentUserMobile').textContent = currentUser.username;
+            
+            if (isMobile()) {
+                document.getElementById('mobileHeader').classList.remove('hidden');
+            }
         }
 
         // Login form
@@ -510,8 +765,12 @@
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('loginError');
             const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
             
             loginBtn.disabled = true;
+            loginText.classList.add('hidden');
+            loginSpinner.classList.remove('hidden');
             errorDiv.classList.add('hidden');
             
             try {
@@ -542,6 +801,8 @@
                 document.getElementById('errorMessage').textContent = 'নেটওয়ার্ক ত্রুটি';
             } finally {
                 loginBtn.disabled = false;
+                loginText.classList.remove('hidden');
+                loginSpinner.classList.add('hidden');
             }
         });
 
@@ -558,7 +819,7 @@
         function showToast(message, type = 'info') {
             // Create toast element
             const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white z-50 ${
+            toast.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white z-50 text-sm ${
                 type === 'success' ? 'bg-green-600' :
                 type === 'error' ? 'bg-red-600' :
                 type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600'
@@ -567,17 +828,27 @@
                 <div class="flex items-center">
                     <i class="fas ${type === 'success' ? 'fa-check-circle' : 
                                    type === 'error' ? 'fa-exclamation-circle' : 
-                                   type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
+                                   type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-2"></i>
                     <span>${message}</span>
                 </div>
             `;
             document.body.appendChild(toast);
             
+            // Auto remove after 3 seconds
             setTimeout(() => {
-                toast.remove();
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
             }, 3000);
             
-            console.log(`${type}: ${message}`);
+            // For mobile, show toast at bottom
+            if (isMobile()) {
+                toast.style.top = 'auto';
+                toast.style.bottom = '80px';
+                toast.style.right = '16px';
+                toast.style.left = '16px';
+                toast.style.textAlign = 'center';
+            }
         }
 
         // Dashboard functions
@@ -610,6 +881,7 @@
                 
             } catch (error) {
                 console.error('Dashboard error:', error);
+                showToast('ডেটা লোড করতে সমস্যা', 'error');
             }
         }
 
@@ -627,7 +899,7 @@
             if (!orders || orders.length === 0) {
                 container.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        <td colspan="6" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                             কোনো অর্ডার পাওয়া যায়নি
                         </td>
                     </tr>
@@ -643,14 +915,16 @@
                 
                 html += `
                     <tr>
-                        <td class="px-6 py-4">${order.orderId}</td>
-                        <td class="px-6 py-4">${order.customerName}</td>
-                        <td class="px-6 py-4">${order.quantity}</td>
-                        <td class="px-6 py-4">৳ ${order.total}</td>
-                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="font-medium">${order.orderId}</div>
+                            <div class="text-xs text-gray-500">${date}</div>
+                        </td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">${order.customerName}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">${order.quantity}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell font-bold">৳ ${order.total}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell"><span class="${statusClass} badge text-xs">${statusText}</span></td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800 p-1">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </td>
@@ -674,13 +948,10 @@
                     }
                 }
             } catch (error) {
-                // ডিফল্ট চার্ট ব্যবহার করার আগে স্ট্যাটিসটিক্স থেকে ডেটা নিন
-                await refreshDashboardStats();
                 renderDefaultChartsWithRealData();
             }
         }
 
-        // আসল ডেটা দিয়ে ডিফল্ট চার্ট রেন্ডার
         function renderDefaultChartsWithRealData() {
             const ctx1 = document.getElementById('ordersChart').getContext('2d');
             const ctx2 = document.getElementById('statusChart').getContext('2d');
@@ -688,7 +959,38 @@
             if (ordersChart) ordersChart.destroy();
             if (statusChart) statusChart.destroy();
             
-            // অর্ডার ট্রেন্ড চার্ট
+            // Mobile responsive chart options
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        display: true,
+                        labels: {
+                            font: {
+                                size: isMobile() ? 10 : 12
+                            }
+                        }
+                    } 
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: isMobile() ? 10 : 12
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: isMobile() ? 10 : 12
+                            }
+                        }
+                    }
+                }
+            };
+            
             ordersChart = new Chart(ctx1, {
                 type: 'line',
                 data: {
@@ -701,14 +1003,9 @@
                         tension: 0.4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
+                options: chartOptions
             });
             
-            // ড্যাশবোর্ডের স্ট্যাটিসটিক্স থেকে ডেটা ব্যবহার করুন
             const pendingEl = document.getElementById('statPendingOrders');
             const pendingCount = pendingEl ? parseInt(pendingEl.textContent) || 0 : 0;
             const totalOrders = allOrders.length;
@@ -731,11 +1028,13 @@
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    ...chartOptions,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                padding: isMobile() ? 10 : 20
+                            }
                         }
                     }
                 }
@@ -749,25 +1048,38 @@
             if (ordersChart) ordersChart.destroy();
             if (statusChart) statusChart.destroy();
             
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        display: true,
+                        labels: {
+                            font: {
+                                size: isMobile() ? 10 : 12
+                            }
+                        }
+                    } 
+                }
+            };
+            
             ordersChart = new Chart(ctx1, {
                 type: 'line',
                 data: data.chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
+                options: chartOptions
             });
             
             statusChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: data.statusData,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    ...chartOptions,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                padding: isMobile() ? 10 : 20
+                            }
                         }
                     }
                 }
@@ -776,17 +1088,21 @@
 
         // Page navigation
         function showPage(page) {
+            // Hide all pages
             document.getElementById('dashboardPage').classList.add('hidden');
             document.getElementById('ordersPage').classList.add('hidden');
             document.getElementById('reviewsPage').classList.add('hidden');
             document.getElementById('debugPage').classList.add('hidden');
             
+            // Remove active classes
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('bg-white/20');
             });
             
+            // Show selected page
             document.getElementById(page + 'Page').classList.remove('hidden');
             
+            // Update page title
             const titles = {
                 dashboard: 'ড্যাশবোর্ড',
                 orders: 'অর্ডারসমূহ',
@@ -794,10 +1110,16 @@
                 debug: 'ডিবাগ প্যানেল'
             };
             
-            document.getElementById('pageTitle').textContent = titles[page];
+            const title = titles[page];
+            document.getElementById('pageTitle').textContent = title;
+            document.getElementById('mobilePageTitle').textContent = title;
             
-            event.currentTarget.classList.add('bg-white/20');
+            // Close mobile sidebar if open
+            if (isMobile()) {
+                document.getElementById('mobileSidebar').classList.remove('open');
+            }
             
+            // Load data for the page
             if (page === 'orders') {
                 loadOrders();
             } else if (page === 'reviews') {
@@ -805,33 +1127,27 @@
             }
         }
 
-        // Order management - আপডেটেড
+        // Order management
         async function loadOrders() {
             try {
-                console.log('Loading orders with filter:', currentFilter);
                 const response = await fetch(`${API_BASE_URL}/admin/orders?status=${currentFilter}`, {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Orders loaded:', data.orders?.length || 0, 'orders');
                     if (data.success) {
                         allOrders = data.orders;
                         renderOrdersTable(data.orders);
-                        
-                        // ড্যাশবোর্ড স্ট্যাটিসটিক্স রিফ্রেশ করুন
                         await refreshDashboardStats();
                     }
-                } else {
-                    console.error('Failed to load orders:', response.status);
                 }
             } catch (error) {
                 console.error('Error loading orders:', error);
+                showToast('অর্ডার লোড করতে সমস্যা', 'error');
             }
         }
 
-        // Dashboard statistics রিফ্রেশ ফাংশন
         async function refreshDashboardStats() {
             try {
                 const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
@@ -842,8 +1158,6 @@
                     const data = await response.json();
                     if (data.success) {
                         updateStatistics(data.statistics);
-                        
-                        // স্ট্যাটাস চার্ট রিফ্রেশ করুন
                         refreshStatusChart(data.statistics.orders);
                     }
                 }
@@ -852,16 +1166,10 @@
             }
         }
 
-        // Status chart রিফ্রেশ ফাংশন
         function refreshStatusChart(orderStats) {
-            if (!statusChart) {
-                // যদি চার্ট না থাকে, নতুন চার্ট তৈরি করুন
-                renderDefaultChartsWithRealData();
-                return;
-            }
+            if (!statusChart) return;
             
             try {
-                // নতুন ডেটা সেট করুন
                 const newData = {
                     labels: ['পেন্ডিং', 'কনফার্মড', 'শিপড', 'ডেলিভারড', 'ক্যান্সেলড'],
                     datasets: [{
@@ -876,9 +1184,8 @@
                     }]
                 };
                 
-                // চার্ট আপডেট করুন
                 statusChart.data = newData;
-                statusChart.update('none'); // 'none' মানে অ্যানিমেশন ছাড়া আপডেট
+                statusChart.update('none');
             } catch (error) {
                 console.error('Error updating status chart:', error);
             }
@@ -890,7 +1197,7 @@
             if (!orders || orders.length === 0) {
                 container.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        <td colspan="6" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                             কোনো অর্ডার পাওয়া যায়নি
                         </td>
                     </tr>
@@ -906,22 +1213,24 @@
                 
                 html += `
                     <tr>
-                        <td class="px-6 py-4">${order.orderId}</td>
-                        <td class="px-6 py-4">${order.customerName}</td>
-                        <td class="px-6 py-4">${order.quantity}</td>
-                        <td class="px-6 py-4">৳ ${order.total}</td>
-                        <td class="px-6 py-4"><span class="${statusClass} badge">${statusText}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex space-x-2">
-                                <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-eye"></i>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="font-medium">${order.orderId}</div>
+                            <div class="text-xs text-gray-500">${date}</div>
+                        </td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">${order.customerName}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">${order.quantity}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell font-bold">৳ ${order.total}</td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell"><span class="${statusClass} badge text-xs">${statusText}</span></td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="flex flex-wrap gap-1">
+                                <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800 p-1">
+                                    <i class="fas fa-eye text-sm"></i>
                                 </button>
-                                <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="text-green-600 hover:text-green-800">
-                                    <i class="fas fa-check"></i>
+                                <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="text-green-600 hover:text-green-800 p-1">
+                                    <i class="fas fa-check text-sm"></i>
                                 </button>
-                                <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="text-purple-600 hover:text-purple-800">
-                                    <i class="fas fa-truck"></i>
+                                <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="text-purple-600 hover:text-purple-800 p-1">
+                                    <i class="fas fa-truck text-sm"></i>
                                 </button>
                             </div>
                         </td>
@@ -937,11 +1246,9 @@
             loadOrders();
             
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.remove('bg-blue-100', 'text-blue-800');
+                btn.classList.remove('active', 'bg-blue-100', 'text-blue-800');
             });
-            event.currentTarget.classList.add('active');
-            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+            event.currentTarget.classList.add('active', 'bg-blue-100', 'text-blue-800');
         }
 
         // Review management
@@ -960,6 +1267,7 @@
                 }
             } catch (error) {
                 console.error('Error loading reviews:', error);
+                showToast('রিভিউ লোড করতে সমস্যা', 'error');
             }
         }
 
@@ -969,7 +1277,7 @@
             if (!reviews || reviews.length === 0) {
                 container.innerHTML = `
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        <td colspan="4" class="px-4 mobile-p-2 py-6 text-center text-gray-500">
                             কোনো রিভিউ পাওয়া যায়নি
                         </td>
                     </tr>
@@ -986,23 +1294,25 @@
                 
                 html += `
                     <tr>
-                        <td class="px-6 py-4">${review.reviewerName}</td>
-                        <td class="px-6 py-4">
-                            <div class="text-yellow-500">${stars}</div>
-                            <div class="text-sm text-gray-500">${review.rating}/5</div>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="font-medium">${review.reviewerName}</div>
+                            <div class="text-xs text-gray-500">${date}</div>
                         </td>
-                        <td class="px-6 py-4">${review.reviewText.substring(0, 100)}...</td>
-                        <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-sm ${statusClass}">${status}</span></td>
-                        <td class="px-6 py-4">${date}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex space-x-2">
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="text-yellow-500 text-sm">${stars}</div>
+                        </td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <span class="px-2 py-1 rounded-full text-xs ${statusClass}">${status}</span>
+                        </td>
+                        <td class="px-4 mobile-p-2 py-3 table-cell">
+                            <div class="flex flex-wrap gap-1">
                                 ${!review.approved ? `
-                                    <button onclick="approveReview('${review.id || review._id}')" class="text-green-600 hover:text-green-800">
-                                        <i class="fas fa-check"></i>
+                                    <button onclick="approveReview('${review.id || review._id}')" class="text-green-600 hover:text-green-800 p-1">
+                                        <i class="fas fa-check text-sm"></i>
                                     </button>
                                 ` : ''}
-                                <button onclick="deleteReview('${review.id || review._id}')" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
+                                <button onclick="deleteReview('${review.id || review._id}')" class="text-red-600 hover:text-red-800 p-1">
+                                    <i class="fas fa-trash text-sm"></i>
                                 </button>
                             </div>
                         </td>
@@ -1018,11 +1328,9 @@
             loadReviews();
             
             document.querySelectorAll('.review-filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.remove('bg-blue-100', 'text-blue-800');
+                btn.classList.remove('active', 'bg-blue-100', 'text-blue-800');
             });
-            event.currentTarget.classList.add('active');
-            event.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+            event.currentTarget.classList.add('active', 'bg-blue-100', 'text-blue-800');
         }
 
         async function approveReview(reviewId) {
@@ -1097,6 +1405,7 @@
                 }
             } catch (error) {
                 console.error('Error viewing order:', error);
+                showToast('অর্ডার বিস্তারিত দেখতে সমস্যা', 'error');
             }
         }
 
@@ -1105,46 +1414,47 @@
             const date = new Date(order.createdAt).toLocaleDateString('bn-BD');
             
             const content = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 mobile-full-grid md:grid-cols-2 gap-3">
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">অর্ডার আইডি</h4>
-                            <p class="font-bold">${order.orderId}</p>
+                            <h4 class="text-xs font-medium text-gray-500">অর্ডার আইডি</h4>
+                            <p class="font-bold text-sm">${order.orderId}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">তারিখ</h4>
-                            <p>${date}</p>
+                            <h4 class="text-xs font-medium text-gray-500">তারিখ</h4>
+                            <p class="text-sm">${date}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">গ্রাহক নাম</h4>
-                            <p>${order.customerName}</p>
+                            <h4 class="text-xs font-medium text-gray-500">গ্রাহক নাম</h4>
+                            <p class="text-sm">${order.customerName}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">মোবাইল</h4>
-                            <p>${order.phone}</p>
+                            <h4 class="text-xs font-medium text-gray-500">মোবাইল</h4>
+                            <p class="text-sm">${order.phone}</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">বইয়ের সংখ্যা</h4>
-                            <p>${order.quantity} কপি</p>
+                            <h4 class="text-xs font-medium text-gray-500">বইয়ের সংখ্যা</h4>
+                            <p class="text-sm">${order.quantity} কপি</p>
                         </div>
                         <div>
-                            <h4 class="text-sm font-medium text-gray-500">মোট মূল্য</h4>
-                            <p class="font-bold text-blue-600">৳ ${order.total}</p>
+                            <h4 class="text-xs font-medium text-gray-500">মোট মূল্য</h4>
+                            <p class="font-bold text-blue-600 text-sm">৳ ${order.total}</p>
                         </div>
                     </div>
                     
                     <div>
-                        <h4 class="text-sm font-medium text-gray-500">ঠিকানা</h4>
-                        <p>${order.address}, ${order.district}</p>
+                        <h4 class="text-xs font-medium text-gray-500">ঠিকানা</h4>
+                        <p class="text-sm">${order.address}, ${order.district}</p>
                     </div>
                     
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-500 mb-2">স্ট্যাটাস পরিবর্তন</h4>
+                    <div class="pt-2">
+                        <h4 class="text-xs font-medium text-gray-500 mb-2">স্ট্যাটাস পরিবর্তন</h4>
                         <div class="flex flex-wrap gap-2">
-                            <button onclick="updateOrderStatus('${order.orderId}', 'pending')" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg">পেন্ডিং</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">কনফার্মড</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'shipped')" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg">শিপড</button>
-                            <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">ডেলিভারড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'pending')" class="px-3 py-2 text-xs bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg">পেন্ডিং</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'confirmed')" class="px-3 py-2 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded-lg">কনফার্মড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'shipped')" class="px-3 py-2 text-xs bg-purple-500 hover:bg-purple-600 text-white rounded-lg">শিপড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'delivered')" class="px-3 py-2 text-xs bg-green-500 hover:bg-green-600 text-white rounded-lg">ডেলিভারড</button>
+                            <button onclick="updateOrderStatus('${order.orderId}', 'cancelled')" class="px-3 py-2 text-xs bg-red-500 hover:bg-red-600 text-white rounded-lg">ক্যান্সেল</button>
                         </div>
                     </div>
                 </div>
@@ -1158,16 +1468,13 @@
             document.getElementById('orderDetailsModal').classList.add('hidden');
         }
 
-        // UPDATED: Order status update function
         async function updateOrderStatus(orderId, status) {
             const statusText = getStatusText(status);
             if (!confirm(`আপনি কি এই অর্ডারের স্ট্যাটাস "${statusText}" করতে চান?`)) return;
             
             try {
-                // প্রথমে orderId দিয়ে খুঁজুন
                 let orderToUpdate = allOrders.find(order => order.orderId === orderId);
                 
-                // যদি orderId না মেলে, তাহলে _id বা id দিয়ে খুঁজুন
                 if (!orderToUpdate) {
                     orderToUpdate = allOrders.find(order => 
                         order._id === orderId || order.id === orderId
@@ -1179,7 +1486,6 @@
                     return;
                 }
                 
-                // যেকোনো ID (orderId, _id, id) দিয়ে API কল করুন
                 const updateId = orderToUpdate._id || orderToUpdate.id || orderToUpdate.orderId;
                 
                 const response = await fetch(`${API_BASE_URL}/admin/orders/${updateId}`, {
@@ -1196,15 +1502,9 @@
                     if (data.success) {
                         showToast(`অর্ডার স্ট্যাটাস "${statusText}" করা হয়েছে`, 'success');
                         closeOrderDetails();
-                        
-                        // সব পেজ রিফ্রেশ করুন
-                        await loadOrders(); // অর্ডার টেবিল রিফ্রেশ
-                        await refreshDashboardStats(); // ড্যাশবোর্ড স্ট্যাটিসটিক্স রিফ্রেশ
-                        updateNotificationBadges(); // নোটিফিকেশন বেজ রিফ্রেশ
-                        
-                        // ড্যাশবোর্ডে অবস্থা আপডেট করুন
-                        document.getElementById('statPendingOrders').textContent = 
-                            await getPendingOrderCount();
+                        await loadOrders();
+                        await refreshDashboardStats();
+                        updateNotificationBadges();
                     } else {
                         showToast(data.message || 'স্ট্যাটাস আপডেট ব্যর্থ', 'error');
                     }
@@ -1218,25 +1518,6 @@
             }
         }
 
-        // পেন্ডিং অর্ডার সংখ্যা পাওয়ার ফাংশন
-        async function getPendingOrderCount() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/admin/orders?status=pending`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        return data.orders.length;
-                    }
-                }
-            } catch (error) {
-                console.error('Error getting pending order count:', error);
-            }
-            return 0;
-        }
-
         async function updateNotificationBadges() {
             try {
                 const response = await fetch(`${API_BASE_URL}/admin/orders?status=pending`, {
@@ -1248,12 +1529,20 @@
                     if (data.success) {
                         const pendingCount = data.orders.length;
                         const badge = document.getElementById('pendingBadge');
+                        const mobileBadge = document.getElementById('pendingBadgeMobile');
+                        const bottomBadge = document.getElementById('bottomPendingBadge');
                         
                         if (pendingCount > 0) {
                             badge.textContent = pendingCount;
                             badge.classList.remove('hidden');
+                            mobileBadge.textContent = pendingCount;
+                            mobileBadge.classList.remove('hidden');
+                            bottomBadge.textContent = pendingCount;
+                            bottomBadge.classList.remove('hidden');
                         } else {
                             badge.classList.add('hidden');
+                            mobileBadge.classList.add('hidden');
+                            bottomBadge.classList.add('hidden');
                         }
                     }
                 }
@@ -1267,12 +1556,20 @@
                     if (reviewsData.success) {
                         const pendingReviews = reviewsData.reviews.length;
                         const reviewBadge = document.getElementById('reviewBadge');
+                        const mobileReviewBadge = document.getElementById('reviewBadgeMobile');
+                        const bottomReviewBadge = document.getElementById('bottomReviewBadge');
                         
                         if (pendingReviews > 0) {
                             reviewBadge.textContent = pendingReviews;
                             reviewBadge.classList.remove('hidden');
+                            mobileReviewBadge.textContent = pendingReviews;
+                            mobileReviewBadge.classList.remove('hidden');
+                            bottomReviewBadge.textContent = pendingReviews;
+                            bottomReviewBadge.classList.remove('hidden');
                         } else {
                             reviewBadge.classList.add('hidden');
+                            mobileReviewBadge.classList.add('hidden');
+                            bottomReviewBadge.classList.add('hidden');
                         }
                     }
                 }
