@@ -18,7 +18,7 @@ const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5500',
-    'https://mybook-site.netlify.app', // আপনার Netlify URL
+    'https://moonlit-tarsier-7325a8.netlify.app', // আপনার Netlify URL
     'https://*.netlify.app' // সব Netlify সাবডোমেইনের জন্য
   ],
   credentials: true,
@@ -36,8 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const DATA_FILE = path.join(__dirname, 'data.json');
 
 // MongoDB Connection (ঐচ্ছিক)
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/MyBook';
-let mongooseConnected = false;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://billaharif661_db_user:2GCmDhaEOQUteXow@iwonttotast0.mza6qgz.mongodb.net/BillahArif?appName=IWontToTast0';
+let mongooseConnected = true;
 
 if (process.env.USE_MONGODB === 'true') {
     mongoose.connect(MONGODB_URI, {
@@ -216,7 +216,7 @@ const authenticateToken = (req, res, next) => {
         });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET || 'MyBook-secret-key-2024', (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET || 'MySuperSecretKey_2026_@!#_JWT', (err, user) => {
         if (err) {
             return res.status(403).json({ 
                 success: false, 
@@ -362,7 +362,7 @@ app.post('/api/auth/login', async (req, res) => {
             
             const token = jwt.sign(
                 { userId: user._id, username: user.username, role: user.role },
-                process.env.JWT_SECRET || 'MyBook-secret-key-2024',
+                process.env.JWT_SECRET || 'MySuperSecretKey_2026_@!#_JWT',
                 { expiresIn: '24h' }
             );
             
@@ -392,7 +392,7 @@ app.post('/api/auth/login', async (req, res) => {
             
             const token = jwt.sign(
                 { userId: user.id, username: user.username, role: user.role },
-                process.env.JWT_SECRET || 'MyBook-secret-key-2024',
+                process.env.JWT_SECRET || 'MySuperSecretKey_2026_@!#_JWT',
                 { expiresIn: '24h' }
             );
             
