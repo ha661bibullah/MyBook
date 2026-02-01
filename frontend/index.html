@@ -32,7 +32,6 @@
     src="https://www.facebook.com/tr?id=1556918292278797&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
-
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -714,16 +713,17 @@
                     <div class="mb-8">
                         <h4 class="text-lg font-bold mb-4">বইয়ের সংখ্যা নির্বাচন করুন</h4>
                         <div class="flex items-center justify-between bg-white/20 p-4 rounded-lg">
-                            <div class="flex items-center">
-                                <i class="fas fa-book text-xl mr-3"></i>
-                                <span class="text-lg">বইয়ের সংখ্যা</span>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <button id="decreaseQty" class="quantity-btn">-</button>
-                                <input type="number" id="bookQuantity" min="1" max="10" value="1" class="quantity-input bg-transparent border-2 border-white/30 text-white">
-                                <button id="increaseQty" class="quantity-btn">+</button>
-                            </div>
-                        </div>
+    <div class="flex items-center">
+        <i class="fas fa-book text-xl mr-3"></i>
+        <span class="text-lg">বইয়ের সংখ্যা</span>
+    </div>
+    <div class="flex items-center space-x-4">
+        <button id="decreaseQty" class="quantity-btn bg-gray-500 hover:bg-gray-400 text-white px-3 py-1 rounded">-</button>
+        <input type="number" id="bookQuantity" min="1" max="10" value="1" class="quantity-input bg-transparent border-2 border-white/30 text-white w-12 text-center">
+        <button id="increaseQty" class="quantity-btn bg-gray-500 hover:bg-gray-400 text-white px-3 py-1 rounded">+</button>
+    </div>
+</div>
+
                     </div>
                     
                     <div class="space-y-6 mb-8">

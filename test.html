@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>খাঁটি আতর - সরাসরি অর্ডার করুন</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .perfume-bottle {
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #d4af37, #b8860b, #8b6914);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        .review-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+    <!-- হেডার ও নেভিগেশন -->
+    <header class="sticky top-0 z-50 bg-amber-900 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-wine-bottle text-2xl text-amber-300"></i>
+                <h1 class="text-2xl font-bold">আল-নূর <span class="text-amber-300">আতর</span></h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-amber-300 transition">হোম</a>
+                <a href="#products" class="hover:text-amber-300 transition">আমাদের আতর</a>
+                <a href="#order" class="hover:text-amber-300 transition">অর্ডার করুন</a>
+                <a href="#reviews" class="hover:text-amber-300 transition">গ্রাহক পর্যালোচনা</a>
+                <a href="#contact" class="hover:text-amber-300 transition">যোগাযোগ</a>
+            </nav>
+            
+            <!-- মোবাইল মেনু বাটন -->
+            <button id="mobileMenuBtn" class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- মোবাইল মেনু -->
+        <div id="mobileMenu" class="md:hidden hidden bg-amber-800 px-4 py-3">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="hover:text-amber-300 transition py-1">হোম</a>
+                <a href="#products" class="hover:text-amber-300 transition py-1">আমাদের আতর</a>
+                <a href="#order" class="hover:text-amber-300 transition py-1">অর্ডার করুন</a>
+                <a href="#reviews" class="hover:text-amber-300 transition py-1">গ্রাহক পর্যালোচনা</a>
+                <a href="#contact" class="hover:text-amber-300 transition py-1">যোগাযোগ</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- হিরো সেকশন -->
+    <section id="home" class="hero-bg text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">খাঁটি <span class="gradient-text">আতর</span> এর অভিজ্ঞতা নিন</h2>
+                <p class="text-xl mb-6 text-amber-100">প্রকৃতির সৌরভ ও আধ্যাত্মিক প্রশান্তির এক অপূর্ব মেলবন্ধন</p>
+                <p class="mb-8">১০০% প্রাকৃতিক উপাদানে তৈরি, কোন কেমিক্যাল মিশ্রণ নেই। আমাদের আতর তৈরি করা হয় ঐতিহ্যবাহী পদ্ধতিতে যা শতাব্দী প্রাচীন।</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#order" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
+                        <i class="fas fa-shopping-bag mr-2"></i> সরাসরি অর্ডার করুন
+                    </a>
+                    <a href="#reviews" class="border-2 border-amber-500 text-amber-300 hover:bg-amber-500 hover:text-white font-bold py-3 px-6 rounded-lg transition">
+                        <i class="fas fa-star mr-2"></i> গ্রাহক রিভিউ
+                    </a>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1590736969955-0126f7e1e88d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" 
+                         alt="আতরের বোতল" 
+                         class="rounded-lg shadow-2xl perfume-bottle floating w-64 h-80 object-cover">
+                    <div class="absolute -bottom-4 -right-4 bg-amber-800 text-white p-4 rounded-lg shadow-lg">
+                        <div class="text-2xl font-bold">৳ ১,২৯৯</div>
+                        <div class="text-sm">১০ মিলি বোতল</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- পণ্য সেকশন -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 text-amber-900">আমাদের <span class="gradient-text">আতর</span> সংগ্রহ</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">প্রতিটি আতর তৈরি করা হয় সযত্নে নির্বাচিত প্রাকৃতিক উপাদান দিয়ে। সরাসরি অর্ডার করুন এবং ২৪ ঘন্টার মধ্যে হোম ডেলিভারি পান।</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- পণ্য ১ -->
+                <div class="bg-amber-50 rounded-xl shadow-lg overflow-hidden border border-amber-200">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1460&q=80" 
+                             alt="গোলাপ আতর" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-amber-900">গোলাপ আতর</h3>
+                            <span class="bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1 rounded-full">বেস্ট সেলার</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">১০০% খাঁটি গোলাপ পাপড়ি থেকে তৈরি, মিষ্টি ও টেকসই সুগন্ধি।</p>
+                        
+                        <div class="mb-4">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-gray-600 ml-2">(২৩৪ রিভিউ)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-amber-800">৳ ১,২৯৯</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">৳ ১,৫৯৯</span>
+                            </div>
+                            <a href="#order" data-product="গোলাপ আতর" data-price="1299" class="direct-order-btn bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-lg transition">
+                                <i class="fas fa-bolt mr-2"></i> অর্ডার করুন
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- পণ্য ২ -->
+                <div class="bg-amber-50 rounded-xl shadow-lg overflow-hidden border border-amber-200">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1601042879364-f3947d1f9fc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1468&q=80" 
+                             alt="কস্তুরী আতর" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-amber-900">কস্তুরী আতর</h3>
+                            <span class="bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1 rounded-full">প্রিমিয়াম</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">উচ্চমানের কস্তুরী থেকে তৈরি, গভীর ও আকর্ষণীয় সুগন্ধি।</p>
+                        
+                        <div class="mb-4">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-gray-600 ml-2">(১৮৯ রিভিউ)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-amber-800">৳ ২,৪৯৯</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">৳ ২,৯৯৯</span>
+                            </div>
+                            <a href="#order" data-product="কস্তুরী আতর" data-price="2499" class="direct-order-btn bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-lg transition">
+                                <i class="fas fa-bolt mr-2"></i> অর্ডার করুন
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- পণ্য ৩ -->
+                <div class="bg-amber-50 rounded-xl shadow-lg overflow-hidden border border-amber-200">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1590736969955-0126f7e1e88d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1468&q=80" 
+                             alt="জসমিন আতর" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-amber-900">জসমিন আতর</h3>
+                            <span class="bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1 rounded-full">নতুন</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">তাজা জসমিন ফুল থেকে নিষ্কাশিত, হালকা ও তাজা সুগন্ধি।</p>
+                        
+                        <div class="mb-4">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="text-gray-600 ml-2">(৯৭ রিভিউ)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-amber-800">৳ ৯৯৯</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">৳ ১,২৯৯</span>
+                            </div>
+                            <a href="#order" data-product="জসমিন আতর" data-price="999" class="direct-order-btn bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-lg transition">
+                                <i class="fas fa-bolt mr-2"></i> অর্ডার করুন
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- গ্রাহক পর্যালোচনা সেকশন -->
+    <section id="reviews" class="py-16 bg-amber-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 text-amber-900">গ্রাহকদের <span class="gradient-text">পর্যালোচনা</span></h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">আমাদের গ্রাহকরা যা বলছেন আমাদের আতর সম্পর্কে। আপনার অভিজ্ঞতাও শেয়ার করুন!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <!-- রিভিউ ১ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            রা
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">রাফিদ আহমেদ</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"গোলাপ আতরটি অত্যন্ত উৎকৃষ্ট মানের। সুগন্ধটি টেকসই এবং প্রকৃত গোলাপের ঘ্রাণ নিয়ে আসে। ডেলিভারিও খুব দ্রুত পেয়েছি।"</p>
+                    <div class="text-sm text-gray-500">গত সপ্তাহে কেনা</div>
+                </div>
+                
+                <!-- রিভিউ ২ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            সা
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">সাবরিনা ইসলাম</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"কস্তুরী আতরটি অসাধারণ! গভীর ও মিষ্টি ঘ্রাণ সারাদিন স্থায়ী হয়। দামের তুলনায় মান অনেক ভালো। নিশ্চিতভাবে আবার কিনব।"</p>
+                    <div class="text-sm text-gray-500">২ সপ্তাহ আগে কেনা</div>
+                </div>
+                
+                <!-- রিভিউ ৩ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            ই
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">ইমরান হোসেন</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"জসমিন আতরটি হালকা ও সতেজ ঘ্রাণের জন্য পারফেক্ট। অফিসে ব্যবহারের জন্য আদর্শ। বোতলের ডিজাইনও খুব সুন্দর।"</p>
+                    <div class="text-sm text-gray-500">১ মাস আগে কেনা</div>
+                </div>
+                
+                <!-- রিভিউ ৪ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            আ
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">আহসান হাবীব</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"তিনটি ভ্যারাইটিই ট্রাই করেছি। সবকটিই অসাধারণ। আল-নূর আতরের প্রতিই এখন আমার পূর্ণ আস্থা। প্রাকৃতিকতার জন্য ধন্যবাদ।"</p>
+                    <div class="text-sm text-gray-500">৩ মাস আগে কেনা</div>
+                </div>
+                
+                <!-- রিভিউ ৫ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            ন
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">নুসরাত জাহান</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"আমার ত্বক সংবেদনশীল, কিন্তু এই আতরে কোন সমস্যা হয়নি। প্রাকৃতিক উপাদানে তৈরি বলে কোনো র্যাশ বা এলার্জি হয়নি।"</p>
+                    <div class="text-sm text-gray-500">২ মাস আগে কেনা</div>
+                </div>
+                
+                <!-- রিভিউ ৬ -->
+                <div class="review-card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold text-xl mr-4">
+                            ক
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">কামরুল হাসান</h4>
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"উপহার হিসেবে কস্তুরী আতর পাঠিয়েছিলাম বন্ধুকে। তিনি অত্যন্ত খুশি হয়েছেন। দ্রুত ডেলিভারি এবং সুন্দর প্যাকেজিং।"</p>
+                    <div class="text-sm text-gray-500">৪ দিন আগে কেনা</div>
+                </div>
+            </div>
+            
+            <!-- রিভিউ ফর্ম -->
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold mb-6 text-center text-amber-900">আপনার <span class="gradient-text">পর্যালোচনা</span> দিন</h3>
+                <form id="reviewForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="reviewName" class="block text-gray-700 mb-2">আপনার নাম *</label>
+                            <input type="text" id="reviewName" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        
+                        <div>
+                            <label for="reviewProduct" class="block text-gray-700 mb-2">পণ্য নির্বাচন করুন *</label>
+                            <select id="reviewProduct" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <option value="">পণ্য বাছাই করুন</option>
+                                <option value="গোলাপ আতর">গোলাপ আতর</option>
+                                <option value="কস্তুরী আতর">কস্তুরী আতর</option>
+                                <option value="জসমিন আতর">জসমিন আতর</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">রেটিং *</label>
+                        <div class="flex space-x-2" id="starRating">
+                            <i class="far fa-star text-2xl cursor-pointer text-amber-400" data-rating="1"></i>
+                            <i class="far fa-star text-2xl cursor-pointer text-amber-400" data-rating="2"></i>
+                            <i class="far fa-star text-2xl cursor-pointer text-amber-400" data-rating="3"></i>
+                            <i class="far fa-star text-2xl cursor-pointer text-amber-400" data-rating="4"></i>
+                            <i class="far fa-star text-2xl cursor-pointer text-amber-400" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="ratingValue" value="0" required>
+                    </div>
+                    
+                    <div>
+                        <label for="reviewText" class="block text-gray-700 mb-2">আপনার পর্যালোচনা *</label>
+                        <textarea id="reviewText" rows="4" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="আপনার অভিজ্ঞতা সম্পর্কে লিখুন..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition transform hover:scale-105">
+                        <i class="fas fa-paper-plane mr-2"></i> পর্যালোচনা জমা দিন
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- সরাসরি অর্ডার সেকশন -->
+    <section id="order" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 text-amber-900">সরাসরি <span class="gradient-text">অর্ডার</span> করুন</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">নিচের ফর্মটি পূরণ করুন এবং আপনার পছন্দের আতরটি অর্ডার করুন। ২৪ ঘন্টার মধ্যে ডেলিভারি পাবেন।</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gradient-to-r from-amber-50 to-amber-100 rounded-2xl shadow-xl overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2 p-8 md:p-12">
+                            <h3 class="text-2xl font-bold mb-6 text-amber-900">অর্ডার <span class="gradient-text">বিবরণ</span></h3>
+                            
+                            <form id="orderForm" class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-gray-700 mb-2">পূর্ণ নাম *</label>
+                                    <input type="text" id="name" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                                
+                                <div>
+                                    <label for="phone" class="block text-gray-700 mb-2">মোবাইল নম্বর *</label>
+                                    <input type="tel" id="phone" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                                
+                                <div>
+                                    <label for="email" class="block text-gray-700 mb-2">ইমেইল</label>
+                                    <input type="email" id="email" class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                                
+                                <div>
+                                    <label for="address" class="block text-gray-700 mb-2">পূর্ণ ঠিকানা *</label>
+                                    <textarea id="address" rows="3" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label for="product" class="block text-gray-700 mb-2">পণ্য নির্বাচন করুন *</label>
+                                    <select id="product" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                        <option value="">পণ্য বাছাই করুন</option>
+                                        <option value="1299">গোলাপ আতর - ৳ ১,২৯৯</option>
+                                        <option value="2499">কস্তুরী আতর - ৳ ২,৪৯৯</option>
+                                        <option value="999">জসমিন আতর - ৳ ৯৯৯</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="quantity" class="block text-gray-700 mb-2">পরিমাণ *</label>
+                                    <div class="flex items-center">
+                                        <button type="button" id="decreaseQty" class="bg-amber-200 text-amber-800 w-10 h-10 rounded-l-lg">-</button>
+                                        <input type="number" id="quantity" min="1" value="1" class="w-20 text-center px-4 py-2 border-t border-b border-amber-300">
+                                        <button type="button" id="increaseQty" class="bg-amber-200 text-amber-800 w-10 h-10 rounded-r-lg">+</button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="payment" class="block text-gray-700 mb-2">পেমেন্ট পদ্ধতি *</label>
+                                    <select id="payment" required class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                        <option value="">পেমেন্ট পদ্ধতি বাছাই করুন</option>
+                                        <option value="cod">ক্যাশ অন ডেলিভারি</option>
+                                        <option value="bkash">bKash</option>
+                                        <option value="nagad">Nagad</option>
+                                        <option value="card">ক্রেডিট/ডেবিট কার্ড</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="bg-amber-100 p-4 rounded-lg">
+                                    <div class="flex justify-between text-lg">
+                                        <span class="font-bold">মোট মূল্য:</span>
+                                        <span id="totalPrice" class="font-bold text-amber-800">৳ ১,২৯৯</span>
+                                    </div>
+                                    <div class="text-sm text-gray-600 mt-2">ডেলিভারি চার্জ: ঢাকার ভিতরে ফ্রি</div>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition transform hover:scale-105">
+                                    <i class="fas fa-paper-plane mr-2"></i> অর্ডার কনফার্ম করুন
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="md:w-1/2 bg-amber-800 text-white p-8 md:p-12 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold mb-6">আমাদের প্রতিশ্রুতি</h3>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-amber-300 mt-1 mr-3"></i>
+                                    <span>১০০% খাঁটি ও প্রাকৃতিক আতর</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-amber-300 mt-1 mr-3"></i>
+                                    <span>ঢাকার মধ্যে ২৪ ঘন্টায় হোম ডেলিভারি</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-amber-300 mt-1 mr-3"></i>
+                                    <span>অনলাইন পেমেন্ট ও ক্যাশ অন ডেলিভারি</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-amber-300 mt-1 mr-3"></i>
+                                    <span>৭ দিনের রিটার্ন পলিসি</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-amber-300 mt-1 mr-3"></i>
+                                    <span>গ্রাহক সেবা: সকাল ৯টা - রাত ১০টা</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="mt-8 p-4 bg-amber-900 rounded-lg">
+                                <h4 class="text-xl font-bold mb-2">যোগাযোগ</h4>
+                                <p class="mb-2"><i class="fas fa-phone-alt mr-2"></i> ০১৭১২-৩৪৫৬৭৮</p>
+                                <p class="mb-2"><i class="fas fa-envelope mr-2"></i> info@alnoor-attar.com</p>
+                                <p><i class="fas fa-map-marker-alt mr-2"></i> ১২৩/এ, আতর গলি, পল্টন, ঢাকা</p>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <h4 class="text-xl font-bold mb-3">পেমেন্ট তথ্য</h4>
+                                <div class="text-sm space-y-2">
+                                    <p><span class="font-bold">bKash:</span> ০১৭১২৩৪৫৬৭৮ (Merchant)</p>
+                                    <p><span class="font-bold">Nagad:</span> ০১৭১২৩৪৫৬৭৮ (Personal)</p>
+                                    <p>রেফারেন্স: আপনার নাম + মোবাইল নম্বরের শেষ ৪ ডিজিট</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- কনফার্মেশন মডাল -->
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
+            <div class="bg-amber-600 text-white p-4 rounded-t-xl flex justify-between items-center">
+                <h3 class="text-xl font-bold">অর্ডার সফল!</h3>
+                <button id="closeModalBtn" class="text-2xl">&times;</button>
+            </div>
+            
+            <div class="p-6 text-center">
+                <div class="text-green-500 text-5xl mb-4">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h4 class="text-2xl font-bold mb-2 text-amber-800">ধন্যবাদ!</h4>
+                <p id="confirmationMessage" class="text-gray-600 mb-6">আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।</p>
+                
+                <div class="bg-amber-50 p-4 rounded-lg mb-6 text-left">
+                    <h5 class="font-bold mb-2">অর্ডার তথ্য:</h5>
+                    <p id="orderDetails" class="text-sm"></p>
+                </div>
+                
+                <button id="continueShoppingBtn" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    <i class="fas fa-shopping-bag mr-2"></i> নতুন অর্ডার করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ফুটার -->
+    <footer id="contact" class="bg-amber-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-wine-bottle text-3xl text-amber-300"></i>
+                        <h2 class="text-2xl font-bold">আল-নূর <span class="text-amber-300">আতর</span></h2>
+                    </div>
+                    <p class="text-amber-100">প্রাকৃতিক সুগন্ধির বিশ্বস্ত নাম</p>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <p class="mb-2">যোগাযোগ: ০১৭১২-৩৪৫৬৭৮</p>
+                    <p class="mb-4">ইমেইল: info@alnoor-attar.com</p>
+                    <div class="flex justify-center md:justify-end space-x-4">
+                        <a href="#" class="text-amber-300 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-amber-300 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-amber-300 hover:text-white text-xl"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-amber-800 mt-8 pt-6 text-center text-amber-200 text-sm">
+                <p>&copy; ২০২৩ আল-নূর আতর। সকল অধিকার সংরক্ষিত।</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // DOM এলিমেন্টস
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const orderForm = document.getElementById('orderForm');
+        const reviewForm = document.getElementById('reviewForm');
+        const productSelect = document.getElementById('product');
+        const quantityInput = document.getElementById('quantity');
+        const decreaseQty = document.getElementById('decreaseQty');
+        const increaseQty = document.getElementById('increaseQty');
+        const totalPrice = document.getElementById('totalPrice');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const orderDetails = document.getElementById('orderDetails');
+        const starRating = document.getElementById('starRating');
+        const stars = starRating.querySelectorAll('.far');
+        const ratingValue = document.getElementById('ratingValue');
+        const directOrderButtons = document.querySelectorAll('.direct-order-btn');
+        
+        // মোবাইল মেনু টগল
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // মোবাইল মেনু লিঙ্ক ক্লিক করলে মেনু বন্ধ করুন
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // সরাসরি অর্ডার বাটন ক্লিক করলে ফর্মে পণ্য নির্বাচন করুন
+        directOrderButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const product = button.getAttribute('data-product');
+                const price = button.getAttribute('data-price');
+                
+                // পণ্য নির্বাচন করুন
+                for (let option of productSelect.options) {
+                    if (option.text.includes(product)) {
+                        productSelect.value = price;
+                        break;
+                    }
+                }
+                
+                // অর্ডার সেকশনে স্ক্রল করুন
+                document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                
+                // মূল্য আপডেট করুন
+                updateTotalPrice();
+                
+                // ফোকাস দিন
+                document.getElementById('name').focus();
+            });
+        });
+        
+        // পণ্য নির্বাচন এবং মূল্য আপডেট
+        productSelect.addEventListener('change', updateTotalPrice);
+        decreaseQty.addEventListener('click', () => {
+            if (quantityInput.value > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updateTotalPrice();
+            }
+        });
+        
+        increaseQty.addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateTotalPrice();
+        });
+        
+        quantityInput.addEventListener('input', updateTotalPrice);
+        
+        function updateTotalPrice() {
+            const price = productSelect.value ? parseInt(productSelect.value) : 0;
+            const quantity = parseInt(quantityInput.value);
+            const total = price * quantity;
+            totalPrice.textContent = `৳ ${total.toLocaleString('bn-BD')}`;
+        }
+        
+        // স্টার রেটিং সিস্টেম
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                ratingValue.value = rating;
+                
+                // স্টার আপডেট করুন
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            // হোভার ইফেক্ট
+            star.addEventListener('mouseover', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('text-amber-500');
+                    } else {
+                        s.classList.remove('text-amber-500');
+                    }
+                });
+            });
+            
+            // হোভার রিমুভ
+            star.addEventListener('mouseout', () => {
+                const currentRating = parseInt(ratingValue.value);
+                
+                stars.forEach((s, index) => {
+                    if (index < currentRating) {
+                        s.classList.add('text-amber-500');
+                    } else {
+                        s.classList.remove('text-amber-500');
+                    }
+                });
+            });
+        });
+        
+        // অর্ডার ফর্ম সাবমিশন
+        orderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const productText = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = quantityInput.value;
+            const payment = document.getElementById('payment').value;
+            const total = parseInt(productSelect.value) * parseInt(quantity);
+            
+            // অর্ডার ডিটেইলস তৈরি করুন
+            const orderInfo = `
+                <strong>গ্রাহক:</strong> ${name}<br>
+                <strong>পণ্য:</strong> ${productText}<br>
+                <strong>পরিমাণ:</strong> ${quantity}<br>
+                <strong>মোট মূল্য:</strong> ৳ ${total.toLocaleString('bn-BD')}<br>
+                <strong>পেমেন্ট:</strong> ${getPaymentMethodText(payment)}<br>
+                <strong>ডেলিভারি ঠিকানা:</strong> ${address}
+            `;
+            
+            // কনফার্মেশন মেসেজ তৈরি করুন
+            confirmationMessage.textContent = `${name} সাহেব/আপু, আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। অর্ডার নং: ATT${Date.now().toString().slice(-6)}। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব (${phone})।`;
+            orderDetails.innerHTML = orderInfo;
+            
+            // মডাল দেখান
+            confirmationModal.classList.remove('hidden');
+            
+            // ফর্ম রিসেট
+            orderForm.reset();
+            quantityInput.value = 1;
+            document.getElementById('payment').selectedIndex = 0;
+            updateTotalPrice();
+        });
+        
+        // পেমেন্ট মেথড টেক্সট ফাংশন
+        function getPaymentMethodText(value) {
+            switch(value) {
+                case 'cod': return 'ক্যাশ অন ডেলিভারি';
+                case 'bkash': return 'bKash';
+                case 'nagad': return 'Nagad';
+                case 'card': return 'ক্রেডিট/ডেবিট কার্ড';
+                default: return value;
+            }
+        }
+        
+        // রিভিউ ফর্ম সাবমিশন
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('reviewName').value;
+            const product = document.getElementById('reviewProduct').value;
+            const rating = ratingValue.value;
+            const reviewText = document.getElementById('reviewText').value;
+            
+            if (rating === "0") {
+                alert('দয়া করে রেটিং দিন');
+                return;
+            }
+            
+            // রিভিউ সাবমিট করলে মেসেজ দেখান
+            alert(`ধন্যবাদ ${name}! আপনার পর্যালোচনা জমা দেওয়া হয়েছে।`);
+            
+            // ফর্ম রিসেট
+            reviewForm.reset();
+            
+            // রেটিং রিসেট
+            ratingValue.value = "0";
+            stars.forEach(star => {
+                star.classList.remove('fas');
+                star.classList.add('far');
+                star.classList.remove('text-amber-500');
+            });
+            
+            // স্টারগুলোকে ডিফল্ট রঙে ফিরিয়ে দিন
+            stars.forEach(star => {
+                star.classList.add('text-amber-400');
+            });
+        });
+        
+        // মডাল বন্ধ করুন
+        closeModalBtn.addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+        });
+        
+        // নতুন অর্ডার করুন বাটন
+        continueShoppingBtn.addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // মডালের বাইরে ক্লিক করলে বন্ধ করুন
+        confirmationModal.addEventListener('click', (e) => {
+            if (e.target === confirmationModal) {
+                confirmationModal.classList.add('hidden');
+            }
+        });
+        
+        // স্ক্রল করলে হেডারে স্টাইল পরিবর্তন
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-xl');
+            } else {
+                header.classList.remove('shadow-xl');
+            }
+        });
+        
+        // স্মুথ স্ক্রলিং
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // প্রথম লোডে মূল্য আপডেট করুন
+        updateTotalPrice();
+    </script>
+</body>
+</html>
