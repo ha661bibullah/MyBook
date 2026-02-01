@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মৃত্যু ও তার পরে - আধ্যাত্মিক জিজ্ঞাসার উত্তর</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="মৃত্যু ও তার পরে বইটি মৃত্যু পরবর্তী জীবন সম্পর্কে মানবজাতির চিরন্তন জিজ্ঞাসার উত্তর দেয়। ধর্ম, দর্শন, বিজ্ঞান ও আধ্যাত্মিকতার সমন্বয়ে রচিত এই বই বাংলাদেশের সেরা বেস্টসেলার বই।">
+    <meta name="keywords" content="মৃত্যু, পরজীবন, আধ্যাত্মিকতা, বই, বাংলাদেশী বই, দর্শন, ধর্ম, বিজ্ঞান, মৃত্যু ভীতি, আত্মা, পুনর্জন্ম">
+    <meta name="author" content="ড. আহমেদ হাসান">
+    <meta property="og:title" content="মৃত্যু ও তার পরে - আধ্যাত্মিক জিজ্ঞাসার উত্তর">
+    <meta property="og:description" content="মৃত্যু পরবর্তী জীবন সম্পর্কে ধর্মীয়, দার্শনিক ও বৈজ্ঞানিক দৃষ্টিভঙ্গির এক অসাধারণ সমন্বয়।">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=580&h=907&q=80">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="bn_BD">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,44 +36,209 @@
         }
     </script>
     <style>
-        body { font-family: 'Hind Siliguri', sans-serif; }
-        .section-padding { padding: 5rem 0; }
-        .book-cover { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); transition: all 0.5s ease; }
-        .book-cover:hover { transform: translateY(-10px); box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6); }
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            line-height: 1.6;
+        }
+        .section-padding { 
+            padding: 6rem 0; 
+        }
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 3rem 0;
+            }
+        }
+        .book-cover { 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+            transition: all 0.5s ease;
+            width: 580px;
+            height: 907px;
+            max-width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            .book-cover {
+                width: 320px;
+                height: 500px;
+            }
+        }
+        @media (max-width: 480px) {
+            .book-cover {
+                width: 280px;
+                height: 437px;
+            }
+        }
+        .book-cover:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6); 
+        }
         .floating { animation: floating 6s ease-in-out infinite; }
-        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes floating { 
+            0%, 100% { transform: translateY(0px); } 
+            50% { transform: translateY(-20px); } 
+        }
         .pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
-        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.8; } 
+        }
+        .gradient-text { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
         .testimonial-card { transition: all 0.3s ease; }
-        .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2); }
-        .chapter-item { transition: all 0.3s ease; border-left: 4px solid transparent; }
-        .chapter-item:hover { border-left-color: #7c3aed; background-color: rgba(124, 58, 237, 0.05); transform: translateX(5px); }
+        .testimonial-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2); 
+        }
+        .chapter-item { 
+            transition: all 0.3s ease; 
+            border-left: 4px solid transparent; 
+        }
+        .chapter-item:hover { 
+            border-left-color: #7c3aed; 
+            background-color: rgba(124, 58, 237, 0.05); 
+            transform: translateX(5px); 
+        }
         .author-signature { font-family: 'Dancing Script', cursive; }
-        .quantity-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-size: 1.2rem; }
-        .quantity-btn:hover { background-color: #7c3aed; color: white; }
-        .quantity-input { width: 60px; text-align: center; font-weight: bold; font-size: 1.2rem; border: 2px solid #e5e7eb; border-radius: 8px; }
+        .quantity-btn { 
+            width: 40px; 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background-color: #f3f4f6; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+        }
+        .quantity-btn:hover { 
+            background-color: #7c3aed; 
+            color: white; 
+        }
+        .quantity-input { 
+            width: 60px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 8px; 
+        }
         .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .container { 
+            max-width: 1400px !important; 
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1400px !important;
+            }
+        }
+        /* Desktop specific improvements */
+        @media (min-width: 1024px) {
+            .desktop-grid-gap {
+                gap: 3rem;
+            }
+            .desktop-text-lg {
+                font-size: 1.125rem;
+            }
+            .desktop-px {
+                padding-left: 4rem;
+                padding-right: 4rem;
+            }
+            .desktop-mb {
+                margin-bottom: 4rem;
+            }
+            .desktop-py {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            .desktop-heading {
+                font-size: 3.5rem;
+            }
+        }
+        /* Improved typography for desktop */
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+        }
+        p {
+            line-height: 1.7;
+        }
+        /* Better spacing for desktop sections */
+        .desktop-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+        /* Enhanced desktop navigation */
+        .desktop-nav {
+            gap: 2.5rem;
+        }
+        .desktop-nav a {
+            font-size: 1.125rem;
+            position: relative;
+        }
+        .desktop-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #7c3aed;
+            transition: width 0.3s ease;
+        }
+        .desktop-nav a:hover::after {
+            width: 100%;
+        }
+        /* Breadcrumb for SEO */
+        .breadcrumb { 
+            font-size: 0.9rem; 
+            color: #666; 
+            margin-bottom: 1rem; 
+        }
+        .breadcrumb a { 
+            color: #7c3aed; 
+            text-decoration: none; 
+        }
+        .breadcrumb a:hover { text-decoration: underline; }
+        /* Improved desktop buttons */
+        .desktop-btn {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        /* Better desktop form styling */
+        .desktop-form-input {
+            padding: 1rem;
+            font-size: 1rem;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="font-bangla bg-light text-gray-800">
     <!-- হেডার -->
     <header class="sticky top-0 z-50 bg-dark text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
+        <div class="container mx-auto px-4 py-4 desktop-py">
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center mr-3">
                         <i class="fas fa-book-open text-white text-xl"></i>
                     </div>
-                    <div>
+                    <div onclick="scrollToTop()" class="cursor-pointer hover:opacity-80 transition-opacity duration-200">
                         <h1 class="text-xl font-bold">মৃত্যু ও তার পরে</h1>
                         <p class="text-xs text-gray-300">আধ্যাত্মিক জিজ্ঞাসার উত্তর</p>
                     </div>
                 </div>
                 
-                <nav class="hidden md:flex space-x-8">
+                <nav class="hidden lg:flex desktop-nav">
                     <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
                     <a href="#chapters" class="hover:text-accent transition">অধ্যায়সমূহ</a>
                     <a href="#author" class="hover:text-accent transition">লেখক</a>
@@ -72,13 +247,13 @@
                 </nav>
                 
                 <a href="#order">
-                    <button class="px-6 py-2 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                    <button class="px-6 py-2 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition desktop-btn">
                         <i class="fas fa-shopping-cart mr-2"></i> এখনই কিনুন
                     </button>
                 </a>
             </div>
             
-            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 pt-4 border-t border-gray-700">
+            <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-4 pt-4 border-t border-gray-700">
                 <div class="flex flex-col space-y-4">
                     <a href="#about" class="hover:text-accent transition">বই সম্পর্কে</a>
                     <a href="#chapters" class="hover:text-accent transition">অধ্যায়সমূহ</a>
@@ -91,15 +266,15 @@
     </header>
 
     <!-- হিরো সেকশন -->
-    <section class="bg-gradient-to-br from-dark to-primary text-white py-16 md:py-24">
+    <section class="bg-gradient-to-br from-dark to-primary text-white py-16 md:py-24 desktop-section">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 desktop-grid-gap items-center">
                 <div>
                     <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1 mb-6">
                         <span class="text-sm">বেস্টসেলার বই</span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6">মৃত্যু ও তার <span class="gradient-text">পরে</span></h1>
-                    <p class="text-xl mb-8 opacity-90">জীবনের শেষ সীমানা পেরিয়ে কী আছে? মৃত্যু পরবর্তী জীবন সম্পর্কে ধর্মীয়, দার্শনিক ও বৈজ্ঞানিক দৃষ্টিভঙ্গির এক অসাধারণ সমন্বয়।</p>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 desktop-heading">মৃত্যু ও তার <span class="gradient-text">পরে</span></h1>
+                    <p class="text-xl mb-8 opacity-90 desktop-text-lg">জীবনের শেষ সীমানা পেরিয়ে কী আছে? মৃত্যু পরবর্তী জীবন সম্পর্কে ধর্মীয়, দার্শনিক ও বৈজ্ঞানিক দৃষ্টিভঙ্গির এক অসাধারণ সমন্বয়।</p>
                     
                     <div class="flex flex-wrap gap-4 mb-10">
                         <div class="flex items-center">
@@ -119,19 +294,20 @@
                     
                     <div class="flex flex-wrap gap-4">
                         <a href="#order">
-                            <button class="px-8 py-3 bg-white text-dark font-bold rounded-lg hover:bg-gray-100 transition flex items-center">
+                            <button class="px-8 py-3 bg-white text-dark font-bold rounded-lg hover:bg-gray-100 transition flex items-center desktop-btn">
                                 <i class="fas fa-shopping-cart mr-2"></i> এখনই অর্ডার করুন
                             </button>
                         </a>
-                        <button id="previewBtn" class="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition flex items-center">
+                        <button id="previewBtn" class="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition flex items-center desktop-btn">
                             <i class="fas fa-eye mr-2"></i> বইয়ের অংশ পড়ুন
                         </button>
                     </div>
                 </div>
                 
-                <div class="relative flex justify-center">
+                <!-- বইয়ের প্রচ্ছদ ১ -->
+                <div class="relative flex justify-center mt-12 lg:mt-0">
                     <div class="floating">
-                        <div class="book-cover w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-gray-900 to-dark rounded-lg relative overflow-hidden">
+                        <div id="bookCover1" class="book-cover bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden mx-auto" style="background-image: url('img/caver1.jpeg');">
                             <div class="absolute left-0 top-0 w-6 h-full bg-gradient-to-b from-accent to-primary"></div>
                             
                             <div class="absolute inset-0 p-6 flex flex-col justify-between">
@@ -164,25 +340,25 @@
 
     <!-- বই সম্পর্কে -->
     <section id="about" class="section-padding bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">বইটি সম্পর্কে</h2>
+        <div class="container mx-auto px-4 desktop-px">
+            <div class="text-center mb-12 desktop-mb">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-dark mb-4">বইটি সম্পর্কে</h2>
                 <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto text-lg">মানুষের চিরকালীন প্রশ্ন "মৃত্যুর পরে কী হয়?" এর উত্তরের সন্ধানে রচিত এই অনবদ্য গ্রন্থ</p>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg desktop-text-lg">মানুষের চিরকালীন প্রশ্ন "মৃত্যুর পরে কী হয়?" এর উত্তরের সন্ধানে রচিত এই অনবদ্য গ্রন্থ</p>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 desktop-grid-gap items-center">
                 <div>
-                    <p class="text-gray-700 mb-6 text-lg">
+                    <p class="text-gray-700 mb-6 text-lg desktop-text-lg">
                         "মৃত্যু ও তার পরে" বইটি মৃত্যু পরবর্তী জীবন সম্পর্কে মানবজাতির চিরন্তন জিজ্ঞাসার উত্তর খুঁজে বেড়ায়। এই বইতে লেখক বিভিন্ন ধর্ম, দর্শন, আধ্যাত্মিকতা এবং আধুনিক বিজ্ঞানের আলোকে মৃত্যু ও পরজীবনের ধারণা উপস্থাপন করেছেন।
                     </p>
                     
-                    <p class="text-gray-700 mb-6 text-lg">
+                    <p class="text-gray-700 mb-6 text-lg desktop-text-lg">
                         বইটি শুধুমাত্র ধর্মীয় বিশ্বাস নয়, বরং দার্শনিক তত্ত্ব, আধ্যাত্মিক অভিজ্ঞতা এবং বৈজ্ঞানিক গবেষণার সমন্বয়ে রচিত। নিকট-মৃত্যু অভিজ্ঞতা (NDE), পুনর্জন্ম, আত্মার অমরত্ব এবং মহাবিশ্বের সৃষ্টিতত্ত্ব নিয়ে বিস্তারিত আলোচনা করা হয়েছে।
                     </p>
                     
-                    <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-accent">
-                        <h4 class="font-bold text-dark mb-3">বইটি যাদের জন্য:</h4>
+                    <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-accent desktop-text-lg">
+                        <h4 class="font-bold text-dark mb-3 text-xl">বইটি যাদের জন্য:</h4>
                         <ul class="space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check text-accent mt-1 mr-3"></i>
@@ -204,7 +380,7 @@
                     </div>
                 </div>
                 
-                <div class="bg-gradient-to-br from-dark to-primary p-8 rounded-xl text-white">
+                <div class="bg-gradient-to-br from-dark to-primary p-8 rounded-xl text-white mt-8 lg:mt-0">
                     <h3 class="text-2xl font-bold mb-6">বইয়ের বিশেষ বৈশিষ্ট্য</h3>
                     
                     <div class="space-y-6">
@@ -255,11 +431,11 @@
 
     <!-- অধ্যায়সমূহ -->
     <section id="chapters" class="section-padding bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">বইয়ের অধ্যায়সমূহ</h2>
+        <div class="container mx-auto px-4 desktop-px">
+            <div class="text-center mb-12 desktop-mb">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-dark mb-4">বইয়ের অধ্যায়সমূহ</h2>
                 <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto text-lg">বইটির ১২টি তথ্যবহুল অধ্যায়ে মৃত্যু ও পরজীবনের বিভিন্ন দিক নিয়ে আলোচনা করা হয়েছে</p>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg desktop-text-lg">বইটির ১২টি তথ্যবহুল অধ্যায়ে মৃত্যু ও পরজীবনের বিভিন্ন দিক নিয়ে আলোচনা করা হয়েছে</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -329,28 +505,28 @@
 
     <!-- লেখক পরিচিতি -->
     <section id="author" class="section-padding bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">লেখক পরিচিতি</h2>
+        <div class="container mx-auto px-4 desktop-px">
+            <div class="text-center mb-12 desktop-mb">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-dark mb-4">লেখক পরিচিতি</h2>
                 <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 desktop-grid-gap items-center">
                 <div class="text-center lg:text-left">
                     <div class="mb-8">
                         <h3 class="text-3xl font-bold text-dark mb-2">ড. আহমেদ হাসান</h3>
-                        <p class="text-gray-600 text-lg">দার্শনিক, গবেষক ও আধ্যাত্মিক লেখক</p>
+                        <p class="text-gray-600 text-lg desktop-text-lg">দার্শনিক, গবেষক ও আধ্যাত্মিক লেখক</p>
                     </div>
                     
-                    <p class="text-gray-700 mb-6 text-lg">
+                    <p class="text-gray-700 mb-6 text-lg desktop-text-lg">
                         ড. আহমেদ হাসান ঢাকা বিশ্ববিদ্যালয়ের দর্শন বিভাগের অধ্যাপক হিসেবে ২০ বছর যাবৎ কর্মরত আছেন। তিনি দর্শনে পিএইচডি ডিগ্রী অর্জন করেছেন কেমব্রিজ বিশ্ববিদ্যালয় থেকে।
                     </p>
                     
-                    <p class="text-gray-700 mb-6 text-lg">
+                    <p class="text-gray-700 mb-6 text-lg desktop-text-lg">
                         দর্শন, ধর্মতত্ত্ব এবং তুলনামূলক ধর্মীয় গবেষণায় তার বিশেষ আগ্রহ রয়েছে। "মৃত্যু ও তার পরে" তার রচিত ৭ম বই। পূর্বে প্রকাশিত তার বইগুলোর মধ্যে "আত্মার রহস্য", "ধর্ম ও বিজ্ঞানের সংলাপ", এবং "বাংলাদেশের সুফি ঐতিহ্য" বিশেষভাবে উল্লেখযোগ্য।
                     </p>
                     
-                    <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="bg-gray-50 p-6 rounded-lg desktop-text-lg">
                         <h4 class="font-bold text-dark mb-4">শিক্ষাগত যোগ্যতা:</h4>
                         <ul class="space-y-3">
                             <li class="flex items-start">
@@ -369,9 +545,10 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-center">
+                <!-- বইয়ের প্রচ্ছদ ২ -->
+                <div class="flex justify-center mt-12 lg:mt-0">
                     <div class="relative">
-                        <div class="w-64 h-80 md:w-80 md:h-96 bg-gradient-to-br from-dark to-primary rounded-lg shadow-2xl flex items-end justify-center overflow-hidden">
+                        <div id="bookCover2" class="book-cover bg-cover bg-center bg-no-repeat rounded-lg shadow-2xl flex items-end justify-center overflow-hidden mx-auto" style="background-image: url('img/caver1.jpeg');">
                             <div class="w-full h-3/4 bg-gradient-to-t from-gray-900 to-transparent relative">
                                 <div class="absolute bottom-6 left-0 right-0 text-center text-white p-4">
                                     <h4 class="text-2xl font-bold">ড. আহমেদ হাসান</h4>
@@ -394,11 +571,11 @@
 
     <!-- পাঠক রিভিউ -->
     <section id="reviews" class="section-padding bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">পাঠকদের রিভিউ</h2>
+        <div class="container mx-auto px-4 desktop-px">
+            <div class="text-center mb-12 desktop-mb">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-dark mb-4">পাঠকদের রিভিউ</h2>
                 <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto text-lg">বইটি পড়ে পাঠকদের জীবনদৃষ্টি কীভাবে বদলে গেছে</p>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg desktop-text-lg">বইটি পড়ে পাঠকদের জীবনদৃষ্টি কীভাবে বদলে গেছে</p>
             </div>
             
             <div class="bg-white rounded-xl shadow p-8 max-w-3xl mx-auto mb-12">
@@ -464,7 +641,7 @@
                     <form id="reviewForm">
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">আপনার নাম *</label>
-                            <input type="text" id="reviewerName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                            <input type="text" id="reviewerName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required>
                         </div>
                         
                         <div class="mb-6">
@@ -481,10 +658,10 @@
                         
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">আপনার রিভিউ *</label>
-                            <textarea id="reviewText" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required></textarea>
+                            <textarea id="reviewText" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required></textarea>
                         </div>
                         
-                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition">
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-lg transition desktop-btn">
                             রিভিউ জমা দিন
                         </button>
                     </form>
@@ -503,14 +680,14 @@
 
     <!-- অর্ডার সেকশন -->
     <section id="order" class="section-padding bg-gradient-to-br from-dark to-primary text-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">বইটি অর্ডার করুন</h2>
+        <div class="container mx-auto px-4 desktop-px">
+            <div class="text-center mb-12 desktop-mb">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">বইটি অর্ডার করুন</h2>
                 <div class="w-24 h-1 bg-accent mx-auto mb-6"></div>
-                <p class="text-xl opacity-90 max-w-3xl mx-auto">জীবন পরিবর্তনকারী এই বইটি সংগ্রহ করুন এখনই। সারা বাংলাদেশে হোম ডেলিভারি সুবিধা রয়েছে।</p>
+                <p class="text-xl opacity-90 max-w-3xl mx-auto desktop-text-lg">জীবন পরিবর্তনকারী এই বইটি সংগ্রহ করুন এখনই। সারা বাংলাদেশে হোম ডেলিভারি সুবিধা রয়েছে।</p>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 desktop-grid-gap">
                 <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl">
                     <h3 class="text-2xl font-bold mb-6">মূল্য ও অফার</h3>
                     
@@ -596,36 +773,38 @@
                     </div>
                 </div>
                 
-                <div class="bg-white text-dark p-8 rounded-xl shadow-2xl">
+                <div class="bg-white text-dark p-8 rounded-xl shadow-2xl mt-8 lg:mt-0">
                     <h3 class="text-2xl font-bold mb-6 text-center">অর্ডার ফর্ম</h3>
                     
                     <form id="orderForm">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-gray-700 mb-2">আপনার নাম *</label>
-                                <input type="text" id="orderName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                                <input type="text" id="orderName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required>
                             </div>
                             
                             <div>
                                 <label class="block text-gray-700 mb-2">মোবাইল নম্বর *</label>
-                                <input type="tel" id="orderPhone" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                                <input type="tel" id="orderPhone" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required>
                             </div>
                         </div>
                         
+                        <!-- ইমেইল ফিল্ড অপশনাল -->
                         <div class="mb-6">
-                            <label class="block text-gray-700 mb-2">ইমেইল</label>
-                            <input type="email" id="orderEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                            <label class="block text-gray-700 mb-2">ইমেইল (ঐচ্ছিক)</label>
+                            <input type="email" id="orderEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input">
+                            <p class="text-xs text-gray-500 mt-1">ইমেইল দেওয়া না থাকলেও চলবে</p>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">ঠিকানা *</label>
-                            <textarea id="orderAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required></textarea>
+                            <textarea id="orderAddress" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required></textarea>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-gray-700 mb-2">জেলা *</label>
-                                <select id="orderDistrict" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+                                <select id="orderDistrict" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" required>
                                     <option value="">জেলা নির্বাচন করুন</option>
                                     <option value="dhaka">ঢাকা</option>
                                     <option value="chittagong">চট্টগ্রাম</option>
@@ -642,7 +821,7 @@
                             <div>
                                 <label class="block text-gray-700 mb-2">বইয়ের সংখ্যা *</label>
                                 <div class="flex items-center">
-                                    <input type="number" id="orderQuantity" min="1" max="10" value="1" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" readonly>
+                                    <input type="number" id="orderQuantity" min="1" max="10" value="1" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent desktop-form-input" readonly>
                                     <span class="ml-3 font-bold">কপি</span>
                                 </div>
                             </div>
@@ -669,7 +848,7 @@
                             </label>
                         </div>
                         
-                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-xl transition text-lg pulse">
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent to-primary text-white font-bold rounded-lg hover:shadow-xl transition text-lg pulse desktop-btn">
                             <i class="fas fa-shopping-cart mr-2"></i> অর্ডার নিশ্চিত করুন
                         </button>
                     </form>
@@ -721,7 +900,7 @@
 
     <!-- ফুটার -->
     <footer class="bg-dark text-white py-12">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto px-4 desktop-px">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center mb-6">
@@ -755,7 +934,7 @@
                             <span class="text-gray-400">প্রজন্ম প্রকাশনী</span>
                         </li>
                         <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-gray-400 mt=1 mr-3"></i>
+                            <i class="fas fa-map-marker-alt text-gray-400 mt-1 mr-3"></i>
                             <span class="text-gray-400">বাংলাবাজার, ঢাকা-১১০০</span>
                         </li>
                         <li class="flex items-start">
@@ -1035,7 +1214,7 @@
             // Review form submission
             reviewForm.addEventListener('submit', handleReviewSubmit);
 
-            // Order form submission
+            // Order form submission - ইমেইল ফিল্ড অপশনাল
             orderForm.addEventListener('submit', handleOrderSubmit);
 
             // Smooth scrolling for navigation
@@ -1059,7 +1238,9 @@
             });
 
             // Mobile menu toggle
-            document.querySelector('header button:last-child')?.addEventListener('click', () => {
+            document.querySelector('header .lg\\:hidden + a')?.addEventListener('click', (e) => {
+                // Prevent navigation if it's the cart button
+                if (e.target.closest('a[href="#order"]')) return;
                 document.getElementById('mobileMenu').classList.toggle('hidden');
             });
         }
@@ -1088,8 +1269,13 @@
                 });
             });
 
-            ratingStars[4].classList.remove('far');
-            ratingStars[4].classList.add('fas');
+            // Set default rating to 5
+            ratingStars.forEach((star, index) => {
+                if (index < 5) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                }
+            });
         }
 
         function calculateTotal() {
@@ -1134,7 +1320,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success) {
-                        approvedReviews = data.reviews;
+                        approvedReviews = data.reviews || [];
                         renderReviews();
                         updateReviewStats();
                     } else {
@@ -1299,12 +1485,15 @@
                     
                     reviewForm.reset();
                     
-                    ratingStars.forEach(s => {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
+                    // Reset stars to default (5 stars)
+                    ratingStars.forEach(star => {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
                     });
-                    ratingStars[4].classList.remove('far');
-                    ratingStars[4].classList.add('fas');
+                    for (let i = 0; i < 5; i++) {
+                        ratingStars[i].classList.remove('far');
+                        ratingStars[i].classList.add('fas');
+                    }
                     ratingValue.value = 5;
                     
                     setTimeout(() => {
@@ -1328,7 +1517,7 @@
             
             const name = document.getElementById('orderName').value.trim();
             const phone = document.getElementById('orderPhone').value.trim();
-            const email = document.getElementById('orderEmail').value.trim() || '';
+            const email = document.getElementById('orderEmail').value.trim() || ''; // ইমেইল অপশনাল
             const address = document.getElementById('orderAddress').value.trim();
             const district = document.getElementById('orderDistrict').value;
             const total = calculateTotal();
@@ -1371,7 +1560,7 @@
                     body: JSON.stringify({
                         customerName: name,
                         phone: phone,
-                        email: email,
+                        email: email, // ইমেইল অপশনাল, খালি থাকতে পারে
                         address: address,
                         district: district,
                         quantity: currentQuantity,
@@ -1382,7 +1571,7 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    const orderId = data.order.orderId || generateOrderId();
+                    const orderId = data.order?.orderId || generateOrderId();
                     
                     modalMessage.textContent = `ধন্যবাদ ${name}! আপনার অর্ডারটি গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি ২৪ ঘন্টার মধ্যে ${phone} নম্বরে আপনার সাথে যোগাযোগ করবে।`;
                     modalOrderId.textContent = orderId;
@@ -1459,6 +1648,14 @@
             setTimeout(() => {
                 toast.remove();
             }, 3000);
+        }
+
+        // টপে স্ক্রল করার ফাংশন
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
